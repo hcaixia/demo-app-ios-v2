@@ -20,6 +20,7 @@
 #import "UIImageView+WebCache.h"
 #import <RongIMKit/RongIMKit.h>
 #import "RCDUserInfo.h"
+#import "RCDFriendInvitationTableViewController.h"
 
 @interface RCDChatListViewController ()
 
@@ -164,19 +165,14 @@
     //自定义会话类型
     if (conversationModelType == RC_CONVERSATION_MODEL_TYPE_CUSTOMIZATION) {
         RCConversationModel *model = self.conversationListDataSource[indexPath.row];
-        RCContactNotificationMessage *_contactNotificationMsg = (RCContactNotificationMessage *)model.lastestMessage;
-        RCDUserInfo *userinfo = [RCDUserInfo new];
-        
-        NSDictionary *_cache_userinfo = [[NSUserDefaults standardUserDefaults]objectForKey:_contactNotificationMsg.sourceUserId];
-        if (_cache_userinfo) {
-            userinfo.name       = _cache_userinfo[@"username"];
-            userinfo.portraitUri    = _cache_userinfo[@"portraitUri"];
-            userinfo.userId         = _contactNotificationMsg.sourceUserId;
-        }
         
         UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-        RCDAddFriendTableViewController *temp = [mainStoryboard instantiateViewControllerWithIdentifier:@"RCDAddFriendTableViewController"];
-        temp.userInfo = userinfo;//model.extend;
+        RCDFriendInvitationTableViewController *temp = [mainStoryboard instantiateViewControllerWithIdentifier:@"RCDFriendInvitationTableViewController"];
+        temp.conversationType = model.conversationType;
+        temp.targetId = model.targetId;
+        temp.userName = model.conversationTitle;
+        temp.title = model.conversationTitle;
+        temp.conversation = model;
         [self.navigationController pushViewController:temp animated:YES];
     }
 
@@ -384,6 +380,7 @@
     __block NSString *userName    = nil;
     __block NSString *portraitUri = nil;
     
+    __weak RCDChatListViewController *weakSelf = self;
     //此处需要添加根据userid来获取用户信息的逻辑，extend字段不存在于DB中，当数据来自db时没有extend字段内容，只有userid
     if (nil == model.extend) {
         // Not finished yet, To Be Continue...
@@ -392,6 +389,31 @@
         if (_cache_userinfo) {
             userName = _cache_userinfo[@"username"];
             portraitUri = _cache_userinfo[@"portraitUri"];
+        } else {
+            NSDictionary *emptyDic = @{};
+            [[NSUserDefaults standardUserDefaults]setObject:emptyDic forKey:_contactNotificationMsg.sourceUserId];
+            [[NSUserDefaults standardUserDefaults]synchronize];
+            [RCDHTTPTOOL getUserInfoByUserID:_contactNotificationMsg.sourceUserId
+                                  completion:^(RCUserInfo *user) {
+                                      if (user == nil) {
+                                          return;
+                                      }
+                                      RCDUserInfo *rcduserinfo_ = [RCDUserInfo new];
+                                      rcduserinfo_.name = user.name;
+                                      rcduserinfo_.userId = user.userId;
+                                      rcduserinfo_.portraitUri = user.portraitUri;
+                                      
+                                      model.extend = rcduserinfo_;
+                                      
+                                      //local cache for userInfo
+                                      NSDictionary *userinfoDic = @{@"username": rcduserinfo_.name,
+                                                                    @"portraitUri":rcduserinfo_.portraitUri
+                                                                    };
+                                      [[NSUserDefaults standardUserDefaults]setObject:userinfoDic forKey:_contactNotificationMsg.sourceUserId];
+                                      [[NSUserDefaults standardUserDefaults]synchronize];
+                                      
+                                      [weakSelf.conversationListTableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+                                  }];
         }
         
     }else{

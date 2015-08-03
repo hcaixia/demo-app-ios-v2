@@ -18,6 +18,7 @@
 static NSString * const userTableName = @"USERTABLE";
 static NSString * const groupTableName = @"GROUPTABLEV2";
 static NSString * const friendTableName = @"FRIENDTABLE";
+static NSString * const blackTableName = @"BLACKTABLE";
 
 + (RCDataBaseManager*)shareInstance
 {
@@ -57,6 +58,13 @@ static NSString * const friendTableName = @"FRIENDTABLE";
             NSString *createIndexSQL=@"CREATE unique INDEX idx_friendId ON FRIENDTABLE(userid);";
             [db executeUpdate:createIndexSQL];
         }
+        
+        if (![DBHelper isTableOK: blackTableName withDB:db]) {
+            NSString *createTableSQL = @"CREATE TABLE BLACKTABLE (id integer PRIMARY KEY autoincrement, userid text,name text, portraitUri text)";
+            [db executeUpdate:createTableSQL];
+            NSString *createIndexSQL=@"CREATE unique INDEX idx_blackId ON BLACKTABLE(userid);";
+            [db executeUpdate:createIndexSQL];
+        }
     }];
     
 }
@@ -71,6 +79,47 @@ static NSString * const friendTableName = @"FRIENDTABLE";
         [db executeUpdate:insertSql,user.userId,user.name,user.portraitUri];
     }];
 }
+
+//插入黑名单列表
+-(void)insertBlackListToDB:(RCUserInfo*)user{
+    NSString *insertSql = @"REPLACE INTO BLACKTABLE (userid, name, portraitUri) VALUES (?, ?, ?)";
+    FMDatabaseQueue *queue = [DBHelper getDatabaseQueue];
+    [queue inDatabase:^(FMDatabase *db) {
+        [db executeUpdate:insertSql,user.userId,user.name,user.portraitUri];
+    }];
+}
+
+//获取黑名单列表
+- (NSArray *)getBlackList{
+    NSMutableArray *allBlackList = [NSMutableArray new];
+    FMDatabaseQueue *queue = [DBHelper getDatabaseQueue];
+    [queue inDatabase:^(FMDatabase *db) {
+        FMResultSet *rs = [db executeQuery:@"SELECT * FROM BLACKTABLE"];
+        while ([rs next]) {
+            RCUserInfo *model;
+            model = [[RCUserInfo alloc] init];
+            model.userId = [rs stringForColumn:@"userid"];
+            model.name = [rs stringForColumn:@"name"];
+            model.portraitUri = [rs stringForColumn:@"portraitUri"];
+            [allBlackList addObject:model];
+        }
+        [rs close];
+    }];
+    return allBlackList;
+}
+
+//移除黑名单
+- (void)removeBlackList:(NSString *)userId{
+    NSString *deleteSql =[NSString stringWithFormat: @"DELETE FROM BLACKTABLE WHERE userid=%@",userId];
+    FMDatabaseQueue *queue = [DBHelper getDatabaseQueue];
+    if (queue==nil) {
+        return ;
+    }
+    [queue inDatabase:^(FMDatabase *db) {
+        [db executeUpdate:deleteSql];
+    }];
+}
+
 //从表中获取用户信息
 -(RCUserInfo*) getUserByUserId:(NSString*)userId
 {

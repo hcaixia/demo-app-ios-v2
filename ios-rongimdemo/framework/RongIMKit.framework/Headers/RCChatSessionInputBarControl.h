@@ -80,7 +80,11 @@ typedef NS_ENUM(NSInteger, RCChatSessionInputBarInputType) {
     /**
      *  语音输入类型
      */
-    RCChatSessionInputBarInputVoice = 1
+    RCChatSessionInputBarInputVoice = 1,
+    /**
+     *  扩展输入类型
+     */
+    RCChatSessionInputBarInputExtention = 2
 };
 
 @protocol RCChatSessionInputBarControlDelegate;

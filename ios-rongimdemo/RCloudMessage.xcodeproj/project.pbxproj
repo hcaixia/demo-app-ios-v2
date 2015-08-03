@@ -74,6 +74,8 @@
 		A6827BDE1B15E52C000B9862 /* AppkeyModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A6827BDD1B15E52C000B9862 /* AppkeyModel.m */; };
 		A6827BE11B15E94A000B9862 /* SelectAppKeyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A6827BE01B15E94A000B9862 /* SelectAppKeyViewController.m */; };
 		A6827BE41B16AC39000B9862 /* AddAppKeyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A6827BE31B16AC39000B9862 /* AddAppKeyViewController.m */; };
+		A692A72F1B69CCF700B18659 /* RCDFriendInvitationTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A692A72E1B69CCF700B18659 /* RCDFriendInvitationTableViewController.m */; };
+		A692A7321B69CD4200B18659 /* RCDFriendInvitationTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A692A7311B69CD4200B18659 /* RCDFriendInvitationTableViewCell.m */; };
 		A6B1D8EB1B1FFCB700AD32EC /* RCWKNotifier.m in Sources */ = {isa = PBXBuildFile; fileRef = A6B1D8EA1B1FFCB700AD32EC /* RCWKNotifier.m */; };
 		A6B1D8F71B201B3600AD32EC /* RCAppInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A6B1D8EE1B201B3600AD32EC /* RCAppInfoModel.m */; };
 		A6B1D8F81B201B3600AD32EC /* RCAppQueryHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = A6B1D8F01B201B3600AD32EC /* RCAppQueryHelper.m */; };
@@ -364,6 +366,10 @@
 		A6827BE01B15E94A000B9862 /* SelectAppKeyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectAppKeyViewController.m; sourceTree = SOURCE_ROOT; };
 		A6827BE21B16AC39000B9862 /* AddAppKeyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddAppKeyViewController.h; sourceTree = SOURCE_ROOT; };
 		A6827BE31B16AC39000B9862 /* AddAppKeyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddAppKeyViewController.m; sourceTree = SOURCE_ROOT; };
+		A692A72D1B69CCF700B18659 /* RCDFriendInvitationTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCDFriendInvitationTableViewController.h; sourceTree = SOURCE_ROOT; };
+		A692A72E1B69CCF700B18659 /* RCDFriendInvitationTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCDFriendInvitationTableViewController.m; sourceTree = SOURCE_ROOT; };
+		A692A7301B69CD4200B18659 /* RCDFriendInvitationTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCDFriendInvitationTableViewCell.h; sourceTree = SOURCE_ROOT; };
+		A692A7311B69CD4200B18659 /* RCDFriendInvitationTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCDFriendInvitationTableViewCell.m; sourceTree = SOURCE_ROOT; };
 		A6B1D8E91B1FFCB700AD32EC /* RCWKNotifier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCWKNotifier.h; sourceTree = "<group>"; };
 		A6B1D8EA1B1FFCB700AD32EC /* RCWKNotifier.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCWKNotifier.m; sourceTree = "<group>"; };
 		A6B1D8ED1B201B3600AD32EC /* RCAppInfoModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCAppInfoModel.h; sourceTree = "<group>"; };
@@ -969,6 +975,10 @@
 				E4B5159A1AC64BC3005CB1D2 /* SearchFriend */,
 				E4B5159B1AC64DB0005CB1D2 /* SelectPerson */,
 				E4BFABFA1A11B5DF007165B1 /* AddressBook */,
+				A692A72D1B69CCF700B18659 /* RCDFriendInvitationTableViewController.h */,
+				A692A72E1B69CCF700B18659 /* RCDFriendInvitationTableViewController.m */,
+				A692A7301B69CD4200B18659 /* RCDFriendInvitationTableViewCell.h */,
+				A692A7311B69CD4200B18659 /* RCDFriendInvitationTableViewCell.m */,
 			);
 			name = ChatList;
 			sourceTree = "<group>";
@@ -1635,11 +1645,13 @@
 				17244C181B56553B000EFF79 /* RCDMessageNoDisturbSettingController.m in Sources */,
 				E4E939911AD65BD4001E0AC6 /* RCDUpdateNameViewController.m in Sources */,
 				5C7629831B54F7E60027DA82 /* RCDBlackListCell.m in Sources */,
+				A692A72F1B69CCF700B18659 /* RCDFriendInvitationTableViewController.m in Sources */,
 				46E17CC71B0EC32A001AC57A /* FMDatabase.m in Sources */,
 				E4E939B11AD65CD6001E0AC6 /* RCDSelectPersonTableViewCell.m in Sources */,
 				E4E939491AD65A95001E0AC6 /* AFURLResponseSerialization.m in Sources */,
 				E4E939A61AD65CA3001E0AC6 /* RCDRegisterViewController.m in Sources */,
 				466684301B5DEC57000B7504 /* RCDConversationSettingTableViewHeader.m in Sources */,
+				A692A7321B69CD4200B18659 /* RCDFriendInvitationTableViewCell.m in Sources */,
 				E4E939521AD65A95001E0AC6 /* UIWebView+AFNetworking.m in Sources */,
 				E4E939641AD65A95001E0AC6 /* NSData+ImageContentType.m in Sources */,
 				E4E9394C1AD65A95001E0AC6 /* UIActivityIndicatorView+AFNetworking.m in Sources */,

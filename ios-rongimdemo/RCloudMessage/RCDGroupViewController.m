@@ -81,12 +81,11 @@
     
 
     if (_groups==nil||_groups.count<1) {
-        [RCDDataSource getAllGroupInfo:^(NSArray *result) {
+        [RCDHTTPTOOL getAllGroupsWithCompletion:^(NSMutableArray *result) {
             _groups =[NSMutableArray arrayWithArray: result];
             dispatch_async(dispatch_get_main_queue(), ^{
                 [weakSelf.tableView reloadData];
             });
-            
         }];
     }else
     {

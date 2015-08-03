@@ -31,11 +31,15 @@
 {
     [self getFriends:^(NSMutableArray *result) {
         for (RCDUserInfo *user in result) {
-            if ([user.userId isEqualToString:userInfo.userId] && completion && [@"1" isEqualToString:userInfo.status]) {
-                completion(YES);
-            }else if(completion){
-                completion(NO);
+            if ([user.userId isEqualToString:userInfo.userId] && completion && [@"1" isEqualToString:user.status]) {
+                if (completion) {
+                    completion(YES);
+                }
+                return ;
             }
+        }
+        if(completion){
+            completion(NO);
         }
     }];
 }

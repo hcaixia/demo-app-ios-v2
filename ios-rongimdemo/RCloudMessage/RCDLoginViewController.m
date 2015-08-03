@@ -21,6 +21,7 @@
 #import "RCDHttpTool.h"
 #import "AppkeyModel.h"
 #import "SelectAppKeyViewController.h"
+#import "RCDataBaseManager.h"
 
 @interface RCDLoginViewController ()<UITextFieldDelegate>
 
@@ -519,6 +520,23 @@
 //                                                   [DEFAULTS synchronize];
                                                }];
                                            }
+                                           
+                                           
+                                           //同步黑名单
+                                           [[RCIMClient sharedRCIMClient] getBlacklist:^(NSArray *blockUserIds) {
+                                               for (NSString *userID in blockUserIds) {
+                                                   
+                                                   // 暂不取用户信息，界面展示的时候在获取
+                                                   RCUserInfo*userInfo = [[RCUserInfo alloc]init];
+                                                   userInfo.userId = userID;
+                                                   userInfo.portraitUri = nil;
+                                                   userInfo.name = nil;
+                                                   [[RCDataBaseManager shareInstance] insertBlackListToDB:userInfo];
+                                               }
+                                               
+                                           } error:^(RCErrorCode status) {
+                                               NSLog(@"同步黑名单失败，status = %ld",(long)status);
+                                           }];
                                            
                                            dispatch_async(dispatch_get_main_queue(), ^{
                                                UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];

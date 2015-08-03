@@ -131,6 +131,12 @@
  *  @param model  被删除消息的model
  */
 - (void)deleteMessage:(RCMessageModel *)model;
+/**
+*  append消息到datasource中，并显示。可以用在插入提醒消息的场景。
+*
+*  @param message 消息
+*/
+- (void)appendAndDisplayMessage:(RCMessage *)message;
 #pragma mark override
 /**
  *  返回方法，如果继承，请重写该方法，并且优先调用父类方法;
@@ -203,6 +209,13 @@
  *  @param userId 用户的ID
  */
 - (void)didTapCellPortrait:(NSString *)userId;
+
+/**
+ *  长按头像事件
+ *
+ *  @param userId 用户的ID
+ */
+- (void)didLongPressCellPortrait:(NSString *)userId;
 
 #pragma mark override
 /**

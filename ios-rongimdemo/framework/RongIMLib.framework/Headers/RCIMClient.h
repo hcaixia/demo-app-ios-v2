@@ -60,40 +60,40 @@ UIKIT_EXTERN NSString *const KNotificationclearTheConversationMessages;
  *  SDK运行状态
  */
 typedef NS_ENUM(NSUInteger, RCSDKRunningMode) {
-    /**
-     *  后台运行
-     */
-    RCSDKRunningMode_Backgroud = 0,
-    /**
-     *  前台运行
-     */
-    RCSDKRunningMode_Foregroud = 1
+  /**
+   *  后台运行
+   */
+  RCSDKRunningMode_Backgroud = 0,
+  /**
+   *  前台运行
+   */
+  RCSDKRunningMode_Foregroud = 1
 };
 
 /**
  *  当前网络状态
  */
 typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
-    /**
-     *  不可用
-     */
-    RC_NotReachable = 0,
-    /**
-     *  wifi
-     */
-    RC_ReachableViaWiFi,
-    /**
-     *  4G
-     */
-    RC_ReachableViaLTE,
-    /**
-     *  3G
-     */
-    RC_ReachableVia3G,
-    /**
-     *  2G
-     */
-    RC_ReachableVia2G
+  /**
+   *  不可用
+   */
+  RC_NotReachable = 0,
+  /**
+   *  wifi
+   */
+  RC_ReachableViaWiFi,
+  /**
+   *  4G
+   */
+  RC_ReachableViaLTE,
+  /**
+   *  3G
+   */
+  RC_ReachableVia3G,
+  /**
+   *  2G
+   */
+  RC_ReachableVia2G
 };
 
 /**
@@ -102,7 +102,6 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
  *  所有 IM 相关方法、监听器都由此调用和设置。
  */
 @interface RCIMClient : NSObject
-
 
 /**
  *  当前的用户信息对象
@@ -117,7 +116,8 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
 /**
  *  WatchKit 的状态代理
  */
-@property(nonatomic, strong)id<RCWatchKitStatusDelegate> watchKitStatusDelegate;
+@property(nonatomic, strong)
+    id<RCWatchKitStatusDelegate> watchKitStatusDelegate;
 /**
  *  获取通讯能力库的核心类单例。
  *
@@ -127,7 +127,8 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
 
 /**
  * 初始化 SDK。
- * 在整个应用程序全局，只需要调用一次 init 方法。传入您从开发者平台申请的 appKey 即可。
+ * 在整个应用程序全局，只需要调用一次 init 方法。传入您从开发者平台申请的 appKey
+ *即可。
  *
  * @param appKey      从开发者平台申请的应用 appKey。
  */
@@ -143,14 +144,16 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
 - (void)registerMessageType:(Class)messageClass;
 
 /**
- * 设置 DeviceToken，用于 APNS 的设备唯一标识。请在获取到Device Token之后立即调用该方法。
+ * 设置 DeviceToken，用于 APNS 的设备唯一标识。请在获取到Device
+ * Token之后立即调用该方法。
  * @param deviceToken 从苹果服务器获取的设备唯一标识
  */
 - (void)setDeviceToken:(NSString *)deviceToken;
 
 /**
  * 建立连接。
- * 建立连接必须传入 Token，它是您 App 当前用户的唯一身份凭证，故传入错误的 Token 会导致失败。
+ * 建立连接必须传入 Token，它是您 App 当前用户的唯一身份凭证，故传入错误的 Token
+ *会导致失败。
  *
  *  @param token                 从服务端获取的用户身份令牌（Token）。
  *  @param successBlock          调用完成的处理。
@@ -160,17 +163,19 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
 - (void)connectWithToken:(NSString *)token
                  success:(void (^)(NSString *userId))successBlock
                    error:(void (^)(RCConnectErrorCode status))errorBlock
-          tokenIncorrect:(void (^)())tokenIncorrectBlock ;
+          tokenIncorrect:(void (^)())tokenIncorrectBlock;
 
 //从2.2.3版本之后，所有的重连操作都由lib库自动处理，上层不需要干预。
 ///**
 // *  重新连接服务器。
-// *  将重用您的 Token 进行重连，请注意当 Token 错误或过期失效时您需要重新获取 Token。
+// *  将重用您的 Token 进行重连，请注意当 Token 错误或过期失效时您需要重新获取
+// Token。
 // *
 // *  @param successBlock 重连成功回调
 // *  @param errorBlock   重连失败回调
 // */
-//- (void)reconnect:(void (^)(NSString *userId))successBlock error:(void (^)(RCConnectErrorCode status))errorBlock;
+//- (void)reconnect:(void (^)(NSString *userId))successBlock error:(void
+//(^)(RCConnectErrorCode status))errorBlock;
 
 /**
  *  断开连接。
@@ -197,14 +202,16 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
  *  @param delegate 接收消息的监听器。
  *  @param userData 用户自定义数据，该值会在 delegate 中返回。
  */
-- (void)setReceiveMessageDelegate:(id<RCIMClientReceiveMessageDelegate>)delegate object:(id)userData;
+- (void)setReceiveMessageDelegate:(id<RCIMClientReceiveMessageDelegate>)delegate
+                           object:(id)userData;
 
 /**
  *  设置连接状态变化的监听器。
  *
  *  @param delegate 连接状态变化的监听器。
  */
-- (void)setRCConnectionStatusChangeDelegate:(id<RCConnectionStatusChangeDelegate>)delegate;
+- (void)setRCConnectionStatusChangeDelegate:
+    (id<RCConnectionStatusChangeDelegate>)delegate;
 
 /**
  *  发送状态消息。可以发送任何类型的消息。但建议您发送自定义的消息类型
@@ -221,7 +228,8 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
                         targetId:(NSString *)targetId
                          content:(RCMessageContent *)content
                          success:(void (^)(long messageId))successBlock
-                           error:(void (^)(RCErrorCode nErrorCode, long messageId))errorBlock;
+                           error:(void (^)(RCErrorCode nErrorCode,
+                                           long messageId))errorBlock;
 /**
  *  发送消息。可以发送任何类型的消息。
  *  注：如果通过该接口发送图片消息，需要自己实现上传图片，把imageUrl传入content（注意它将是一个RCImageMessage）。
@@ -239,7 +247,8 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
                    content:(RCMessageContent *)content
                pushContent:(NSString *)pushContent
                    success:(void (^)(long messageId))successBlock
-                     error:(void (^)(RCErrorCode nErrorCode, long messageId))errorBlock;
+                     error:(void (^)(RCErrorCode nErrorCode,
+                                     long messageId))errorBlock;
 
 /**
  *  发送消息。可以发送任何类型的消息。
@@ -260,7 +269,8 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
                pushContent:(NSString *)pushContent
                   pushData:(NSString *)pushData
                    success:(void (^)(long messageId))successBlock
-                     error:(void (^)(RCErrorCode nErrorCode, long messageId))errorBlock;
+                     error:(void (^)(RCErrorCode nErrorCode,
+                                     long messageId))errorBlock;
 /**
  *  发送图片消息，上传图片并且发送，使用该方法，默认原图会上传到融云的服务，并且发送消息,如果使用普通的sendMessage方法，
  *  需要自己实现上传图片，并且添加ImageMessage的URL之后发送
@@ -275,13 +285,14 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
  *
  *  @return 发送的消息实体。
  */
-- (RCMessage *)sendImageMessage:(RCConversationType)conversationType
-                       targetId:(NSString *)targetId
-                        content:(RCMessageContent *)content
-                    pushContent:(NSString *)pushContent
-                       progress:(void (^)(int progress, long messageId))progressBlock
-                         success:(void (^)(long messageId))successBlock
-                          error:(void (^)(RCErrorCode errorCode, long messageId))errorBlock;
+- (RCMessage *)
+sendImageMessage:(RCConversationType)conversationType
+        targetId:(NSString *)targetId
+         content:(RCMessageContent *)content
+     pushContent:(NSString *)pushContent
+        progress:(void (^)(int progress, long messageId))progressBlock
+         success:(void (^)(long messageId))successBlock
+           error:(void (^)(RCErrorCode errorCode, long messageId))errorBlock;
 
 /**
  *  发送图片消息，上传图片并且发送，使用该方法，默认原图会上传到融云的服务，并且发送消息,如果使用普通的sendMessage方法，
@@ -298,14 +309,15 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
  *
  *  @return 发送的消息实体。
  */
-- (RCMessage *)sendImageMessage:(RCConversationType)conversationType
-                       targetId:(NSString *)targetId
-                        content:(RCMessageContent *)content
-                    pushContent:(NSString *)pushContent
-                       pushData:(NSString *)pushData
-                       progress:(void (^)(int progress, long messageId))progressBlock
-                        success:(void (^)(long messageId))successBlock
-                          error:(void (^)(RCErrorCode errorCode, long messageId))errorBlock;
+- (RCMessage *)
+sendImageMessage:(RCConversationType)conversationType
+        targetId:(NSString *)targetId
+         content:(RCMessageContent *)content
+     pushContent:(NSString *)pushContent
+        pushData:(NSString *)pushData
+        progress:(void (^)(int progress, long messageId))progressBlock
+         success:(void (^)(long messageId))successBlock
+           error:(void (^)(RCErrorCode errorCode, long messageId))errorBlock;
 /**
  *  下载图片
  *
@@ -322,7 +334,7 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
                 mediaType:(RCMediaType)mediaType
                  mediaUrl:(NSString *)mediaUrl
                  progress:(void (^)(int progress))progressBlock
-                   success:(void (^)(NSString *mediaPath))successBlock
+                  success:(void (^)(NSString *mediaPath))successBlock
                     error:(void (^)(RCErrorCode errorCode))errorBlock;
 
 /**
@@ -357,7 +369,8 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
  *
  *  @return 会话信息。
  */
-- (RCConversation *)getConversation:(RCConversationType)conversationType targetId:(NSString *)targetId;
+- (RCConversation *)getConversation:(RCConversationType)conversationType
+                           targetId:(NSString *)targetId;
 
 /**
  *  从会话列表中移除某一会话，但是不删除会话内的消息。
@@ -369,7 +382,8 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
  *
  *  @return 是否移除成功。
  */
-- (BOOL)removeConversation:(RCConversationType)conversationType targetId:(NSString *)targetId;
+- (BOOL)removeConversation:(RCConversationType)conversationType
+                  targetId:(NSString *)targetId;
 
 /**
  *  设置某一会话为置顶或者取消置顶。
@@ -380,7 +394,9 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
  *
  *  @return 是否设置成功。
  */
-- (BOOL)setConversationToTop:(RCConversationType)conversationType targetId:(NSString *)targetId isTop:(BOOL)isTop;
+- (BOOL)setConversationToTop:(RCConversationType)conversationType
+                    targetId:(NSString *)targetId
+                       isTop:(BOOL)isTop;
 
 /**
  *  获取所有未读消息数。
@@ -397,7 +413,8 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
  *
  *  @return 未读消息数。
  */
-- (int)getUnreadCount:(RCConversationType)conversationType targetId:(NSString *)targetId;
+- (int)getUnreadCount:(RCConversationType)conversationType
+             targetId:(NSString *)targetId;
 
 /**
  *  获取某会话类型的未读消息数.
@@ -417,7 +434,9 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
  *
  *  @return 最新消息记录，按照时间顺序从新到旧排列。
  */
-- (NSArray *)getLatestMessages:(RCConversationType)conversationType targetId:(NSString *)targetId count:(int)count;
+- (NSArray *)getLatestMessages:(RCConversationType)conversationType
+                      targetId:(NSString *)targetId
+                         count:(int)count;
 
 /**
  *  获取历史消息记录。
@@ -453,7 +472,8 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
 /**
  *  删除指定的一条或者一组消息。
  *
- *  @param messageIds 要删除的消息 Id 列表, 存储对象为NSNumber messageId，类型为long。
+ *  @param messageIds 要删除的消息 Id 列表, 存储对象为NSNumber
+ *messageId，类型为long。
  *
  *  @return 是否删除成功。
  */
@@ -467,7 +487,8 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
  *
  *  @return 是否清空成功。
  */
-- (BOOL)clearMessages:(RCConversationType)conversationType targetId:(NSString *)targetId;
+- (BOOL)clearMessages:(RCConversationType)conversationType
+             targetId:(NSString *)targetId;
 
 /**
  *  清除消息未读状态。
@@ -477,7 +498,8 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
  *
  *  @return 是否清空成功。
  */
-- (BOOL)clearMessagesUnreadStatus:(RCConversationType)conversationType targetId:(NSString *)targetId;
+- (BOOL)clearMessagesUnreadStatus:(RCConversationType)conversationType
+                         targetId:(NSString *)targetId;
 
 /**
  *  清空会话列表
@@ -504,7 +526,8 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
  *  @param messageId      消息 Id。
  *  @param receivedStatus 接收到的消息状态。
  */
-- (BOOL)setMessageReceivedStatus:(long)messageId receivedStatus:(RCReceivedStatus)receivedStatus;
+- (BOOL)setMessageReceivedStatus:(long)messageId
+                  receivedStatus:(RCReceivedStatus)receivedStatus;
 
 /**
  *  获取某一会话的文字消息草稿。
@@ -514,7 +537,8 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
  *
  *  @return 草稿的文字内容。
  */
-- (NSString *)getTextMessageDraft:(RCConversationType)conversationType targetId:(NSString *)targetId;
+- (NSString *)getTextMessageDraft:(RCConversationType)conversationType
+                         targetId:(NSString *)targetId;
 
 /**
  *  保存文字消息草稿。
@@ -537,7 +561,8 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
  *
  *  @return 是否清除成功。
  */
-- (BOOL)clearTextMessageDraft:(RCConversationType)conversationType targetId:(NSString *)targetId;
+- (BOOL)clearTextMessageDraft:(RCConversationType)conversationType
+                     targetId:(NSString *)targetId;
 
 /**
  *  获取讨论组信息和设置。
@@ -547,7 +572,7 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
  *  @param errorBlock       调用返回的错误信息。
  */
 - (void)getDiscussion:(NSString *)discussionId
-           success:(void (^)(RCDiscussion *discussion))successBlock
+              success:(void (^)(RCDiscussion *discussion))successBlock
                 error:(void (^)(RCErrorCode status))errorBlock;
 
 /**
@@ -560,7 +585,7 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
  */
 - (void)setDiscussionName:(NSString *)targetId
                      name:(NSString *)discussionName
-               success:(void (^)())successBlock
+                  success:(void (^)())successBlock
                     error:(void (^)(RCErrorCode status))errorBlock;
 
 /**
@@ -573,7 +598,7 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
  */
 - (void)createDiscussion:(NSString *)name
               userIdList:(NSArray *)userIdList
-              success:(void (^)(RCDiscussion *discussion))successBlock
+                 success:(void (^)(RCDiscussion *discussion))successBlock
                    error:(void (^)(RCErrorCode status))errorBlock;
 
 /**
@@ -586,7 +611,7 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
  */
 - (void)addMemberToDiscussion:(NSString *)discussionId
                    userIdList:(NSArray *)userIdList
-                   success:(void (^)(RCDiscussion *discussion))successBlock
+                      success:(void (^)(RCDiscussion *discussion))successBlock
                         error:(void (^)(RCErrorCode status))errorBlock;
 
 /**
@@ -601,7 +626,8 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
  */
 - (void)removeMemberFromDiscussion:(NSString *)discussionId
                             userId:(NSString *)userId
-                        success:(void (^)(RCDiscussion *discussion))successBlock
+                           success:
+                               (void (^)(RCDiscussion *discussion))successBlock
                              error:(void (^)(RCErrorCode status))errorBlock;
 
 /**
@@ -612,21 +638,23 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
  *  @param errorBlock        调用返回的错误信息。
  */
 - (void)quitDiscussion:(NSString *)discussionId
-            success:(void (^)(RCDiscussion *discussion))successBlock
+               success:(void (^)(RCDiscussion *discussion))successBlock
                  error:(void (^)(RCErrorCode status))errorBlock;
 
 /**
  *  获取会话消息提醒状态。
  *
  *  @param conversationType 会话类型。
- *  @param targetId         目标 Id。根据不同的 conversationType，可能是聊天 Id、讨论组 Id、群组 Id。
+ *  @param targetId         目标 Id。根据不同的 conversationType，可能是聊天Id、讨论组 Id、群组 Id。
  *  @param successBlock     调用完成的处理。
  *  @param errorBlock       调用返回的错误信息。
  */
-- (void)getConversationNotificationStatus:(RCConversationType)conversationType
-                                 targetId:(NSString *)targetId
-                               success:(void (^)(RCConversationNotificationStatus nStatus))successBlock
-                                    error:(void (^)(RCErrorCode status))errorBlock;
+- (void)
+getConversationNotificationStatus:(RCConversationType)conversationType
+                         targetId:(NSString *)targetId
+                          success:(void (^)(RCConversationNotificationStatus
+                                                nStatus))successBlock
+                            error:(void (^)(RCErrorCode status))errorBlock;
 
 /**
  *  设置会话消息提醒状态。
@@ -637,11 +665,13 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
  *  @param successBlock     调用完成的处理。
  *  @param errorBlock       调用返回的错误信息。
  */
-- (void)setConversationNotificationStatus:(RCConversationType)conversationType
-                                 targetId:(NSString *)targetId
-                                isBlocked:(BOOL)isBlocked
-                               success:(void (^)(RCConversationNotificationStatus nStatus))successBlock
-                                    error:(void (^)(RCErrorCode status))errorBlock;
+- (void)
+setConversationNotificationStatus:(RCConversationType)conversationType
+                         targetId:(NSString *)targetId
+                        isBlocked:(BOOL)isBlocked
+                          success:(void (^)(RCConversationNotificationStatus
+                                                nStatus))successBlock
+                            error:(void (^)(RCErrorCode status))errorBlock;
 
 /**
  *  设置讨论组成员邀请权限。
@@ -653,7 +683,7 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
  */
 - (void)setDiscussionInviteStatus:(NSString *)targetId
                            isOpen:(BOOL)isOpen
-                       success:(void (^)())successBlock
+                          success:(void (^)())successBlock
                             error:(void (^)(RCErrorCode status))errorBlock;
 
 /**
@@ -664,7 +694,7 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
  *  @param errorBlock       调用返回的错误信息。
  */
 - (void)syncGroups:(NSArray *)groupList
-        success:(void (^)())successBlock
+           success:(void (^)())successBlock
              error:(void (^)(RCErrorCode status))errorBlock;
 
 /**
@@ -677,7 +707,7 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
  */
 - (void)joinGroup:(NSString *)groupId
         groupName:(NSString *)groupName
-       success:(void (^)())successBlock
+          success:(void (^)())successBlock
             error:(void (^)(RCErrorCode status))errorBlock;
 
 /**
@@ -688,20 +718,20 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
  *  @param errorBlock       调用返回的错误信息。
  */
 - (void)quitGroup:(NSString *)groupId
-       success:(void (^)())successBlock
+          success:(void (^)())successBlock
             error:(void (^)(RCErrorCode status))errorBlock;
 
 /**
  *  加入聊天室。
  *
  *  @param targetId         聊天室ID。
- *  @param messageCount     进入聊天室获取获取多少条历史信息， -1表示不获取，0表示系统默认数目(现在默认值为10条)，正数表示获取的具体数目，最大值为50
+ *  @param messageCount     进入聊天室获取获取多少条历史信息，-1表示不获取，0表示系统默认数目(现在默认值为10条)，正数表示获取的具体数目，最大值为50
  *  @param successBlock     调用完成的处理。
  *  @param errorBlock       调用返回的错误信息。
  */
 - (void)joinChatRoom:(NSString *)targetId
         messageCount:(int)messageCount
-          success:(void (^)())successBlock
+             success:(void (^)())successBlock
                error:(void (^)(RCErrorCode status))errorBlock;
 
 /**
@@ -713,7 +743,7 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
  */
 
 - (void)quitChatRoom:(NSString *)targetId
-          success:(void (^)())successBlock
+             success:(void (^)())successBlock
                error:(void (^)(RCErrorCode status))errorBlock;
 
 /**
@@ -730,7 +760,9 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
  *  @param successBlock 加入黑名单成功。
  *  @param errorBlock      加入黑名单失败。
  */
-- (void)addToBlacklist:(NSString *)userId success:(void (^)())successBlock error:(void (^)(RCErrorCode status))errorBlock;
+- (void)addToBlacklist:(NSString *)userId
+               success:(void (^)())successBlock
+                 error:(void (^)(RCErrorCode status))errorBlock;
 
 /**
  *  移出黑名单
@@ -740,7 +772,7 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
  *  @param errorBlock      移出黑名单失败。
  */
 - (void)removeFromBlacklist:(NSString *)userId
-                 success:(void (^)())successBlock
+                    success:(void (^)())successBlock
                       error:(void (^)(RCErrorCode status))errorBlock;
 
 /**
@@ -751,7 +783,7 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
  *  @param errorBlock      获取用户黑名单状态失败。
  */
 - (void)getBlacklistStatus:(NSString *)userId
-                success:(void (^)(int bizStatus))successBlock
+                   success:(void (^)(int bizStatus))successBlock
                      error:(void (^)(RCErrorCode status))errorBlock;
 
 /**
@@ -761,7 +793,8 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
  *  @param errorBlock      获取用户黑名单状态失败
  */
 
-- (void)getBlacklist:(void (^)(NSArray *blockUserIds))successBlock error:(void (^)(RCErrorCode status))errorBlock;
+- (void)getBlacklist:(void (^)(NSArray *blockUserIds))successBlock
+               error:(void (^)(RCErrorCode status))errorBlock;
 
 /**
  *  设置关闭 Push 时间，在该段时间内您可以收到 Push 消息，但不会收到提示。
@@ -774,8 +807,9 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
 
 - (void)setConversationNotificationQuietHours:(NSString *)startTime
                                      spanMins:(int)spanMins
-                            success:(void (^)())successBlock
-                              error:(void (^)(RCErrorCode status))errorBlock;
+                                      success:(void (^)())successBlock
+                                        error:(void (^)(RCErrorCode status))
+                                                  errorBlock;
 /**
  *  删除 Push 设置
  *
@@ -783,7 +817,8 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
  *  @param errorBlock   失败回调
  */
 - (void)removeConversationNotificationQuietHours:(void (^)())successBlock
-                                 error:(void (^)(RCErrorCode status))errorBlock;
+                                           error:(void (^)(RCErrorCode status))
+                                                     errorBlock;
 
 /**
  *  查询 Push 设置
@@ -791,8 +826,9 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
  *  @param successBlock startTime 关闭开始时间，spansMin间隔分钟
  *  @param errorBlock   status为0表示成功，其它失败
  */
-- (void)getNotificationQuietHours:(void (^)(NSString *startTime, int spansMin))successBlock
-                              error:(void (^)(RCErrorCode status))errorBlock;
+- (void)getNotificationQuietHours:(void (^)(NSString *startTime,
+                                            int spansMin))successBlock
+                            error:(void (^)(RCErrorCode status))errorBlock;
 /**
  *  搜索所有公众账号
  *
@@ -855,8 +891,9 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
  *
  *  @return RCPublicServiceProfile
  */
-- (RCPublicServiceProfile *)getPublicServiceProfile:(RCPublicServiceType)publicServiceType
-                                 publicServiceId:(NSString *)publicServiceId;
+- (RCPublicServiceProfile *)getPublicServiceProfile:
+                                (RCPublicServiceType)publicServiceType
+                                    publicServiceId:(NSString *)publicServiceId;
 
 /**
  *  查询已关注的公众号
@@ -873,13 +910,31 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
  *  @param errorBlock   失败回调
  */
 - (void)syncUserData:(RCUserData *)userData
-   success:(void (^)())successBlock
-     error:(void (^)(RCErrorCode status))errorBlock;
+             success:(void (^)())successBlock
+               error:(void (^)(RCErrorCode status))errorBlock;
 /**
  *  查询当前连接状态
  *
  *  @return 连接状态
  */
 - (RCConnectionStatus)getConnectionStatus;
+
+/**
+ *  从服务端获取历史消息记录（不保存在本地数据库）。
+ *
+ *  @param conversationType 会话类型。不支持传入 RCConversationType.CHATROOM。
+ *  @param targetId         目标 Id。根据不同的 conversationType，可能是聊天
+ *  Id、讨论组 Id、群组 Id。
+ *  @param recordTime  最早消息的 sendtime，第一次取传0。
+ *  @param count            要获取的消息数量（1-20条）。
+ *  @param successBlock 成功回调返回历史记录
+ *  @return 。
+ */
+- (void)getRemoteHistoryMessages:(RCConversationType)conversationType
+                  targetId:(NSString *)targetId
+                recordTime:(long)recordTime
+                     count:(int)count
+                   success:(void (^)(NSArray *messages))successBlock;
+
 @end
 #endif

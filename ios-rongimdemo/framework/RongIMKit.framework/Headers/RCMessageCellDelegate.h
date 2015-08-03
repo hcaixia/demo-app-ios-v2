@@ -47,6 +47,13 @@
 - (void)didTapCellPortrait:(NSString *)userId;
 
 /**
+ *  长按头像事件
+ *
+ *  @param userId 用户的ID
+ */
+- (void)didLongPressCellPortrait:(NSString *)userId;
+
+/**
  *  长按消息内容
  *
  *  @param model 数据

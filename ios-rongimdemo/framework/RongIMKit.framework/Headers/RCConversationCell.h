@@ -111,6 +111,13 @@
  */
 - (void)didTapCellPortrait:(RCConversationModel *)model;
 
+/**
+ *  长按头像事件
+ *
+ *  @param model 会话的model
+ */
+- (void)didLongPressCellPortrait:(RCConversationModel *)model;
+
 @end
 
 #endif

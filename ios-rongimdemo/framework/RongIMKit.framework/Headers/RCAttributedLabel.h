@@ -138,5 +138,13 @@
  */
 - (void)attributedLabel:(RCAttributedLabel *)label didSelectLinkWithPhoneNumber:(NSString *)phoneNumber;
 
+/**
+ *  响应点击事件
+ *  @param label The label whose link was selected.
+ *  @param content content.
+ */
+- (void)attributedLabel:(RCAttributedLabel *)label didTapLabel:(NSString *)content;
+
+
 @end
 

@@ -21,6 +21,7 @@
 #import "RCDCommonDefine.h"
 #import "RCDHttpTool.h"
 #import "AFHttpTool.h"
+#import "RCDataBaseManager.h"
 
 //#define RONGCLOUD_IM_APPKEY @"e0x9wycfx7flq" //offline key
 #define RONGCLOUD_IM_APPKEY @"z3v5yqkbv8v30" // online key
@@ -109,6 +110,22 @@
                     //登陆demoserver成功之后才能调demo 的接口
                     [RCDDataSource syncGroups];
                     [RCDDataSource syncFriendList:^(NSMutableArray * result) {}];
+                    
+                    [[RCIMClient sharedRCIMClient] getBlacklist:^(NSArray *blockUserIds) {
+                        for (NSString *userID in blockUserIds) {
+                            
+                            // 暂不取用户信息，界面展示的时候在获取
+                            RCUserInfo*userInfo = [[RCUserInfo alloc]init];
+                            userInfo.userId = userID;
+                            userInfo.portraitUri = nil;
+                            userInfo.name = nil;
+                            [[RCDataBaseManager shareInstance] insertBlackListToDB:userInfo];
+                        }
+
+                    } error:^(RCErrorCode status) {
+                        NSLog(@"同步黑名单失败，status = %ld",(long)status);
+                    }];
+                    
                 }
               }
               failure:^(NSError *err){
@@ -291,7 +308,7 @@
   int unreadMsgCount = [[RCIMClient sharedRCIMClient] getUnreadCount:@[
     @(ConversationType_PRIVATE),
     @(ConversationType_DISCUSSION),
-    @(ConversationType_PUBLICSERVICE),
+    @(ConversationType_APPSERVICE),
     @(ConversationType_PUBLICSERVICE),
     @(ConversationType_GROUP)
   ]];

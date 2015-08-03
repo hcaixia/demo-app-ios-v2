@@ -74,7 +74,21 @@
  */
   
   //默认输入类型为语音
-  //self.defaultInputType = RCChatSessionInputBarInputVoice;
+  //self.defaultInputType = RCChatSessionInputBarInputExtention;
+
+    
+/***********如何在会话界面插入提醒消息***********************
+
+    RCInformationNotificationMessage *warningMsg = [RCInformationNotificationMessage notificationWithMessage:@"请不要轻易给陌生人汇钱！" extra:nil];
+    BOOL saveToDB = NO;  //是否保存到数据库中
+    RCMessage *savedMsg ;
+    if (saveToDB) {
+        savedMsg = [[RCIMClient sharedRCIMClient] insertMessage:self.conversationType targetId:self.targetId senderUserId:[RCIMClient sharedRCIMClient].currentUserInfo.userId sendStatus:SentStatus_SENT content:warningMsg];
+    } else {
+        savedMsg =[[RCMessage alloc] initWithType:self.conversationType targetId:self.targetId direction:MessageDirection_SEND messageId:-1 content:warningMsg];//注意messageId要设置为－1
+    }
+    [self appendAndDisplayMessage:savedMsg];
+*/
 }
 
 - (void)leftBarButtonItemPressed:(id)sender {

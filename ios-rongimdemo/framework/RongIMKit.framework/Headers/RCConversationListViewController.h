@@ -199,6 +199,13 @@
 - (void)didTapCellPortrait:(RCConversationModel *)model;
 
 /**
+ *  长按头像事件
+ *
+ *  @param model 会话model
+ */
+- (void)didLongPressCellPortrait:(RCConversationModel *)model;
+
+/**
  *  收到新消息,用于刷新会话列表，如果派生类调用了父类方法，请不要再次调用refreshConversationTableViewIfNeeded，避免多次刷新
  *  当收到多条消息时，会在最后一条消息时在内部调用refreshConversationTableViewIfNeeded
  *

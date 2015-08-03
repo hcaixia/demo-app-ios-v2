@@ -17,6 +17,16 @@
 //存储用户信息
 -(void)insertUserToDB:(RCUserInfo*)user;
 
+//插入黑名单列表
+-(void)insertBlackListToDB:(RCUserInfo*)user;
+
+//获取黑名单列表
+- (NSArray *)getBlackList;
+
+//移除黑名单
+- (void)removeBlackList:(NSString *)userId;
+
+
 //从表中获取用户信息
 -(RCUserInfo*) getUserByUserId:(NSString*)userId;
 
