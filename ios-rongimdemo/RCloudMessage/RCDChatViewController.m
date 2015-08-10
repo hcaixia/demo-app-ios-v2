@@ -15,9 +15,13 @@
 #import "RCDGroupDetailViewController.h"
 #import "RCDRCIMDataSource.h"
 #import "RCDHttpTool.h"
+#import "LocationShareViewController.h"
+#import "LocationShareStartCell.h"
+#import "LocationShareStatusView.h"
 
-@interface RCDChatViewController ()
-
+@interface RCDChatViewController () <UIActionSheetDelegate, RCLocationShareObserver, LocationShareStatusViewDelegate, UIAlertViewDelegate, RCMessageCellDelegate>
+@property (nonatomic, weak)id<RCLocationShareProxy> locationShare;
+@property (nonatomic, strong)LocationShareStatusView *locationShareStatusView;
 @end
 
 @implementation RCDChatViewController
@@ -36,6 +40,21 @@
         self.navigationItem.rightBarButtonItem = nil;
     }
 
+/*******************实时地理位置共享***************/
+    [self registerClass:[LocationShareStartCell class] forCellWithReuseIdentifier:RCLocationShareStartMessageTypeIdentifier];
+    
+    __weak typeof(&*self) weakSelf = self;
+    [[RCLocationShareManager sharedManager] getLocationShareProxy:self.conversationType targetId:self.targetId success:^(id<RCLocationShareProxy> locationShare) {
+        weakSelf.locationShare = locationShare;
+        [weakSelf.locationShare addLocationShareObserver:self];
+        [weakSelf updateLocationShareStatus];
+    } error:^(RCLocationShareErrorCode status) {
+        NSLog(@"get location share failre with code %d", (int)status);
+    }];
+
+/******************实时地理位置共享**************/
+    
+    
     [self notifyUpdateUnreadMessageCount];
     
     //如果是单聊，不显示发送方昵称
@@ -92,10 +111,20 @@
 }
 
 - (void)leftBarButtonItemPressed:(id)sender {
-  //需要调用super的实现
-  [super leftBarButtonItemPressed:sender];
+    if ([self.locationShare getStatus] == RC_LOCATION_SHARE_STATUS_OUTGOING ||
+        [self.locationShare getStatus] == RC_LOCATION_SHARE_STATUS_CONNECTED) {
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示" message:@"退出当前界面位置共享会终止，确定要退出？" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"退出", nil];
+        [alertView show];
+    } else {
+        [self popupChatViewController];
+    }
+    
+}
 
-  [self.navigationController popViewControllerAnimated:YES];
+- (void)popupChatViewController {
+    [super leftBarButtonItemPressed:nil];
+    [self.locationShare removeLocationShareObserver:self];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 /**
@@ -301,20 +330,276 @@
     
 }
 
-//- (void)pluginBoardView:(RCPluginBoardView *)pluginBoardView clickedItemWithTag:(NSInteger)tag{
-//    [super pluginBoardView:pluginBoardView clickedItemWithTag:tag];
-//    switch (tag) {
-//        case 101: {
-//            //这里加你自己的事件处理
-//        } break;
-//        default:
-//            break;
-//    }
-//}
+- (void)setLocationShare:(id<RCLocationShareProxy>)locationShare {
+    _locationShare = locationShare;
+}
+
+- (void)pluginBoardView:(RCPluginBoardView *)pluginBoardView clickedItemWithTag:(NSInteger)tag{
+    switch (tag) {
+            case PLUGIN_BOARD_ITEM_LOCATION_TAG: {
+                if (self.locationShare) {
+                    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"发送位置", @"位置实时共享", nil];
+                    [actionSheet showInView:self.view];
+                } else {
+                    [super pluginBoardView:pluginBoardView clickedItemWithTag:tag];
+                }
+                
+            } break;
+        default:
+            [super pluginBoardView:pluginBoardView clickedItemWithTag:tag];
+            break;
+    }
+}
+- (LocationShareStatusView *)locationShareStatusView {
+    if (!_locationShareStatusView) {
+        _locationShareStatusView = [[LocationShareStatusView alloc] initWithFrame:CGRectMake(0, 62, self.view.frame.size.width, 0)];
+        _locationShareStatusView.delegate = self;
+        [self.view addSubview:_locationShareStatusView];
+    }
+    return _locationShareStatusView;
+}
+#pragma mark - LocationShareStatusViewDelegate
+- (void)onJoin {
+    [self showLocationShareViewController];
+}
+- (RCLocationShareStatus)getStatus {
+    return [self.locationShare getStatus];
+}
+
+- (void)onShowLocationShareView {
+    [self showLocationShareViewController];
+}
+
+#pragma mark override
+/**
+ *  重写方法实现自定义消息的显示
+ *
+ *  @param collectionView collectionView
+ *  @param indexPath      indexPath
+ *
+ *  @return RCMessageTemplateCell
+ */
+- (RCMessageBaseCell *)rcConversationCollectionView:(UICollectionView *)collectionView
+                             cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    RCMessageModel *model =
+    [self.conversationDataRepository objectAtIndex:indexPath.row];
+    
+    if (!self.displayUserNameInCell) {
+        if (model.messageDirection == MessageDirection_RECEIVE) {
+            model.isDisplayNickname = NO;
+        }
+    }
+    RCMessageContent *messageContent = model.content;
+    RCMessageBaseCell *cell = nil;
+    if ([messageContent isMemberOfClass:[RCLocationShareStartMessage class]]) {
+        LocationShareStartCell *__cell = [collectionView
+                                 dequeueReusableCellWithReuseIdentifier:RCLocationShareStartMessageTypeIdentifier
+                                 forIndexPath:indexPath];
+        [__cell setDataModel:model];
+        [__cell setDelegate:self];
+        //__cell.locationDelegate=self;
+        cell = __cell;
+        return cell;
+    } else {
+        return [super rcConversationCollectionView:collectionView cellForItemAtIndexPath:indexPath];
+    }
+}
+
+#pragma mark override
+- (void)didTapMessageCell:(RCMessageModel *)model {
+    [super didTapMessageCell:model];
+    if ([model.content isKindOfClass:[RCLocationShareStartMessage class]]) {
+        [self showLocationShareViewController];
+    }
+}
+
+#pragma mark override
+/**
+ *  重写方法实现自定义消息的显示的高度
+ *
+ *  @param collectionView       collectionView
+ *  @param collectionViewLayout collectionViewLayout
+ *  @param indexPath            indexPath
+ *
+ *  @return 显示的高度
+ */
+- (CGSize)rcConversationCollectionView:(UICollectionView *)collectionView
+                                layout:(UICollectionViewLayout *)collectionViewLayout
+                sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    RCMessageModel *model = [self.conversationDataRepository objectAtIndex:indexPath.row];
+    RCMessageContent *messageContent = model.content;
+    if ([messageContent isMemberOfClass:[RCLocationShareStartMessage class]]) {
+        if (model.isDisplayMessageTime) {
+            return CGSizeMake(collectionView.frame.size.width, 85);
+        }
+        return CGSizeMake(collectionView.frame.size.width, 70);
+    } else {
+        return [super rcConversationCollectionView:collectionView layout:collectionViewLayout sizeForItemAtIndexPath:indexPath];
+    }
+}
+
+#pragma mark override
+- (void)resendMessage:(RCMessageContent *)messageContent{
+    if ([messageContent isKindOfClass:[RCLocationShareStartMessage class]]) {
+        [self showLocationShareViewController];
+    } else {
+        [super resendMessage:messageContent];
+    }
+}
+#pragma mark - UIActionSheet Delegate
+-(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    switch (buttonIndex) {
+        case 0:
+        {
+            [super pluginBoardView:self.pluginBoardView clickedItemWithTag:PLUGIN_BOARD_ITEM_LOCATION_TAG];
+        }
+        break;
+        case 1:
+        {
+            [self showLocationShareViewController];
+        }
+        break;
+    }
+}
+
+#pragma mark - RCLocationShareObserver
+- (void)onLocationShareStatusChange:(RCLocationShareStatus)status {
+    __weak typeof(&*self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf updateLocationShareStatus];
+    });
+}
+
+- (void)onReceiveLocation:(CLLocation *)location fromUserId:(NSString *)userId {
+    __weak typeof(&*self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf updateLocationShareStatus];
+    });
+}
+
+- (void)onParticipantsJoin:(NSString *)userId {
+    __weak typeof(&*self) weakSelf = self;
+    if ([userId isEqualToString:[RCIMClient sharedRCIMClient].currentUserInfo.userId]) {
+        [self notifyParticipantChange:@"你加入了地理位置共享"];
+    } else {
+        [[RCIM sharedRCIM].userInfoDataSource getUserInfoWithUserId:userId completion:^(RCUserInfo *userInfo) {
+            if (userInfo.name.length) {
+                [weakSelf notifyParticipantChange:[NSString stringWithFormat:@"%@加入地理位置共享", userInfo.name]];
+            } else {
+                [weakSelf notifyParticipantChange:[NSString stringWithFormat:@"user<%@>加入地理位置共享", userId]];
+            }
+        }];
+    }
+}
+
+- (void)onParticipantsQuit:(NSString *)userId {
+    __weak typeof(&*self) weakSelf = self;
+    if ([userId isEqualToString:[RCIMClient sharedRCIMClient].currentUserInfo.userId]) {
+        [self notifyParticipantChange:@"你退出地理位置共享"];
+    } else {
+        [[RCIM sharedRCIM].userInfoDataSource getUserInfoWithUserId:userId completion:^(RCUserInfo *userInfo) {
+            if (userInfo.name.length) {
+                [weakSelf notifyParticipantChange:[NSString stringWithFormat:@"%@退出地理位置共享", userInfo.name]];
+            } else {
+                [weakSelf notifyParticipantChange:[NSString stringWithFormat:@"user<%@>退出地理位置共享", userId]];
+            }
+        }];
+    }
+}
+
+- (void)onLocationShareStartFailed:(long)messageId {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        for (int i = 0; i < self.conversationDataRepository.count; i++) {
+            RCMessageModel *model =
+            [self.conversationDataRepository objectAtIndex:i];
+            if (model.messageId == messageId) {
+                model.sentStatus = SentStatus_FAILED;
+            }
+        }
+        NSArray *visibleItem = [self.conversationMessageCollectionView indexPathsForVisibleItems];
+        for (int i = 0; i < visibleItem.count; i++) {
+            NSIndexPath *indexPath = visibleItem[i];
+            RCMessageModel *model =
+            [self.conversationDataRepository objectAtIndex:indexPath.row];
+            if (model.messageId == messageId) {
+                [self.conversationMessageCollectionView reloadItemsAtIndexPaths:@[indexPath]];
+            }
+        }
+   });
+}
+
+- (void)notifyParticipantChange:(NSString *)text {
+    __weak typeof(&*self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf.locationShareStatusView updateText:text];
+        [weakSelf performSelector:@selector(updateLocationShareStatus) withObject:nil afterDelay:0.5];
+    });
+}
+
+
+- (void)onFailUpdateLocation:(NSString *)description {
+    
+}
+
+#pragma mark - UIAlertViewDelegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 1) {
+        [self.locationShare quitLocationShare];
+        [self popupChatViewController];
+    }
+}
 
 - (RCMessage *)willAppendAndDisplayMessage:(RCMessage *)message
 {
     return message;
 }
 
+/*******************实时地理位置共享***************/
+- (void)showLocationShareViewController{
+    LocationShareViewController *lsvc = [[LocationShareViewController alloc] init];
+    lsvc.locationShareProxy = self.locationShare;
+    if ([self.locationShare getStatus] == RC_LOCATION_SHARE_STATUS_INCOMING) {
+        [self.locationShare joinLocationShare];
+    }else if([self.locationShare getStatus] == RC_LOCATION_SHARE_STATUS_IDLE){
+        [self.locationShare startLocationShare];
+    }
+    [self.navigationController presentViewController:lsvc animated:YES completion:^{
+        
+    }];
+}
+- (void)updateLocationShareStatus {
+    if (self.locationShare) {
+        [self.locationShareStatusView updateLocationShareStatus];
+        __weak typeof(&*self) weakSelf = self;
+        NSArray *participants = nil;
+        switch ([self.locationShare getStatus]) {
+                case RC_LOCATION_SHARE_STATUS_OUTGOING:
+                [self.locationShareStatusView updateText:@"您正在共享地理位置"];
+                break;
+                case RC_LOCATION_SHARE_STATUS_CONNECTED:
+                case RC_LOCATION_SHARE_STATUS_INCOMING:
+                participants = [self.locationShare getParticipants];
+                if (participants.count == 1) {
+                    NSString *userId = participants[0];
+                    [weakSelf.locationShareStatusView updateText:[NSString stringWithFormat:@"user<%@>正在共享地理位置", userId]];
+                    [[RCIM sharedRCIM].userInfoDataSource getUserInfoWithUserId:userId completion:^(RCUserInfo *userInfo) {
+                        if (userInfo.name.length) {
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                [weakSelf.locationShareStatusView updateText:[NSString stringWithFormat:@"%@正在共享地理位置", userInfo.name]];
+                            });
+                        }
+                    }];
+                } else {
+                    if(participants.count<1)
+                       [self.locationShareStatusView removeFromSuperview];
+                    else
+                        [self.locationShareStatusView updateText:[NSString stringWithFormat:@"%d人正在共享地理位置", (int)participants.count]];
+                }
+                break;
+            default:
+                break;
+        }
+    }
+}
 @end

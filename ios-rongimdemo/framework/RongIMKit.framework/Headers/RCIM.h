@@ -110,7 +110,7 @@ FOUNDATION_EXPORT NSString
  */
 @property(nonatomic) UIColor *globalNavigationBarTintColor;
 /**
- *  默认45*45
+ *  默认45*45，高度最小只能为36
  */
 @property(nonatomic) CGSize globalConversationPortraitSize;
 /**

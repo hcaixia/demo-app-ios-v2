@@ -289,6 +289,14 @@
  */
 - (void)sendImageMessage:(RCImageMessage *)imageMessage pushContent:(NSString *)pushContent;
 
+/**
+ *  重新发送消息。
+ *  消息发送失败后，会有小红点，点击小红点进行重发消息。此时已经删除掉数据库信息和列表信息，重写此函数来发送消息，详情请见demo
+ *
+ *  @param messageContent 消息
+ */
+- (void)resendMessage:(RCMessageContent *)messageContent;
+
 #pragma mark override
 /**
  *  发送新拍照的图片成功之后，如果需要保存到本地系统，则重写该方法

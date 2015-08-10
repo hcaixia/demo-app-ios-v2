@@ -5,7 +5,7 @@
   Created by xugang on 1/15/15.
   Copyright (c) 2015 RongCloud. All rights reserved.
 */
-"RC:ImgMsg" = "[Picture]";
+"RC:ImgMsg" = "[Image]";
 "RC:LBSMsg" = "[Location]";
 "RC:VcMsg" = "[Voice]";
 "RC:ImgTextMsg" = "[RichContent]";
@@ -34,8 +34,6 @@
 "VoIP_Answer"="Answer";
 "VoIP_Reject"="Reject";
 "VoIP_Drop"="Drop";
-"VoIP_Mute"="Mute";
-"VoIP_Speaker"="Speaker";
 "Request_Friends_extra"="You have received a message for requesting add friends";
 "Setting"="Setting";
 "Back"="Back";
@@ -65,9 +63,9 @@
 "NoPhotoTitle"="No Photos or Videos";
 "NoPhotoDesc"="You can sync photos and videos onto your iPhone using iTunes.";
 "Send"="Send";
-"SetToTop"="Set to Top";
-"NewMsgNotification"="Message Notification";
-"ClearRecord"="Clear History";
+"SetToTop"="sticky to top";
+"NewMsgNotification"="New Message Notification";
+"ClearRecord"="Clear Chat History";
 "CanNotRemoveSelf"="Can't remove youself";
 "MemberNumber"="Members";
 "Invite"="invite";
@@ -97,3 +95,23 @@
 "AccessRightTitle"="no access right";
 "JoinChatRoomFailed"="Join chat room failed";
 "Connecting..."="Connecting...";
+"FromFriendInvitation"="From %@ friend invitation";
+"AddFriendInvitation"="Add Friend Invitation";
+"ReadAll"="Read all";
+"OfficialAccounts"="Official Accounts";
+"Share"="Share Name Card";
+"Report"="Report";
+"ClearHistory"="Clear History";
+"Unfollow"="Unfollow";
+"Introduced"="Intro";
+"AccountType"="Account Type";
+"ServicePhone"="Customer service hotline";
+"BusinessScope"="Business Scope";
+"NewMessageNotification"="New message notification";
+"ViewHistory"="View History";
+"EnterOfficialAccount"="Enter Official Account";
+"Attention"="Follow";
+"PublicNum"="Public service : %@";
+"Wait"="Please wait a moment...";
+"Searching"="Searching...";
+"Search"="Search:";

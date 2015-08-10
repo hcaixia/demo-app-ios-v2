@@ -115,6 +115,7 @@
     [DEFAULTS removeObjectForKey:@"userToken"];
     [DEFAULTS removeObjectForKey:@"userCookie"];
     [DEFAULTS removeObjectForKey:@"isLogin"];
+    [DEFAULTS synchronize];
     
     
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];

@@ -55,3 +55,4 @@ FOUNDATION_EXPORT const unsigned char RongIMKitVersionString[];
 #import <RongIMKit/RCPublicServiceSearchViewController.h>
 #import <RongIMKit/RCPublicServiceListViewController.h>
 #import <RongIMKit/RCImagePreviewController.h>
+#import <RongIMKit/RCKitUtility.h>

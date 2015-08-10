@@ -903,6 +903,16 @@ setConversationNotificationStatus:(RCConversationType)conversationType
 - (NSArray *)getPublicServiceList;
 
 /**
+ *  获取公众号WebView Controller。
+ *  公众号相关的所有网页都应该由此WebView打开。
+ *
+ *  @param URLString  待打开的链接地址
+ *
+ *  @return WebView controller
+ */
+- (UIViewController *)getPublicServiceWebViewController:(NSString *)URLString;
+
+/**
  *  同步用户信息
  *
  *  @param userData          用户信息

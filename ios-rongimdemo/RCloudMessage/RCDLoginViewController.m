@@ -159,7 +159,7 @@
     userNameTextField.delegate=self;
     //_account.placeholder=[NSString stringWithFormat:@"Email"];
     UIColor* color = [UIColor whiteColor];
-    userNameTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"用户名" attributes:@{ NSForegroundColorAttributeName : color }];
+    userNameTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"邮箱" attributes:@{ NSForegroundColorAttributeName : color }];
     userNameTextField.textColor = [UIColor whiteColor];
     userNameTextField.text = [self getDefaultUserName];
     if (userNameTextField.text.length > 0) {
@@ -507,7 +507,7 @@
                                            
                                            [RCDHTTPTOOL getUserInfoByUserID:userId
                                                                  completion:^(RCUserInfo* user) {
-                                                                     [[RCIM sharedRCIM]refreshUserInfoCache:_currentUserInfo withUserId:userId];
+                                                                     [[RCIM sharedRCIM]refreshUserInfoCache:user withUserId:userId];
                                                                      
                                                                  }];
                                            //同步群组

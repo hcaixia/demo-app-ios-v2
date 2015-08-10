@@ -65,7 +65,7 @@
     //初始化融云SDK
     [[RCIM sharedRCIM] initWithAppKey:RONGCLOUD_IM_APPKEY];
   }
-
+  
   //设置会话列表头像和会话界面头像
 
   [[RCIM sharedRCIM] setConnectionStatusDelegate:self];
@@ -87,7 +87,6 @@
   NSString *userId=[DEFAULTS objectForKey:@"userId"];
   NSString *userName = [DEFAULTS objectForKey:@"userName"];
   NSString *password = [DEFAULTS objectForKey:@"userPwd"];
-    
   if (token.length && userId.length && password.length && !debugMode) {
     RCUserInfo *_currentUserInfo =
     [[RCUserInfo alloc] initWithUserId:userId
@@ -133,14 +132,15 @@
           //设置当前的用户信息
 
           //同步群组
-          
-          dispatch_async(dispatch_get_main_queue(), ^{
-            UIStoryboard *storyboard =
-                [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-            UINavigationController *rootNavi = [storyboard
-                instantiateViewControllerWithIdentifier:@"rootNavi"];
-            self.window.rootViewController = rootNavi;
-          });
+          //调用connectWithToken时数据库会同步打开，不用再等到block返回之后再访问数据库，因此不需要这里刷新
+          //这里仅保证之前已经成功登陆过，如果第一次登陆必须等block 返回之后才操作数据
+//          dispatch_async(dispatch_get_main_queue(), ^{
+//            UIStoryboard *storyboard =
+//                [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+//            UINavigationController *rootNavi = [storyboard
+//                instantiateViewControllerWithIdentifier:@"rootNavi"];
+//            self.window.rootViewController = rootNavi;
+//          });
         }
         error:^(RCConnectErrorCode status) {
             RCUserInfo *_currentUserInfo =[[RCUserInfo alloc] initWithUserId:userId
