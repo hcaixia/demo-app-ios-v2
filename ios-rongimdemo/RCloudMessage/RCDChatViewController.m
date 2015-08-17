@@ -15,13 +15,14 @@
 #import "RCDGroupDetailViewController.h"
 #import "RCDRCIMDataSource.h"
 #import "RCDHttpTool.h"
-#import "LocationShareViewController.h"
-#import "LocationShareStartCell.h"
-#import "LocationShareStatusView.h"
+#import "RealTimeLocationViewController.h"
+#import "RealTimeLocationStartCell.h"
+#import "RealTimeLocationStatusView.h"
+#import "RealTimeLocationEndCell.h"
 
-@interface RCDChatViewController () <UIActionSheetDelegate, RCLocationShareObserver, LocationShareStatusViewDelegate, UIAlertViewDelegate, RCMessageCellDelegate>
-@property (nonatomic, weak)id<RCLocationShareProxy> locationShare;
-@property (nonatomic, strong)LocationShareStatusView *locationShareStatusView;
+@interface RCDChatViewController () <UIActionSheetDelegate, RCRealTimeLocationObserver, RealTimeLocationStatusViewDelegate, UIAlertViewDelegate, RCMessageCellDelegate>
+@property (nonatomic, weak)id<RCRealTimeLocationProxy> realTimeLocation;
+@property (nonatomic, strong)RealTimeLocationStatusView *realTimeLocationStatusView;
 @end
 
 @implementation RCDChatViewController
@@ -41,14 +42,15 @@
     }
 
 /*******************实时地理位置共享***************/
-    [self registerClass:[LocationShareStartCell class] forCellWithReuseIdentifier:RCLocationShareStartMessageTypeIdentifier];
+    [self registerClass:[RealTimeLocationStartCell class] forCellWithReuseIdentifier:RCRealTimeLocationStartMessageTypeIdentifier];
+    [self registerClass:[RealTimeLocationEndCell class] forCellWithReuseIdentifier:RCRealTimeLocationEndMessageTypeIdentifier];
     
     __weak typeof(&*self) weakSelf = self;
-    [[RCLocationShareManager sharedManager] getLocationShareProxy:self.conversationType targetId:self.targetId success:^(id<RCLocationShareProxy> locationShare) {
-        weakSelf.locationShare = locationShare;
-        [weakSelf.locationShare addLocationShareObserver:self];
-        [weakSelf updateLocationShareStatus];
-    } error:^(RCLocationShareErrorCode status) {
+    [[RCRealTimeLocationManager sharedManager] getRealTimeLocationProxy:self.conversationType targetId:self.targetId success:^(id<RCRealTimeLocationProxy> realTimeLocation) {
+        weakSelf.realTimeLocation = realTimeLocation;
+        [weakSelf.realTimeLocation addRealTimeLocationObserver:self];
+        [weakSelf updateRealTimeLocationStatus];
+    } error:^(RCRealTimeLocationErrorCode status) {
         NSLog(@"get location share failre with code %d", (int)status);
     }];
 
@@ -111,8 +113,8 @@
 }
 
 - (void)leftBarButtonItemPressed:(id)sender {
-    if ([self.locationShare getStatus] == RC_LOCATION_SHARE_STATUS_OUTGOING ||
-        [self.locationShare getStatus] == RC_LOCATION_SHARE_STATUS_CONNECTED) {
+    if ([self.realTimeLocation getStatus] == RC_REAL_TIME_LOCATION_STATUS_OUTGOING ||
+        [self.realTimeLocation getStatus] == RC_REAL_TIME_LOCATION_STATUS_CONNECTED) {
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示" message:@"退出当前界面位置共享会终止，确定要退出？" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"退出", nil];
         [alertView show];
     } else {
@@ -123,7 +125,7 @@
 
 - (void)popupChatViewController {
     [super leftBarButtonItemPressed:nil];
-    [self.locationShare removeLocationShareObserver:self];
+    [self.realTimeLocation removeRealTimeLocationObserver:self];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -330,14 +332,14 @@
     
 }
 
-- (void)setLocationShare:(id<RCLocationShareProxy>)locationShare {
-    _locationShare = locationShare;
+- (void)setRealTimeLocation:(id<RCRealTimeLocationProxy>)realTimeLocation {
+    _realTimeLocation = realTimeLocation;
 }
 
 - (void)pluginBoardView:(RCPluginBoardView *)pluginBoardView clickedItemWithTag:(NSInteger)tag{
     switch (tag) {
             case PLUGIN_BOARD_ITEM_LOCATION_TAG: {
-                if (self.locationShare) {
+                if (self.realTimeLocation) {
                     UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"发送位置", @"位置实时共享", nil];
                     [actionSheet showInView:self.view];
                 } else {
@@ -350,24 +352,24 @@
             break;
     }
 }
-- (LocationShareStatusView *)locationShareStatusView {
-    if (!_locationShareStatusView) {
-        _locationShareStatusView = [[LocationShareStatusView alloc] initWithFrame:CGRectMake(0, 62, self.view.frame.size.width, 0)];
-        _locationShareStatusView.delegate = self;
-        [self.view addSubview:_locationShareStatusView];
+- (RealTimeLocationStatusView *)realTimeLocationStatusView {
+    if (!_realTimeLocationStatusView) {
+        _realTimeLocationStatusView = [[RealTimeLocationStatusView alloc] initWithFrame:CGRectMake(0, 62, self.view.frame.size.width, 0)];
+        _realTimeLocationStatusView.delegate = self;
+        [self.view addSubview:_realTimeLocationStatusView];
     }
-    return _locationShareStatusView;
+    return _realTimeLocationStatusView;
 }
-#pragma mark - LocationShareStatusViewDelegate
+#pragma mark - RealTimeLocationStatusViewDelegate
 - (void)onJoin {
-    [self showLocationShareViewController];
+    [self showRealTimeLocationViewController];
 }
-- (RCLocationShareStatus)getStatus {
-    return [self.locationShare getStatus];
+- (RCRealTimeLocationStatus)getStatus {
+    return [self.realTimeLocation getStatus];
 }
 
-- (void)onShowLocationShareView {
-    [self showLocationShareViewController];
+- (void)onShowRealTimeLocationView {
+    [self showRealTimeLocationViewController];
 }
 
 #pragma mark override
@@ -391,16 +393,23 @@
     }
     RCMessageContent *messageContent = model.content;
     RCMessageBaseCell *cell = nil;
-    if ([messageContent isMemberOfClass:[RCLocationShareStartMessage class]]) {
-        LocationShareStartCell *__cell = [collectionView
-                                 dequeueReusableCellWithReuseIdentifier:RCLocationShareStartMessageTypeIdentifier
+    if ([messageContent isMemberOfClass:[RCRealTimeLocationStartMessage class]]) {
+        RealTimeLocationStartCell *__cell = [collectionView
+                                 dequeueReusableCellWithReuseIdentifier:RCRealTimeLocationStartMessageTypeIdentifier
                                  forIndexPath:indexPath];
         [__cell setDataModel:model];
         [__cell setDelegate:self];
         //__cell.locationDelegate=self;
         cell = __cell;
         return cell;
-    } else {
+    } else if ([messageContent isMemberOfClass:[RCRealTimeLocationEndMessage class]]) {
+        RealTimeLocationEndCell *__cell = [collectionView
+                                          dequeueReusableCellWithReuseIdentifier:RCRealTimeLocationEndMessageTypeIdentifier
+                                          forIndexPath:indexPath];
+        [__cell setDataModel:model];
+        cell = __cell;
+        return cell;
+    } else  {
         return [super rcConversationCollectionView:collectionView cellForItemAtIndexPath:indexPath];
     }
 }
@@ -408,8 +417,8 @@
 #pragma mark override
 - (void)didTapMessageCell:(RCMessageModel *)model {
     [super didTapMessageCell:model];
-    if ([model.content isKindOfClass:[RCLocationShareStartMessage class]]) {
-        [self showLocationShareViewController];
+    if ([model.content isKindOfClass:[RCRealTimeLocationStartMessage class]]) {
+        [self showRealTimeLocationViewController];
     }
 }
 
@@ -428,11 +437,11 @@
                 sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     RCMessageModel *model = [self.conversationDataRepository objectAtIndex:indexPath.row];
     RCMessageContent *messageContent = model.content;
-    if ([messageContent isMemberOfClass:[RCLocationShareStartMessage class]]) {
+    if ([messageContent isMemberOfClass:[RCRealTimeLocationStartMessage class]]) {
         if (model.isDisplayMessageTime) {
-            return CGSizeMake(collectionView.frame.size.width, 85);
+            return CGSizeMake(collectionView.frame.size.width, 66);
         }
-        return CGSizeMake(collectionView.frame.size.width, 70);
+        return CGSizeMake(collectionView.frame.size.width, 66);
     } else {
         return [super rcConversationCollectionView:collectionView layout:collectionViewLayout sizeForItemAtIndexPath:indexPath];
     }
@@ -440,8 +449,8 @@
 
 #pragma mark override
 - (void)resendMessage:(RCMessageContent *)messageContent{
-    if ([messageContent isKindOfClass:[RCLocationShareStartMessage class]]) {
-        [self showLocationShareViewController];
+    if ([messageContent isKindOfClass:[RCRealTimeLocationStartMessage class]]) {
+        [self showRealTimeLocationViewController];
     } else {
         [super resendMessage:messageContent];
     }
@@ -457,24 +466,24 @@
         break;
         case 1:
         {
-            [self showLocationShareViewController];
+            [self showRealTimeLocationViewController];
         }
         break;
     }
 }
 
-#pragma mark - RCLocationShareObserver
-- (void)onLocationShareStatusChange:(RCLocationShareStatus)status {
+#pragma mark - RCRealTimeLocationObserver
+- (void)onRealTimeLocationStatusChange:(RCRealTimeLocationStatus)status {
     __weak typeof(&*self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        [weakSelf updateLocationShareStatus];
+        [weakSelf updateRealTimeLocationStatus];
     });
 }
 
 - (void)onReceiveLocation:(CLLocation *)location fromUserId:(NSString *)userId {
     __weak typeof(&*self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        [weakSelf updateLocationShareStatus];
+        [weakSelf updateRealTimeLocationStatus];
     });
 }
 
@@ -508,7 +517,7 @@
     }
 }
 
-- (void)onLocationShareStartFailed:(long)messageId {
+- (void)onRealTimeLocationStartFailed:(long)messageId {
     dispatch_async(dispatch_get_main_queue(), ^{
         for (int i = 0; i < self.conversationDataRepository.count; i++) {
             RCMessageModel *model =
@@ -532,8 +541,8 @@
 - (void)notifyParticipantChange:(NSString *)text {
     __weak typeof(&*self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        [weakSelf.locationShareStatusView updateText:text];
-        [weakSelf performSelector:@selector(updateLocationShareStatus) withObject:nil afterDelay:0.5];
+        [weakSelf.realTimeLocationStatusView updateText:text];
+        [weakSelf performSelector:@selector(updateRealTimeLocationStatus) withObject:nil afterDelay:0.5];
     });
 }
 
@@ -545,7 +554,7 @@
 #pragma mark - UIAlertViewDelegate
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (buttonIndex == 1) {
-        [self.locationShare quitLocationShare];
+        [self.realTimeLocation quitRealTimeLocation];
         [self popupChatViewController];
     }
 }
@@ -556,45 +565,45 @@
 }
 
 /*******************实时地理位置共享***************/
-- (void)showLocationShareViewController{
-    LocationShareViewController *lsvc = [[LocationShareViewController alloc] init];
-    lsvc.locationShareProxy = self.locationShare;
-    if ([self.locationShare getStatus] == RC_LOCATION_SHARE_STATUS_INCOMING) {
-        [self.locationShare joinLocationShare];
-    }else if([self.locationShare getStatus] == RC_LOCATION_SHARE_STATUS_IDLE){
-        [self.locationShare startLocationShare];
+- (void)showRealTimeLocationViewController{
+    RealTimeLocationViewController *lsvc = [[RealTimeLocationViewController alloc] init];
+    lsvc.realTimeLocationProxy = self.realTimeLocation;
+    if ([self.realTimeLocation getStatus] == RC_REAL_TIME_LOCATION_STATUS_INCOMING) {
+        [self.realTimeLocation joinRealTimeLocation];
+    }else if([self.realTimeLocation getStatus] == RC_REAL_TIME_LOCATION_STATUS_IDLE){
+        [self.realTimeLocation startRealTimeLocation];
     }
     [self.navigationController presentViewController:lsvc animated:YES completion:^{
         
     }];
 }
-- (void)updateLocationShareStatus {
-    if (self.locationShare) {
-        [self.locationShareStatusView updateLocationShareStatus];
+- (void)updateRealTimeLocationStatus {
+    if (self.realTimeLocation) {
+        [self.realTimeLocationStatusView updateRealTimeLocationStatus];
         __weak typeof(&*self) weakSelf = self;
         NSArray *participants = nil;
-        switch ([self.locationShare getStatus]) {
-                case RC_LOCATION_SHARE_STATUS_OUTGOING:
-                [self.locationShareStatusView updateText:@"您正在共享地理位置"];
+        switch ([self.realTimeLocation getStatus]) {
+                case RC_REAL_TIME_LOCATION_STATUS_OUTGOING:
+                [self.realTimeLocationStatusView updateText:@"您正在共享地理位置"];
                 break;
-                case RC_LOCATION_SHARE_STATUS_CONNECTED:
-                case RC_LOCATION_SHARE_STATUS_INCOMING:
-                participants = [self.locationShare getParticipants];
+                case RC_REAL_TIME_LOCATION_STATUS_CONNECTED:
+                case RC_REAL_TIME_LOCATION_STATUS_INCOMING:
+                participants = [self.realTimeLocation getParticipants];
                 if (participants.count == 1) {
                     NSString *userId = participants[0];
-                    [weakSelf.locationShareStatusView updateText:[NSString stringWithFormat:@"user<%@>正在共享地理位置", userId]];
+                    [weakSelf.realTimeLocationStatusView updateText:[NSString stringWithFormat:@"user<%@>正在共享地理位置", userId]];
                     [[RCIM sharedRCIM].userInfoDataSource getUserInfoWithUserId:userId completion:^(RCUserInfo *userInfo) {
                         if (userInfo.name.length) {
                             dispatch_async(dispatch_get_main_queue(), ^{
-                                [weakSelf.locationShareStatusView updateText:[NSString stringWithFormat:@"%@正在共享地理位置", userInfo.name]];
+                                [weakSelf.realTimeLocationStatusView updateText:[NSString stringWithFormat:@"%@正在共享地理位置", userInfo.name]];
                             });
                         }
                     }];
                 } else {
                     if(participants.count<1)
-                       [self.locationShareStatusView removeFromSuperview];
+                       [self.realTimeLocationStatusView removeFromSuperview];
                     else
-                        [self.locationShareStatusView updateText:[NSString stringWithFormat:@"%d人正在共享地理位置", (int)participants.count]];
+                        [self.realTimeLocationStatusView updateText:[NSString stringWithFormat:@"%d人正在共享地理位置", (int)participants.count]];
                 }
                 break;
             default:
@@ -602,4 +611,6 @@
         }
     }
 }
+
+
 @end

@@ -42,6 +42,7 @@
 
 @property (nonatomic, strong) UILabel *appKeyLabel;
 @property (nonatomic, strong) UIButton *changeKeyButton;
+@property (nonatomic) int loginFailureTimes;
 @property (nonatomic)BOOL rcDebug;
 @end
 
@@ -51,7 +52,7 @@
 #define PassWordFieldTag 1001
 @synthesize animatedImagesView = _animatedImagesView;
 @synthesize inputBackground = _inputBackground;
-
+MBProgressHUD* hud ;
 
 - (void)onChangeKey:(id)sender
 {
@@ -70,7 +71,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
     self.rcDebug = [[NSUserDefaults standardUserDefaults] boolForKey:@"rongcloud appkey debug"];
     if (self.rcDebug) {//测试切换appkey使用
         NSDictionary *defaultValues = [NSDictionary dictionaryWithObjectsAndKeys:@[@"z3v5yqkbv8v30", @"lmxuhwagxrxmd", @"e0x9wycfx7flq"], @"keys", @[@1, @2, @0], @"envs", nil];
@@ -417,46 +417,108 @@
     NSString* defaultUserPwd = [[NSUserDefaults standardUserDefaults] objectForKey:@"userPwd"];
     return defaultUserPwd;
 }
-/**
- *  默认登陆
- */
-- (void)defaultLogin
-{
-    UIStoryboard* storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-//        if ([self getDefaultUser]) {
-//            NSString* token = [[NSUserDefaults standardUserDefaults] objectForKey:@"userToken"];
-//            if (token.length != 0) {
-//                //连接融云SDK
-//                [[RCIM sharedRCIM] connectWithToken:token
-//                            success:^(NSString* userId) {
-//                                //
-//                                //同步群组
-//                                [RCDDataSource syncGroups];
-//                                
-//                                //通知主线程更新UI
-//                                dispatch_async(dispatch_get_main_queue(), ^{
-//                                    UINavigationController *rootNavi = [storyboard instantiateViewControllerWithIdentifier:@"rootNavi"];
-//                                    [ShareApplicationDelegate window].rootViewController = rootNavi;
-//                                });
-//    
-//                            }
-//                            error:^(RCConnectErrorCode status) {
-//                                NSAssert(status == 2004, @"Token is incorrect.");
-//                            }];
-//            }
-//        }
-//        else {
-    RCDLoginViewController* loginVC = [storyboard instantiateViewControllerWithIdentifier:@"loginVC"];
-    UINavigationController *_navi = [[UINavigationController alloc]initWithRootViewController:loginVC];
-    [ShareApplicationDelegate window].rootViewController = _navi;
-   // }
-}
 
 - (IBAction)actionLogin:(id)sender
 {
     NSString* userName = [(UITextField*)[self.view viewWithTag:UserTextFieldTag] text];
      NSString* userPwd = [(UITextField*)[self.view viewWithTag:PassWordFieldTag] text];
     [self login:userName password:userPwd];
+}
+
+- (void)loginSuccess:(NSString *)userName password:(NSString *)password token:(NSString *)token userId:(NSString *)userId
+{
+    //保存默认用户
+    [DEFAULTS setObject:userName forKey:@"userName"];
+    [DEFAULTS setObject:password forKey:@"userPwd"];
+    [DEFAULTS setObject:token forKey:@"userToken"];
+    [DEFAULTS setObject:userId forKey:@"userId"];
+    [DEFAULTS synchronize];
+    
+    //设置当前的用户信息
+    RCUserInfo *_currentUserInfo = [[RCUserInfo alloc]initWithUserId:userId name:userName portrait:nil];
+    [RCIMClient sharedRCIMClient].currentUserInfo = _currentUserInfo;
+    
+    [RCDHTTPTOOL getUserInfoByUserID:userId
+                          completion:^(RCUserInfo* user) {
+                              [[RCIM sharedRCIM]refreshUserInfoCache:user withUserId:userId];
+                              
+                          }];
+    //同步群组
+    [RCDDataSource syncGroups];
+    [RCDDataSource syncFriendList:^(NSMutableArray *friends) {}];
+    BOOL notFirstTimeLogin = [DEFAULTS boolForKey:@"notFirstTimeLogin"];
+    if (!notFirstTimeLogin) {
+        [RCDDataSource cacheAllData:^{ //auto saved after completion.
+            //                                                   [DEFAULTS setBool:YES forKey:@"notFirstTimeLogin"];
+            //                                                   [DEFAULTS synchronize];
+        }];
+    }
+    //同步黑名单
+    [[RCIMClient sharedRCIMClient] getBlacklist:^(NSArray *blockUserIds) {
+        for (NSString *userID in blockUserIds) {
+            
+            // 暂不取用户信息，界面展示的时候在获取
+            RCUserInfo*userInfo = [[RCUserInfo alloc]init];
+            userInfo.userId = userID;
+            userInfo.portraitUri = nil;
+            userInfo.name = nil;
+            [[RCDataBaseManager shareInstance] insertBlackListToDB:userInfo];
+        }
+        
+    } error:^(RCErrorCode status) {
+        NSLog(@"同步黑名单失败，status = %ld",(long)status);
+    }];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        UINavigationController *rootNavi = [storyboard instantiateViewControllerWithIdentifier:@"rootNavi"];
+        [ShareApplicationDelegate window].rootViewController = rootNavi;
+        
+    });
+}
+/**
+ *  登录融云服务器
+ *
+ *  @param userName 用户名
+ *  @param token    token
+ *  @param password 密码
+ */
+- (void)loginRongCloud:(NSString *)userName token:(NSString *)token password:(NSString *)password
+{
+    //登陆融云服务器
+    [[RCIM sharedRCIM] connectWithToken:token success:^(NSString *userId) {
+        [self loginSuccess:userName password:password token:token userId:userId];
+    } error:^(RCConnectErrorCode status) {
+        //关闭HUD
+        [hud hide:YES];
+        NSLog(@"RCConnectErrorCode is %ld",(long)status);
+        _errorMsgLb.text=@"Token无效！";
+        [_pwdTextField shake];
+        
+    } tokenIncorrect:^{
+        NSLog(@"IncorrectToken");
+        
+//        if (_loginFailureTimes<3) {
+//            _loginFailureTimes++;
+//            [AFHttpTool getTokenSuccess:^(id response) {
+//                [self loginRongCloud:userName token:token password:password];
+//            } failure:^(NSError *err) {
+//                dispatch_async(dispatch_get_main_queue(), ^{
+//                [hud hide:YES];
+//                _errorMsgLb.text=@"Token无效";
+//                });
+//            }];
+//        }else
+//        {
+            _loginFailureTimes=0;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [hud hide:YES];
+                _errorMsgLb.text=@"Token无效";
+            });
+//        }
+        
+        
+    }];
 }
 
 /**
@@ -478,128 +540,51 @@
         if (self.rcDebug) {
             [[RCIM sharedRCIM] initWithAppKey:self.currentModel.appKey];
         }
-        
-        MBProgressHUD* hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        hud= [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         hud.labelText = @"登录中...";
-
+        [hud show:YES];
         [AFHttpTool loginWithEmail:userName password:password env:(self.currentModel == nil ? 1 : self.currentModel.env)
             success:^(id response) {
-                               
-                               if ([response[@"code"] intValue] == 200) {
-                                   RCDLoginInfo *loginInfo = [RCDLoginInfo shareLoginInfo];
-                                   loginInfo = [loginInfo initWithDictionary:response[@"result"] error:NULL];
-                                   
-                                   [AFHttpTool getTokenSuccess:^(id response) {
-
-                                       NSString *token = response[@"result"][@"token"];
-                                       //登陆融云服务器
-                                       [[RCIM sharedRCIM] connectWithToken:token success:^(NSString *userId) {
-                                           //保存默认用户
-                                                   [DEFAULTS setObject:userName forKey:@"userName"];
-                                                   [DEFAULTS setObject:password forKey:@"userPwd"];
-                                                   [DEFAULTS setObject:token forKey:@"userToken"];
-                                                   [DEFAULTS setObject:userId forKey:@"userId"];
-                                                   [DEFAULTS synchronize];
-                                           
-                                           //设置当前的用户信息
-                                           RCUserInfo *_currentUserInfo = [[RCUserInfo alloc]initWithUserId:userId name:userName portrait:nil];
-                                           [RCIMClient sharedRCIMClient].currentUserInfo = _currentUserInfo;
-                                           
-                                           [RCDHTTPTOOL getUserInfoByUserID:userId
-                                                                 completion:^(RCUserInfo* user) {
-                                                                     [[RCIM sharedRCIM]refreshUserInfoCache:user withUserId:userId];
-                                                                     
-                                                                 }];
-                                           //同步群组
-                                           [RCDDataSource syncGroups];
-                                           [RCDDataSource syncFriendList:^(NSMutableArray *friends) {}];
-                                           BOOL notFirstTimeLogin = [DEFAULTS boolForKey:@"notFirstTimeLogin"];
-                                           if (!notFirstTimeLogin) {
-                                               [RCDDataSource cacheAllData:^{ //auto saved after completion.
-//                                                   [DEFAULTS setBool:YES forKey:@"notFirstTimeLogin"];
-//                                                   [DEFAULTS synchronize];
-                                               }];
-                                           }
-                                           
-                                           
-                                           //同步黑名单
-                                           [[RCIMClient sharedRCIMClient] getBlacklist:^(NSArray *blockUserIds) {
-                                               for (NSString *userID in blockUserIds) {
-                                                   
-                                                   // 暂不取用户信息，界面展示的时候在获取
-                                                   RCUserInfo*userInfo = [[RCUserInfo alloc]init];
-                                                   userInfo.userId = userID;
-                                                   userInfo.portraitUri = nil;
-                                                   userInfo.name = nil;
-                                                   [[RCDataBaseManager shareInstance] insertBlackListToDB:userInfo];
-                                               }
-                                               
-                                           } error:^(RCErrorCode status) {
-                                               NSLog(@"同步黑名单失败，status = %ld",(long)status);
-                                           }];
-                                           
-                                           dispatch_async(dispatch_get_main_queue(), ^{
-                                               UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-                                               UINavigationController *rootNavi = [storyboard instantiateViewControllerWithIdentifier:@"rootNavi"];
-                                               [ShareApplicationDelegate window].rootViewController = rootNavi;
-                                               
-                                           });
-
-                                           
-                                       } error:^(RCConnectErrorCode status) {
-                                           //关闭HUD
-                                           [hud hide:YES];
-                                           NSLog(@"RCConnectErrorCode is %ld",(long)status);
-                                           _errorMsgLb.text=@"Token无效！";
-                                           [_pwdTextField shake];
-
-                                       } tokenIncorrect:^{
-                                           NSLog(@"IncorrectToken");
-                                           [hud hide:YES];
-                                           _errorMsgLb.text=@"Token无效";
-                                           [_pwdTextField shake];
-                                       }];
-                                       
-
-                                       
-                                       
-                                   } failure:^(NSError *err) {
-                                       //关闭HUD
-                                       [hud hide:YES];
-                                       NSLog(@"NSError is %@",err);
-                                       
-                                       _errorMsgLb.text=@"APP服务器错误！";
-                                       [_pwdTextField shake];
-                                   }];
-                               }else{
-                                   //关闭HUD
-                                   [hud hide:YES];
-                                   int _errCode = [response[@"code"] intValue];
-                                   NSLog(@"NSError is %d",_errCode);
-                                   if(_errCode==500)
-                                   {
-                                       _errorMsgLb.text=@"APP服务器错误！";
-                                       
-                                   }else
-                                   {
-                                       _errorMsgLb.text=@"用户名或密码错误！";
-                                   }
-                                   [_pwdTextField shake];
-                                   
-                               }
-
+               if ([response[@"code"] intValue] == 200) {
+                   RCDLoginInfo *loginInfo = [RCDLoginInfo shareLoginInfo];
+                   loginInfo = [loginInfo initWithDictionary:response[@"result"] error:NULL];
+                   [AFHttpTool getTokenSuccess:^(id response) {
+                       NSString *token = response[@"result"][@"token"];
+                       [self loginRongCloud:userName token:token password:password];
+                   } failure:^(NSError *err) {
+                       //关闭HUD
+                       [hud hide:YES];
+                       NSLog(@"NSError is %@",err);
+                       _errorMsgLb.text=@"APP服务器错误！";
+                       [_pwdTextField shake];
+                   }];
+               }else{
+                   //关闭HUD
+                   [hud hide:YES];
+                   int _errCode = [response[@"code"] intValue];
+                   NSLog(@"NSError is %d",_errCode);
+                   if(_errCode==500)
+                   {
+                       _errorMsgLb.text=@"APP服务器错误！";
+                       
+                   }else
+                   {
+                       _errorMsgLb.text=@"用户名或密码错误！";
+                   }
+                   [_pwdTextField shake];
+               }
             }
             failure:^(NSError* err) {
-                               //关闭HUD
-                               [hud hide:YES];
-                               NSLog(@"NSError is %ld",(long)err.code);
-                               if (err.code == 3840) {
-                                   _errorMsgLb.text=@"用户名或密码错误！";
-                                   [_pwdTextField shake];
-                               }else{
-                                   _errorMsgLb.text=@"DemoServer错误！";
-                                   [_pwdTextField shake];
-                               }
+               //关闭HUD
+               [hud hide:YES];
+               NSLog(@"NSError is %ld",(long)err.code);
+               if (err.code == 3840) {
+                   _errorMsgLb.text=@"用户名或密码错误！";
+                   [_pwdTextField shake];
+               }else{
+                   _errorMsgLb.text=@"DemoServer错误！";
+                   [_pwdTextField shake];
+               }
 
             }];
     }

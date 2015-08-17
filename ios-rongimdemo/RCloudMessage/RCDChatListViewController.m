@@ -71,6 +71,7 @@
     self.conversationListTableView.tableFooterView = [UIView new];
 //    self.conversationListTableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 12)];
     
+    
 }
 
 
@@ -140,6 +141,7 @@
  */
 -(void)onSelectedTableRow:(RCConversationModelType)conversationModelType conversationModel:(RCConversationModel *)model atIndexPath:(NSIndexPath *)indexPath
 {
+    
     if (conversationModelType == RC_CONVERSATION_MODEL_TYPE_NORMAL) {
         RCDChatViewController *_conversationVC = [[RCDChatViewController alloc]init];
         _conversationVC.conversationType = model.conversationType;
@@ -147,7 +149,9 @@
         _conversationVC.userName = model.conversationTitle;
         _conversationVC.title = model.conversationTitle;
         _conversationVC.conversation = model;
-        
+        _conversationVC.unReadMessage = model.unreadMessageCount;
+        _conversationVC.enableNewComingMessageIcon=YES;//开启消息提醒
+        _conversationVC.enableUnreadMessageIcon=YES;
         [self.navigationController pushViewController:_conversationVC animated:YES];
     }
     

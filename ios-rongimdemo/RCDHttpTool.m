@@ -289,16 +289,21 @@
         NSString *code = [NSString stringWithFormat:@"%@",response[@"code"]];
         if (joinResult) {
             if ([code isEqualToString:@"200"]) {
-                for (RCDGroupInfo *group in _allGroups) {
-                    if ([group.groupId isEqualToString:[NSString stringWithFormat:@"%d",groupID]]) {
-                        group.isJoin=YES;
-                        [[RCDataBaseManager shareInstance] insertGroupToDB:group];
+                [[RCIMClient sharedRCIMClient]joinGroup:[NSString stringWithFormat:@"%d",groupID] groupName:@"" success:^{
+                    for (RCDGroupInfo *group in _allGroups) {
+                        if ([group.groupId isEqualToString:[NSString stringWithFormat:@"%d",groupID]]) {
+                            group.isJoin=YES;
+                            [[RCDataBaseManager shareInstance] insertGroupToDB:group];
+                        }
                     }
-                }
-        
-                dispatch_async(dispatch_get_main_queue(), ^(void) {
-                    joinResult(YES);
-                });
+                    
+                    dispatch_async(dispatch_get_main_queue(), ^(void) {
+                        joinResult(YES);
+                    });
+
+                } error:^(RCErrorCode status) {
+                    joinResult(NO);
+                }];
                 
             }else{
                 joinResult(NO);
@@ -319,13 +324,17 @@
         
         if (result) {
             if ([code isEqualToString:@"200"]) {
-                for (RCDGroupInfo *group in _allGroups) {
-                    if ([group.groupId isEqualToString:[NSString stringWithFormat:@"%d",groupID]]) {
-                        group.isJoin=NO;
-                        [[RCDataBaseManager shareInstance] insertGroupToDB:group];
+                [[RCIMClient sharedRCIMClient] quitGroup:[NSString stringWithFormat:@"%d",groupID] success:^{
+                    result(YES);
+                    for (RCDGroupInfo *group in _allGroups) {
+                        if ([group.groupId isEqualToString:[NSString stringWithFormat:@"%d",groupID]]) {
+                            group.isJoin=NO;
+                            [[RCDataBaseManager shareInstance] insertGroupToDB:group];
+                        }
                     }
-                }
-                result(YES);
+                } error:^(RCErrorCode status) {
+                    result(NO);
+                }];
             }else{
                 result(NO);
             }

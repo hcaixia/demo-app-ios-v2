@@ -177,6 +177,8 @@
             strRange.location = nameEndRange.location + nameEndRange.length;
             strRange.length = receiveStr.length - strRange.location;
         } else {
+            self.hasNewVersion = NO;
+            self.versionUrl = nil;
             break;
         }
     }
@@ -218,6 +220,8 @@
             strRange.location = nameEndRange.location + nameEndRange.length;
             strRange.length = receiveStr.length - strRange.location;
         } else {
+            self.hasNewVersion = NO;
+            self.versionUrl = nil;
             break;
         }
     }

@@ -63,6 +63,16 @@
 @property(nonatomic) BOOL showConnectingStatusOnNavigatorBar;
 
 /**
+ *  cell 背景颜色
+ */
+@property(nonatomic) UIColor *cellBackgroundColor;
+
+/**
+ *  置顶cell 背景颜色
+ */
+@property(nonatomic) UIColor *topCellBackgroundColor;
+
+/**
  *  在navigationbar上更新连接状态
  */
 - (void)updateConnectionStatusOnNavigatorBar;
@@ -180,7 +190,14 @@
 
 #pragma mark override
 /**
- *  重写方法，点击tableView删除按钮触发事件
+ *  重写方法，会话删除后的触发事件
+ *
+ *  @param model 会话model
+ */
+- (void)didDeleteConversationCell:(RCConversationModel *)model;
+
+/**
+ *  重写方法，自定义会话(RC_CONVERSATION_MODEL_TYPE_CUSTOMIZATION)删除按钮触发事件
  *
  *  @param tableView    表格
  *  @param editingStyle 编辑样式

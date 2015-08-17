@@ -452,6 +452,22 @@
     UINavigationController *_navi =
         [[UINavigationController alloc] initWithRootViewController:loginVC];
     self.window.rootViewController = _navi;
+  } else if (status == ConnectionStatus_TOKEN_INCORRECT) {
+      dispatch_async(dispatch_get_main_queue(), ^{
+          RCDLoginViewController *loginVC =
+          [[RCDLoginViewController alloc] init];
+          UINavigationController *_navi = [[UINavigationController alloc]
+                                           initWithRootViewController:loginVC];
+          self.window.rootViewController = _navi;
+          UIAlertView *alertView =
+          [[UIAlertView alloc] initWithTitle:nil
+                                     message:@"Token已过期，请重新登录"
+                                    delegate:nil
+                           cancelButtonTitle:@"确定"
+                           otherButtonTitles:nil, nil];
+          ;
+          [alertView show];
+      });
   }
 }
 

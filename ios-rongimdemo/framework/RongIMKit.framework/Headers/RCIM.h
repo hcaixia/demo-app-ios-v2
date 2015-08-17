@@ -231,6 +231,16 @@ FOUNDATION_EXPORT NSString
 - (void)refreshGroupInfoCache:(RCGroup *)groupInfo
                  withGroupId:(NSString *)groupId;
 
+/**
+ *  清除所有本地用户信息的缓存。
+ */
+- (void)clearUserInfoCache;
+
+/**
+ *  清除所有本地群组信息的缓存。
+ */
+- (void)clearGroupInfoCache;
+
 @end
 
 #endif

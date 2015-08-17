@@ -38,6 +38,14 @@
  */
 @property(nonatomic, strong) NSString *userName;
 /**
+ *  unReadMessage
+ */
+@property(nonatomic, assign) NSInteger unReadMessage;
+/**
+ *  新消息提示条，未读消息上限150条
+ */
+@property(nonatomic, strong) UIButton *unReadButton;
+/**
  *  conversationType
  */
 @property(nonatomic) RCConversationType conversationType;
@@ -65,6 +73,21 @@
  *  emoji
  */
 @property(nonatomic, strong) RCEmojiBoardView *emojiBoardView;
+
+/**
+ *  new msg label
+ */
+@property(nonatomic, strong) UILabel *unReadNewMessageLabel;
+
+/**
+ *  默认No，如果Yes，开启右上角和右下角未读个数icon。
+ */
+@property(nonatomic, assign) BOOL enableUnreadMessageIcon;
+
+/**
+ *  默认No,如果Yes, 当消息不在最下方时显示 右下角新消息数图标
+ */
+@property(nonatomic, assign) BOOL enableNewComingMessageIcon;
 
 /**
  * 是否允许保存新拍照片到本地系统

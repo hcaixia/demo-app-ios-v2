@@ -45,6 +45,10 @@
         //设置为不用默认渲染方式
         self.tabBarItem.image = [[UIImage imageNamed:@"icon_server"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
         self.tabBarItem.selectedImage = [[UIImage imageNamed:@"icon_server_hover"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(didReceiveMessageNotification:)
+                                                     name:RCKitDispatchMessageNotification
+                                                   object:nil];
     }
     return self;
 }
@@ -62,15 +66,37 @@
     self.tabBarController.navigationItem.titleView = titleView;
    // self.tabBarController.navigationItem.title = @"客服";
     self.tabBarController.navigationItem.rightBarButtonItem = nil;
+    
 
 }
 - (void)viewDidLoad {
-    [super viewDidLoad];    
+    [super viewDidLoad];
+    
+}
+-(void)viewDidDisappear:(BOOL)animated
+{
+    self.tabBarItem.badgeValue = nil;
+}
+-(void)didReceiveMessageNotification:(NSNotification *)notification
+{
+    __weak typeof(&*self) __weakSelf = self;
+    RCMessage *message = notification.object;
+    if (message.conversationType == ConversationType_CUSTOMERSERVICE) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+//            int count = [[RCIMClient sharedRCIMClient]getUnreadCount:@[@(ConversationType_CUSTOMERSERVICE)]];
+//            if (count>0) {
+                __weakSelf.tabBarItem.badgeValue = @"";
+//            }
+            });
+    }
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:RCKitDispatchMessageNotification object:nil];
 }
 
 @end

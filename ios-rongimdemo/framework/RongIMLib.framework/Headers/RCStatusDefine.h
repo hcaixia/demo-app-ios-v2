@@ -208,6 +208,12 @@ typedef NS_ENUM(NSInteger, RCConnectionStatus) {
      *   注销
      */
     ConnectionStatus_SignUp = 12,
+    
+    /**
+     *   Token无效，可能是token错误，token过期或者后台刷新了密钥等原因
+     */
+    ConnectionStatus_TOKEN_INCORRECT = 31004,
+    
     /**
      *  服务器断开连接
      */

@@ -46,9 +46,9 @@
         [_lblName setTextColor:HEXCOLOR(0x252525)];
         _lblName.text = @"好友消息";
         
-        [self addSubview:_ivAva];
-        [self addSubview:_lblDetail];
-        [self addSubview:_lblName];
+        [self.contentView addSubview:_ivAva];
+        [self.contentView addSubview:_lblDetail];
+        [self.contentView addSubview:_lblName];
         _ivAva.translatesAutoresizingMaskIntoConstraints = NO;
         _lblName.translatesAutoresizingMaskIntoConstraints = NO;
         _lblDetail.translatesAutoresizingMaskIntoConstraints = NO;

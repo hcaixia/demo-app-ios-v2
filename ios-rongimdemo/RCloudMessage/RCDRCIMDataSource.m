@@ -53,13 +53,13 @@
     //开发者调用自己的服务器接口获取所属群组信息，同步给融云服务器，也可以直接
     //客户端创建，然后同步
     [RCDHTTPTOOL getMyGroupsWithBlock:^(NSMutableArray *result) {
-        if ([result count]) {
+        if (result!=nil) {
             //同步群组
             [[RCIMClient sharedRCIMClient] syncGroups:result
                                          success:^{
-                //DebugLog(@"同步成功!");
+                NSLog(@"同步群组成功!");
             } error:^(RCErrorCode status) {
-                //DebugLog(@"同步失败!  %ld",(long)status);
+                NSLog(@"同步群组失败!  %ld",(long)status);
                 
             }];
         }

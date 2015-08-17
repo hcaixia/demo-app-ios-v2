@@ -946,5 +946,30 @@ setConversationNotificationStatus:(RCConversationType)conversationType
                      count:(int)count
                    success:(void (^)(NSArray *messages))successBlock;
 
+/**
+ *  发起客服会话（kit中会话页面已经有客服会话的判断，不用调用此消息，如果用使用Lib 在发起客服会话时调用，这里会发送握手消息）
+ *
+ *  @param customerServiceId    客服id
+ *  @param successBlock 成功回调
+ *  @param errorBlock   失败回调
+ */
+- (void)joinCustomerServiceChat:(NSString *)customerServiceId
+                        success:(void (^)())successBlock
+                          error:(void (^)(RCErrorCode status))errorBlock;
+
+/**
+ *  结束客服会话（kit中会话页面已经有客服会话的判断，不用调用此消息，如果用使用Lib 在发起客服会话时调用，这里会发送结束消息）
+ *
+ *  @param customerServiceId    客服id
+ *  @param successBlock 成功回调
+ *  @param errorBlock   失败回调
+ */
+- (void)quitCustomerServiceChat:(NSString *)customerServiceId
+                        success:(void (^)())successBlock
+                          error:(void (^)(RCErrorCode status))errorBlock;
+
+
+
+
 @end
 #endif
