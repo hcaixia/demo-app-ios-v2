@@ -289,7 +289,7 @@
         NSString *code = [NSString stringWithFormat:@"%@",response[@"code"]];
         if (joinResult) {
             if ([code isEqualToString:@"200"]) {
-                [[RCIMClient sharedRCIMClient]joinGroup:[NSString stringWithFormat:@"%d",groupID] groupName:@"" success:^{
+//                [[RCIMClient sharedRCIMClient]joinGroup:[NSString stringWithFormat:@"%d",groupID] groupName:@"" success:^{
                     for (RCDGroupInfo *group in _allGroups) {
                         if ([group.groupId isEqualToString:[NSString stringWithFormat:@"%d",groupID]]) {
                             group.isJoin=YES;
@@ -301,9 +301,9 @@
                         joinResult(YES);
                     });
 
-                } error:^(RCErrorCode status) {
-                    joinResult(NO);
-                }];
+//                } error:^(RCErrorCode status) {
+//                    joinResult(NO);
+//                }];
                 
             }else{
                 joinResult(NO);
@@ -324,7 +324,7 @@
         
         if (result) {
             if ([code isEqualToString:@"200"]) {
-                [[RCIMClient sharedRCIMClient] quitGroup:[NSString stringWithFormat:@"%d",groupID] success:^{
+//                [[RCIMClient sharedRCIMClient] quitGroup:[NSString stringWithFormat:@"%d",groupID] success:^{
                     result(YES);
                     for (RCDGroupInfo *group in _allGroups) {
                         if ([group.groupId isEqualToString:[NSString stringWithFormat:@"%d",groupID]]) {
@@ -332,9 +332,9 @@
                             [[RCDataBaseManager shareInstance] insertGroupToDB:group];
                         }
                     }
-                } error:^(RCErrorCode status) {
-                    result(NO);
-                }];
+//                } error:^(RCErrorCode status) {
+//                    result(NO);
+//                }];
             }else{
                 result(NO);
             }
