@@ -1986,7 +1986,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Beijing Rong Cloud Network Technology CO., LTD";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Beijing Rong Cloud Network Technology CO., LTD";
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/framework";
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/RCloudMessage/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;

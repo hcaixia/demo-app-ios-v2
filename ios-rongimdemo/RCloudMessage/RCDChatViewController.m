@@ -229,6 +229,11 @@
               }
           }
       }
+      
+      //没有找到群组信息，可能是获取群组信息失败，这里重新获取一些群众信息。
+      [RCDHTTPTOOL getAllGroupsWithCompletion:^(NSMutableArray *result) {
+          
+      }];
 //      [RCDDataSource getGroupInfoWithGroupId:self.targetId completion:^(RCGroup *groupInfo) {
 //          detail.groupInfo=[[RCDGroupInfo alloc]init];
 //          detail.groupInfo.groupId=groupInfo.groupId;
@@ -584,18 +589,18 @@
         NSArray *participants = nil;
         switch ([self.realTimeLocation getStatus]) {
                 case RC_REAL_TIME_LOCATION_STATUS_OUTGOING:
-                [self.realTimeLocationStatusView updateText:@"您正在共享地理位置"];
+                [self.realTimeLocationStatusView updateText:@"你正在共享位置"];
                 break;
                 case RC_REAL_TIME_LOCATION_STATUS_CONNECTED:
                 case RC_REAL_TIME_LOCATION_STATUS_INCOMING:
                 participants = [self.realTimeLocation getParticipants];
                 if (participants.count == 1) {
                     NSString *userId = participants[0];
-                    [weakSelf.realTimeLocationStatusView updateText:[NSString stringWithFormat:@"user<%@>正在共享地理位置", userId]];
+                    [weakSelf.realTimeLocationStatusView updateText:[NSString stringWithFormat:@"user<%@>正在共享位置", userId]];
                     [[RCIM sharedRCIM].userInfoDataSource getUserInfoWithUserId:userId completion:^(RCUserInfo *userInfo) {
                         if (userInfo.name.length) {
                             dispatch_async(dispatch_get_main_queue(), ^{
-                                [weakSelf.realTimeLocationStatusView updateText:[NSString stringWithFormat:@"%@正在共享地理位置", userInfo.name]];
+                                [weakSelf.realTimeLocationStatusView updateText:[NSString stringWithFormat:@"%@正在共享位置", userInfo.name]];
                             });
                         }
                     }];

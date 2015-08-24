@@ -46,15 +46,15 @@
  */
 @property(nonatomic, strong) UIButton *unReadButton;
 /**
- *  conversationType
+ *  会话类型
  */
 @property(nonatomic) RCConversationType conversationType;
 /**
- *  conversationMessageCollectionView
+ *  展示会话的CollectionView控件，可以修改这个控件的属性比如背景
  */
 @property(nonatomic, strong) UICollectionView *conversationMessageCollectionView;
 /**
- *  conversationDataRepository
+ *  会话数据存储数组
  */
 @property(nonatomic, strong) NSMutableArray *conversationDataRepository;
 /**
@@ -181,7 +181,7 @@
                              cellForItemAtIndexPath:(NSIndexPath *)indexPath;
 #pragma mark override
 /**
- *  将要显示会话消息，可以修改RCMessageBaseCell的头像形状，添加自定定义的UI修饰
+ *  将要显示会话消息，可以修改RCMessageBaseCell的头像形状，添加自定定义的UI修饰，建议不要修改里面label 文字的大小，cell 大小是根据文字来计算的，如果修改大小可能造成cell 显示出现问题
  *
  *  @param cell      cell
  *  @param indexPath indexPath

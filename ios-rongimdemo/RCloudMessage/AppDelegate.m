@@ -58,6 +58,14 @@
   //初始化友盟配置
   [self umengTrack];
 
+    /**
+     *  推送说明：
+     *  我们在知识库里还有推送调试页面加了很多说明，当遇到推送问题时可以去知识库里搜索还有查看推送测试页面的说明。
+     *  首先必须设置deviceToken，可以搜索本文件关键字“推送处理”。模拟器是无法获取devicetoken，也就没有推送功能。
+     *  当使用"开发／测试环境"的appkey测试推送时，必须用Development的证书打包，并且在后台上传"开发／测试环境"的推送证书，证书必须是development的。
+        当使用"生产／线上环境"的appkey测试推送时，必须用Distribution的证书打包，并且在后台上传"生产／线上环境"的推送证书，证书必须是distribution的。
+     */
+    
   BOOL debugMode = [[NSUserDefaults standardUserDefaults] boolForKey:@"rongcloud appkey debug"];
   //debugMode是为了切换appkey测试用的，请应用忽略关于debugMode的信息，这里直接调用init。
   if (!debugMode) {
@@ -185,6 +193,9 @@
     self.window.rootViewController = _navi;
   }
 
+  /**
+   * 推送处理1
+   */
   if ([application
           respondsToSelector:@selector(registerUserNotificationSettings:)]) {
     //注册推送, iOS 8
@@ -226,6 +237,10 @@
   return YES;
 }
 
+
+/**
+ * 推送处理2
+ */
 //注册用户通知设置
 - (void)application:(UIApplication *)application
     didRegisterUserNotificationSettings:
@@ -234,6 +249,9 @@
   [application registerForRemoteNotifications];
 }
 
+/**
+ * 推送处理3
+ */
 - (void)application:(UIApplication *)application
     didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
   NSString *token =
@@ -286,6 +304,10 @@
   AudioServicesPlaySystemSound(1007);
 }
 
+/**
+ * 推送处理4
+ * userInfo内容请参考官网文档
+ */
 - (void)application:(UIApplication *)application
     didReceiveRemoteNotification:(NSDictionary *)userInfo {
 }

@@ -70,9 +70,9 @@
       targetId:_groupInfo.groupId
       success:^(RCConversationNotificationStatus nStatus) {
 
-        BOOL enableNotification = YES;
+        BOOL enableNotification = NO;
         if (nStatus == NOTIFY) {
-          enableNotification = NO;
+          enableNotification = YES;
         }
         [self.swMessageNotDistrub setOn:enableNotification];
 
@@ -175,7 +175,7 @@
   [[RCIMClient sharedRCIMClient]
       setConversationNotificationStatus:ConversationType_GROUP
       targetId:_groupInfo.groupId
-      isBlocked:isDistruble.isOn
+      isBlocked:!isDistruble.isOn
       success:^(RCConversationNotificationStatus nStatus) {
 
       }
