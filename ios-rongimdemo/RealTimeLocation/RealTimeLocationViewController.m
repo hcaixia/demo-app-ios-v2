@@ -134,18 +134,21 @@ MBProgressHUD* hud;
 - (void)onReceiveLocation:(CLLocation *)location fromUserId:(NSString *)userId {
     __weak typeof(&*self) __weakself = self;
         if (self.isFristTimeToLoad) {
-            CLLocationCoordinate2D center;
-            center.latitude=location.coordinate.latitude;
-            center.longitude=location.coordinate.longitude;
-            
-            MKCoordinateSpan span;
-            span.latitudeDelta=0.1;
-            span.longitudeDelta=0.1;
-            MKCoordinateRegion region={center,span};
-            self.theSpan=span;
-            self.theRegion=region;
-            [self.mapView setCenterCoordinate:center animated:YES];
-            [self.mapView setRegion:self.theRegion];
+            if (-90.0f <= location.coordinate.latitude && location.coordinate.latitude <= 90.0f &&
+                -180.0f <= location.coordinate.longitude && location.coordinate.longitude <= 180.0f)
+            {
+                CLLocationCoordinate2D center;
+                center.latitude=location.coordinate.latitude;
+                center.longitude=location.coordinate.longitude;
+                MKCoordinateSpan span;
+                span.latitudeDelta=0.1;
+                span.longitudeDelta=0.1;
+                MKCoordinateRegion region={center,span};
+                self.theSpan=span;
+                self.theRegion=region;
+                [self.mapView setCenterCoordinate:center animated:YES];
+                [self.mapView setRegion:self.theRegion];
+            }
         }
         self.isFristTimeToLoad=NO;
         CLLocation * cll=[self.realTimeLocationProxy getLocation:userId];

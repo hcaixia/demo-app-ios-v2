@@ -129,8 +129,8 @@
         [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapMessage:)];
         messageTap.numberOfTapsRequired = 1;
         messageTap.numberOfTouchesRequired = 1;
-        [self.messageContentView addGestureRecognizer:messageTap];
-        self.messageContentView.userInteractionEnabled = YES;
+        [self.bubbleBackgroundView addGestureRecognizer:messageTap];
+        self.bubbleBackgroundView.userInteractionEnabled = YES;
     }
     return _bubbleBackgroundView;
 }

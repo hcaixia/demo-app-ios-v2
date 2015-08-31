@@ -47,6 +47,37 @@
 }
 
 #pragma mark - Table view data source
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    return YES;
+}
+
+- (void)tableView:(UITableView *)tableView
+commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
+forRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+
+        RCMessage *message = self.messageArray[indexPath.row];
+        
+        if ([[RCIMClient sharedRCIMClient] deleteMessages:@[[NSNumber numberWithLong:message.messageId]]]) {
+            
+            [self.messageArray removeObjectAtIndex:indexPath.row];
+            [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
+                                                               withRowAnimation:UITableViewRowAnimationFade];
+        }
+        else {
+            NSLog(@"删除失败，请重试");
+        }
+        
+        if (0 == self.messageArray.count) {
+            
+            // 删除会话列表
+            [[RCIMClient sharedRCIMClient] removeConversation:ConversationType_SYSTEM targetId:self.targetId];
+            
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+    }
+}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;

@@ -51,7 +51,7 @@
         [weakSelf.realTimeLocation addRealTimeLocationObserver:self];
         [weakSelf updateRealTimeLocationStatus];
     } error:^(RCRealTimeLocationErrorCode status) {
-        NSLog(@"get location share failre with code %d", (int)status);
+        NSLog(@"get location share failure with code %d", (int)status);
     }];
 
 /******************实时地理位置共享**************/

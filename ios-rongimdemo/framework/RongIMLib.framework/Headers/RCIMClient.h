@@ -21,6 +21,7 @@
 #import "RCPublicServiceProfile.h"
 #import "RCUserData.h"
 #import "RCWatchKitStatusDelegate.h"
+#import "RCUploadImageStatusListener.h"
 
 @class RCConversation;
 @class RCDiscussion;
@@ -318,6 +319,31 @@ sendImageMessage:(RCConversationType)conversationType
         progress:(void (^)(int progress, long messageId))progressBlock
          success:(void (^)(long messageId))successBlock
            error:(void (^)(RCErrorCode errorCode, long messageId))errorBlock;
+
+/**
+ *  发送图片消息，由APP实现上传图片。请在uploadPrepareBlock中上传图片，并通知融云上传进度和结果。使用lib的客户可以忽略此方法
+ *
+ *  @param conversationType   会话类型。
+ *  @param targetId           目标 Id。根据不同的 conversationType，可能是聊天 Id、讨论组 Id、群组 Id 或聊天室 Id。
+ *  @param content            消息内容
+ *  @param pushContent        推送消息内容
+ *  @param pushData         推送消息附加信息
+ *  @param uploadPrepareBlock 应用上传图片Block
+ *  @param progressBlock      进度块
+ *  @param successBlock       成功处理块
+ *  @param errorBlock         失败处理块
+ *
+ *  @return 发送的消息实体。
+ */
+- (RCMessage *)sendImageMessage:(RCConversationType)conversationType
+                       targetId:(NSString *)targetId
+                        content:(RCMessageContent *)content
+                    pushContent:(NSString *)pushContent
+                       pushData:(NSString *)pushData
+                  uploadPrepare:(void (^)(RCUploadImageStatusListener *uploadListener))uploadPrepareBlock
+                       progress:(void (^)(int progress, long messageId))progressBlock
+                        success:(void (^)(long messageId))successBlock
+                          error:(void (^)(RCErrorCode errorCode, long messageId))errorBlock;
 /**
  *  下载图片
  *

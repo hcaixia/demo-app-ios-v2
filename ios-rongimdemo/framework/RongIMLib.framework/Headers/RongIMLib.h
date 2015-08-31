@@ -68,3 +68,4 @@ FOUNDATION_EXPORT const unsigned char RongIMLibVersionString[];
 #import <RongIMLib/RCRealTimeLocationManager.h>
 #import <RongIMLib/RCRealTimeLocationStartMessage.h>
 #import <RongIMLib/RCRealTimeLocationEndMessage.h>
+#import <RongIMLib/RCUploadImageStatusListener.h>
