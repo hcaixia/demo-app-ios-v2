@@ -19,63 +19,59 @@
  * 公众服务账号信息
  */
 @interface RCPublicServiceProfile : NSObject
-/*
+/**
  * 公众服务账号名称
  */
 @property(nonatomic, strong) NSString *name;
-/*
+/**
  * 公众服务账号描述
  */
-@property(nonatomic, strong) NSString *descriptions;
-/*
+@property(nonatomic, strong) NSString *introduction;
+/**
  * 公众服务账号的userID
  */
-@property(nonatomic, strong) NSString *serviceId;
-/*
+@property(nonatomic, strong) NSString *publicServiceId;
+/**
  * 公众服务账号头像Url
  */
-@property(nonatomic, strong) NSString *thumbnailUrl;
-/*
- * 公众服务账号主体
+@property(nonatomic, strong) NSString *portraitUrl;
+/**
+ * 公众服务账号主体. 当前版本暂不支持.
  */
 @property(nonatomic, strong) NSString *owner;
-/*
- * 公众服务账号主体Url
+/**
+ * 公众服务账号主体Url. 当前版本暂不支持.
  */
 @property(nonatomic, strong) NSString *ownerUrl;
-/*
- * 公众服务账号的电话号码
+/**
+ * 公众服务账号的电话号码. 当前版本暂不支持.
  */
-@property(nonatomic, strong) NSString *serviceTel;
-/*
- * 公众服务账号历史消息
+@property(nonatomic, strong) NSString *publicServiceTel;
+/**
+ * 公众服务账号历史消息. 当前版本暂不支持.
  */
 @property(nonatomic, strong) NSString *histroyMsgUrl;
-/*
- * 公众服务账号地理位置
+/**
+ * 公众服务账号地理位置. 当前版本暂不支持.
  */
 @property(nonatomic, strong) CLLocation *location;
-/*
- * 公众服务账号经营范围
+/**
+ * 公众服务账号经营范围. 当前版本暂不支持.
  */
 @property(nonatomic, strong) NSString *scope;
-/*
+/**
  * 公众服务账号类型
  */
-@property(nonatomic) RCPublicServiceType serviceType;
-/*
+@property(nonatomic) RCPublicServiceType publicServiceType;
+/**
  * 是否关注该公众服务账号
  */
-@property(nonatomic) BOOL followed;
-/*
- * extra信息
- */
-@property(nonatomic, strong) NSString *extra;
-/*
+@property(nonatomic, getter=isFollowed) BOOL followed;
+/**
  * 公众服务账号菜单
  */
 @property(nonatomic, strong) RCPublicServiceMenu *menu;
-/*
+/**
  * 公众服务账号的全局属性
  */
 @property(nonatomic, getter=isGlobal) BOOL global;

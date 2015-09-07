@@ -22,45 +22,20 @@
 @implementation RCDBlackListViewController
 
 #pragma mark - Table view data source
+- (instancetype)initWithCoder:(NSCoder *)aDecoder{
+    if(self == [super initWithCoder:aDecoder]){
+        [self getAllData];
+    }
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     // Do any additional setup after loading the view.
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     
     self.tableView.tableFooterView = [UIView new];
 
-}
--(void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    
-    NSArray *blacklist = [[RCDataBaseManager shareInstance] getBlackList];
-    
-    
-    if (blacklist.count < 20) {
-        self.hideSectionHeader = YES;
-    }
-    
-    self.mDictData = [self sortedArrayWithPinYinDic:blacklist];
-    
-    // key 排序
-    NSArray *keyArr = [[self.mDictData allKeys] sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-        
-        return [obj1 compare:obj2 options:NSNumericSearch];
-    }];
-    
-    self.keys = [NSMutableArray arrayWithArray:keyArr];
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        
-        [self.tableView reloadData];
-    });
-    
-    [self getAllData];
-
-    
 }
 
 #pragma mark - private
@@ -69,41 +44,43 @@
 -(void) getAllData
 {
     [[RCIMClient sharedRCIMClient] getBlacklist:^(NSArray *blockUserIds) {
-        
+        [[RCDataBaseManager shareInstance] clearBlackListData];
         NSMutableArray *blacklist = [[NSMutableArray alloc]initWithCapacity:5];
-        //
         for (NSString *userID in blockUserIds) {
-            
             // 暂不取用户信息，界面展示的时候在获取
             RCUserInfo*userInfo = [[RCUserInfo alloc]init];
             userInfo.userId = userID;
             userInfo.portraitUri = nil;
             userInfo.name = nil;
+            [[RCDataBaseManager shareInstance] insertBlackListToDB:userInfo];
             [blacklist addObject:userInfo];
-
         }
-        
         if (blacklist.count < 20) {
             self.hideSectionHeader = YES;
         }
-        
         self.mDictData = [self sortedArrayWithPinYinDic:blacklist];
-        
         // key 排序
         NSArray *keyArr = [[self.mDictData allKeys] sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-            
             return [obj1 compare:obj2 options:NSNumericSearch];
         }];
-        
         self.keys = [NSMutableArray arrayWithArray:keyArr];
-        
         dispatch_async(dispatch_get_main_queue(), ^{
-            
             [self.tableView reloadData];
         });
-        
     } error:^(RCErrorCode status) {
-        
+        NSArray *blacklist = [[RCDataBaseManager shareInstance] getBlackList];
+        if (blacklist.count < 20) {
+            self.hideSectionHeader = YES;
+        }
+        self.mDictData = [self sortedArrayWithPinYinDic:blacklist];
+        // key 排序
+        NSArray *keyArr = [[self.mDictData allKeys] sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+            return [obj1 compare:obj2 options:NSNumericSearch];
+        }];
+        self.keys = [NSMutableArray arrayWithArray:keyArr];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView reloadData];
+        });
         NSLog(@"getAllData error ");
     }];
 }

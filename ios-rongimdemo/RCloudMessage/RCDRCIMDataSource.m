@@ -23,19 +23,6 @@
 
 @implementation RCDRCIMDataSource
 
-- (instancetype)init
-{
-    self = [super init];
-    if (self) {
-        //设置信息提供者
-        [[RCIM sharedRCIM] setUserInfoDataSource:self];
-        [[RCIM sharedRCIM] setGroupInfoDataSource:self];
-        
-
-    }
-    return self;
-}
-
 + (RCDRCIMDataSource*)shareInstance
 {
     static RCDRCIMDataSource* instance = nil;

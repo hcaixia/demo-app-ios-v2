@@ -120,6 +120,19 @@ static NSString * const blackTableName = @"BLACKTABLE";
     }];
 }
 
+//清空黑名单缓存数据
+-(void)clearBlackListData
+{
+    NSString *deleteSql = @"DELETE FROM BLACKTABLE";
+    FMDatabaseQueue *queue = [DBHelper getDatabaseQueue];
+    if (queue==nil) {
+        return ;
+    }
+    [queue inDatabase:^(FMDatabase *db) {
+        [db executeUpdate:deleteSql];
+    }];
+}
+
 //从表中获取用户信息
 -(RCUserInfo*) getUserByUserId:(NSString*)userId
 {

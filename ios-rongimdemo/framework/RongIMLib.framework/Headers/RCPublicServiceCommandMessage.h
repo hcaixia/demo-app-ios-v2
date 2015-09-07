@@ -1,5 +1,5 @@
 //
-//  RCPublicServiceCommondMessage.h
+//  RCPublicServiceCommandMessage.h
 //  RongIMLib
 //
 //  Created by litao on 15/6/23.
@@ -16,7 +16,7 @@
  * 只能发送，接收不处理。
  * 不存储和计数
  */
-@interface RCPublicServiceCommondMessage : RCMessageContent
+@interface RCPublicServiceCommandMessage : RCMessageContent
 /** 
  * 消息命令
  */

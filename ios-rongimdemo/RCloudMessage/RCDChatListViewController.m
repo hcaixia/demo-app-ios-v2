@@ -389,6 +389,13 @@
     if (nil == model.extend) {
         // Not finished yet, To Be Continue...
         RCContactNotificationMessage *_contactNotificationMsg = (RCContactNotificationMessage *)model.lastestMessage;
+        if (_contactNotificationMsg.sourceUserId == nil) {
+            RCDChatListCell *cell = [[RCDChatListCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@""];
+            cell.lblDetail.text = @"好友请求";
+            [cell.ivAva sd_setImageWithURL:[NSURL URLWithString:portraitUri] placeholderImage:[UIImage imageNamed:@"system_notice"]];
+            return cell;
+
+        }
         NSDictionary *_cache_userinfo = [[NSUserDefaults standardUserDefaults]objectForKey:_contactNotificationMsg.sourceUserId];
         if (_cache_userinfo) {
             userName = _cache_userinfo[@"username"];
@@ -442,6 +449,7 @@
     //处理好友请求
     RCMessage *message = notification.object;
     if ([message.content isMemberOfClass:[RCContactNotificationMessage class]]) {
+        
         if (message.conversationType != ConversationType_SYSTEM) {
             NSLog(@"好友消息要发系统消息！！！");
 #if DEBUG
@@ -449,7 +457,9 @@
 #endif
         }
         RCContactNotificationMessage *_contactNotificationMsg = (RCContactNotificationMessage *)message.content;
-        
+        if (_contactNotificationMsg.sourceUserId == nil || _contactNotificationMsg.sourceUserId .length ==0) {
+            return;
+        }
         //该接口需要替换为从消息体获取好友请求的用户信息
         [RCDHTTPTOOL getUserInfoByUserID:_contactNotificationMsg.sourceUserId
                               completion:^(RCUserInfo *user) {

@@ -995,7 +995,94 @@ setConversationNotificationStatus:(RCConversationType)conversationType
                           error:(void (^)(RCErrorCode status))errorBlock;
 
 
+#pragma mark - 统计API
+/**
+ *  统计事件
+ *
+ *  @param key      事件名
+ *  @param count    计数
+ */
+- (void)recordEvent:(NSString *)key count:(int)count;
 
+/**
+ *  统计事件
+ *
+ *  @param key      事件名
+ *  @param count    计数
+ *  @param sum      权重
+ */
+- (void)recordEvent:(NSString *)key count:(int)count sum:(double)sum;
+
+/**
+ *  统计事件
+ *
+ *  @param key              事件名
+ *  @param segmentation     事件详情
+ *  @param count            计数
+ */
+- (void)recordEvent:(NSString *)key segmentation:(NSDictionary *)segmentation count:(int)count;
+
+/**
+ *  统计事件
+ *
+ *  @param key              事件名
+ *  @param segmentation     事件详情
+ *  @param count            计数
+ *  @param sum              权重
+ */
+- (void)recordEvent:(NSString *)key segmentation:(NSDictionary *)segmentation count:(int)count sum:(double)sum;
+
+/**
+ *  统计地址位置
+ *
+ *  @param latitude     纬度
+ *  @param longitude    经度
+ */
+- (void)recordLocation:(double)latitude longitude:(double)longitude;
+
+/**
+ *  统计用户信息
+ *
+ *  @param userDetails  用户信息
+ */
+- (void)recordUserDetails:(NSDictionary *)userDetails;
+
+/**
+ *  用户信息Key值，昵称
+ */
+extern NSString* const kRCUserName;
+/**
+ *  用户信息Key值，邮箱
+ */
+extern NSString* const kRCUserEmail;
+/**
+ *  用户信息Key值，公司
+ */
+extern NSString* const kRCUserOrganization;
+/**
+ *  用户信息Key值，手机号
+ */
+extern NSString* const kRCUserPhone;
+/**
+ *  用户信息Key值，性别
+ */
+extern NSString* const kRCUserGender;
+/**
+ *  用户信息Key值，头像
+ */
+extern NSString* const kRCUserPicture;
+/**
+ *  用户信息Key值，头像地址
+ */
+extern NSString* const kRCUserPicturePath;
+/**
+ *  用户信息Key值，出生日期
+ */
+extern NSString* const kRCUserBirthYear;
+/**
+ *  用户信息Key值，用户自定义信息
+ */
+extern NSString* const kRCUserCustom;
 
 @end
 #endif

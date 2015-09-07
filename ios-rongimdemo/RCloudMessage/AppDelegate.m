@@ -83,7 +83,7 @@
     NSLog(@"iPhone6 %d", iPhone6);
     [RCIM sharedRCIM].globalConversationPortraitSize = CGSizeMake(46, 46);
   }
-
+//    [RCIM sharedRCIM].portraitImageViewCornerRadius = 10;
   //设置用户信息源和群组信息源
   [RCIM sharedRCIM].userInfoDataSource = RCDDataSource;
   [RCIM sharedRCIM].groupInfoDataSource = RCDDataSource;
@@ -117,22 +117,6 @@
                     //登陆demoserver成功之后才能调demo 的接口
                     [RCDDataSource syncGroups];
                     [RCDDataSource syncFriendList:^(NSMutableArray * result) {}];
-                    
-                    [[RCIMClient sharedRCIMClient] getBlacklist:^(NSArray *blockUserIds) {
-                        for (NSString *userID in blockUserIds) {
-                            
-                            // 暂不取用户信息，界面展示的时候在获取
-                            RCUserInfo*userInfo = [[RCUserInfo alloc]init];
-                            userInfo.userId = userID;
-                            userInfo.portraitUri = nil;
-                            userInfo.name = nil;
-                            [[RCDataBaseManager shareInstance] insertBlackListToDB:userInfo];
-                        }
-
-                    } error:^(RCErrorCode status) {
-                        NSLog(@"同步黑名单失败，status = %ld",(long)status);
-                    }];
-                    
                 }
               }
               failure:^(NSError *err){

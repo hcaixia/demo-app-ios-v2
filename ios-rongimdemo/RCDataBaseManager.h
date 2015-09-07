@@ -26,6 +26,8 @@
 //移除黑名单
 - (void)removeBlackList:(NSString *)userId;
 
+//清空黑名单缓存信息
+-(void)clearBlackListData;
 
 //从表中获取用户信息
 -(RCUserInfo*) getUserByUserId:(NSString*)userId;

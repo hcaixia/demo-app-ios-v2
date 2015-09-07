@@ -109,6 +109,11 @@ FOUNDATION_EXPORT NSString
  *   导航按钮字体颜色
  */
 @property(nonatomic) UIColor *globalNavigationBarTintColor;
+
+/**
+ *   头像边角，只有在头像样式为矩形时有效（矩形样式即默认样式）
+ */
+@property(nonatomic) CGFloat portraitImageViewCornerRadius;
 /**
  *  默认45*45，高度最小只能为36
  */

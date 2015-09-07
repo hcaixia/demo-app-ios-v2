@@ -160,6 +160,12 @@
 *  @param message 消息
 */
 - (void)appendAndDisplayMessage:(RCMessage *)message;
+/**
+ *  滚动到list的最底部
+ *
+ *  @param animated 是否动画
+ */
+- (void)scrollToBottomAnimated:(BOOL)animated;
 #pragma mark override
 /**
  *  返回方法，如果继承，请重写该方法，并且优先调用父类方法;

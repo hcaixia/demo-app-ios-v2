@@ -37,9 +37,13 @@
 - (IBAction)onAgree:(id)sender {
 
     __weak __typeof(self)weakSelf = self;
+    
+    RCContactNotificationMessage *_contactNotificationMsg = (RCContactNotificationMessage *)weakSelf.model.content;
+    if (_contactNotificationMsg.sourceUserId == nil || _contactNotificationMsg.sourceUserId .length ==0) {
+        return;
+    }
     MBProgressHUD* hud = [MBProgressHUD showHUDAddedTo:self.superview animated:YES];
     hud.labelText = @"添加中...";
-    RCContactNotificationMessage *_contactNotificationMsg = (RCContactNotificationMessage *)weakSelf.model.content;
     [AFHttpTool processRequestFriend:_contactNotificationMsg.sourceUserId withIsAccess:YES success:^(id response) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [hud hide:YES];
@@ -61,9 +65,15 @@
 
 - (void)setModel:(RCMessage *)model {
     _model = model;
+    if (![model.content isMemberOfClass:[RCContactNotificationMessage class]])
+    {
+        return;
+    }
     RCContactNotificationMessage *_contactNotificationMsg = (RCContactNotificationMessage *)model.content;
     self.message.text = _contactNotificationMsg.message;
-
+    if (_contactNotificationMsg.sourceUserId == nil || _contactNotificationMsg.sourceUserId.length == 0) {
+        return;
+    }
     NSDictionary *_cache_userinfo = [[NSUserDefaults standardUserDefaults]objectForKey:_contactNotificationMsg.sourceUserId];
     if (_cache_userinfo) {
         self.userName.text = _cache_userinfo[@"username"];

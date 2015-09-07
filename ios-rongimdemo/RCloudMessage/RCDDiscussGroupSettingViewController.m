@@ -377,12 +377,29 @@
     [[RCDRCIMDataSource shareInstance]getUserInfoWithUserId:userId completion:^(RCUserInfo *userInfo)
     {
         if (userInfo) {
-            RCDChatViewController *_conversationVC = [[RCDChatViewController alloc]init];
-            _conversationVC.conversationType = ConversationType_PRIVATE;
-            _conversationVC.targetId = userId;
-            _conversationVC.userName=userInfo.name;
-            _conversationVC.title=userInfo.name;
-            [self.navigationController pushViewController:_conversationVC animated:YES];
+            NSUInteger count = self.navigationController.viewControllers.count;
+            if (count > 1) {
+                UIViewController *preVC =
+                self.navigationController.viewControllers[count - 2];
+                if ([preVC isKindOfClass:[RCConversationViewController class]]) {
+                    [self.navigationController popViewControllerAnimated:YES];
+                    return;
+                } else {
+                    RCDChatViewController *_conversationVC = [[RCDChatViewController alloc]init];
+                    _conversationVC.conversationType = ConversationType_PRIVATE;
+                    _conversationVC.targetId = userId;
+                    _conversationVC.userName=userInfo.name;
+                    _conversationVC.title=userInfo.name;
+                    [self.navigationController pushViewController:_conversationVC animated:YES];
+                }
+            }else{
+                RCDChatViewController *_conversationVC = [[RCDChatViewController alloc]init];
+                _conversationVC.conversationType = ConversationType_PRIVATE;
+                _conversationVC.targetId = userId;
+                _conversationVC.userName=userInfo.name;
+                _conversationVC.title=userInfo.name;
+                [self.navigationController pushViewController:_conversationVC animated:YES];
+            }
 
         }
         else

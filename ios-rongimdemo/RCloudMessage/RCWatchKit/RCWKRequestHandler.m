@@ -130,11 +130,11 @@
                                      || conversationType.intValue == ConversationType_APPSERVICE) {
                                      NSArray *publicServices = [[RCIMClient sharedRCIMClient] getPublicServiceList];
                                      for (RCPublicServiceProfile *profile in publicServices) {
-                                         if ([profile.serviceId isEqualToString:targetId]) {
+                                         if ([profile.publicServiceId isEqualToString:targetId]) {
                                              UIImage *image = [UIImage
                                                                imageWithData:
                                                                [NSData dataWithContentsOfURL:
-                                                                [NSURL URLWithString:profile.thumbnailUrl]]];
+                                                                [NSURL URLWithString:profile.portraitUrl ]]];
                                              NSLog(@"size is %f, %f", image.size.width, image.size.height);
                                              if (image && [image size].width > 0) {
                                                  [self copyImage:image to:targetId maxWidth:50 round:YES];
