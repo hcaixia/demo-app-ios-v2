@@ -16,18 +16,32 @@
  * -------------------------------------------------------------------
  */
 
-#ifndef OPENCORE_AMRWB_DEC_IF_H
-#define OPENCORE_AMRWB_DEC_IF_H
+#ifndef OPENCORE_AMRNB_INTERF_ENC_H
+#define OPENCORE_AMRNB_INTERF_ENC_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#define _good_frame 0
+#ifndef AMRNB_WRAPPER_INTERNAL
+/* Copied from enc/src/rc_gsmamr_enc.h */
+enum RCMode {
+	MR475 = 0,/* 4.75 kbps */
+	MR515,    /* 5.15 kbps */
+	MR59,     /* 5.90 kbps */
+	MR67,     /* 6.70 kbps */
+	MR74,     /* 7.40 kbps */
+	MR795,    /* 7.95 kbps */
+	MR102,    /* 10.2 kbps */
+	MR122,    /* 12.2 kbps */
+	MRDTX,    /* DTX       */
+	N_MODES   /* Not Used  */
+};
+#endif
 
-void* D_IF_init(void);
-void D_IF_decode(void* state, const unsigned char* bits, short* synth, int bfi);
-void D_IF_exit(void* state);
+void* RC_Encoder_Interface_init(int dtx);
+void RC_Encoder_Interface_exit(void* state);
+int RC_Encoder_Interface_Encode(void* state, enum RCMode mode, const short* speech, unsigned char* out, int forceSpeech);
 
 #ifdef __cplusplus
 }

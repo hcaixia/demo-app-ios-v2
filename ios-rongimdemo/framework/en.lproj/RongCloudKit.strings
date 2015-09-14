@@ -117,3 +117,5 @@
 "Search"="Search:";
 "Right_unReadMessage"="%ld new message";
 "HistoryMessageTip"="Above is the historical messages";
+"DISCUSSION"="discussion";
+"DateFormat"="MM-dd";

@@ -31,9 +31,17 @@
 @property(nonatomic, strong) NSString *extra;
 
 /**
- *  根据参数创建文本消息对象
+ *  根据参数创建公众号命令消息对象
  *
  *  @param item  公众账号菜单项
  */
 + (instancetype)messageFromMenuItem:(RCPublicServiceMenuItem *)item;
+
+/**
+ *  创建公众号命令消息对象
+ *
+ *  @param command  公众号命令
+ *  @param data     公众号数据
+ */
++ (instancetype)messageWithCommand:(NSString *)command data:(NSString *)data;
 @end

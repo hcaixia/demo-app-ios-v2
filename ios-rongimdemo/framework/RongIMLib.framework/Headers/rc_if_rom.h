@@ -24,7 +24,7 @@ extern "C" {
 #endif
 
 #include <stdint.h>
-typedef int16_t Word16;
+typedef int16_t RCWord16;
 
 #ifdef __cplusplus
 }

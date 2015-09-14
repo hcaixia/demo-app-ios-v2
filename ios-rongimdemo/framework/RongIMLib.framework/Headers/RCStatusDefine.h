@@ -359,7 +359,7 @@ typedef NS_ENUM(NSUInteger, RCReceivedStatus) {
      */
     ReceivedStatus_READ = 1,
     /**
-     * 未读。
+     * 已收听（语音消息）。
      */
     ReceivedStatus_LISTENED = 2,
 

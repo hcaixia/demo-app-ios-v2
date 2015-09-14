@@ -73,7 +73,7 @@
     self.tableView.tableFooterView = [UIView new];
 }
 
-- (void)addUsers:(NSArray *)users {
+- (void)addUsers:(NSMutableArray *)users {
     if (!users)
         return;
     

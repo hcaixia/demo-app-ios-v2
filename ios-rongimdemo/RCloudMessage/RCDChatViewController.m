@@ -32,11 +32,32 @@
     self.enableSaveNewPhotoToLocalSystem = YES;
 
     if (self.conversationType != ConversationType_CHATROOM) {
-      self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]
-          initWithImage:[UIImage imageNamed:@"Setting"]
-                  style:UIBarButtonItemStylePlain
-                 target:self
-                 action:@selector(rightBarButtonItemClicked:)];
+        if (self.conversationType == ConversationType_DISCUSSION) {
+            [[RCIMClient sharedRCIMClient] getDiscussion:self.targetId success:^(RCDiscussion *discussion) {
+                if (discussion != nil && discussion.memberIdList.count>0) {
+                    if ([discussion.memberIdList containsObject:[RCIMClient sharedRCIMClient].currentUserInfo.userId]) {
+                        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]
+                                                                  initWithImage:[UIImage imageNamed:@"Setting"]
+                                                                  style:UIBarButtonItemStylePlain
+                                                                  target:self
+                                                                  action:@selector(rightBarButtonItemClicked:)];
+                    }else
+                    {
+                        self.navigationItem.rightBarButtonItem = nil;
+                    }
+                }
+            } error:^(RCErrorCode status) {
+                
+            }];
+        }else
+        {
+            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]
+                                                      initWithImage:[UIImage imageNamed:@"Setting"]
+                                                      style:UIBarButtonItemStylePlain
+                                                      target:self
+                                                      action:@selector(rightBarButtonItemClicked:)];
+        }
+      
     } else {
         self.navigationItem.rightBarButtonItem = nil;
     }
@@ -63,6 +84,7 @@
     if (self.conversationType == ConversationType_PRIVATE) {
         self.displayUserNameInCell = NO;
     }
+    
     
 /***********如何自定义面板功能***********************
  自定义面板功能首先要继承RCConversationViewController，如现在所在的这个文件。
@@ -376,6 +398,7 @@
 - (void)onShowRealTimeLocationView {
     [self showRealTimeLocationViewController];
 }
+
 
 #pragma mark override
 /**

@@ -46,16 +46,27 @@
         [_lblName setTextColor:HEXCOLOR(0x252525)];
         _lblName.text = @"好友消息";
         
+        _labelTime = [[UILabel alloc] init];
+        _labelTime.backgroundColor = [UIColor clearColor];
+        _labelTime.font = [UIFont systemFontOfSize:14];
+        _labelTime.textColor = [UIColor lightGrayColor];
+        _labelTime.textAlignment = NSTextAlignmentRight;
+
         [self.contentView addSubview:_ivAva];
         [self.contentView addSubview:_lblDetail];
         [self.contentView addSubview:_lblName];
+        [self.contentView addSubview:_labelTime];
         _ivAva.translatesAutoresizingMaskIntoConstraints = NO;
         _lblName.translatesAutoresizingMaskIntoConstraints = NO;
         _lblDetail.translatesAutoresizingMaskIntoConstraints = NO;
+        _labelTime.translatesAutoresizingMaskIntoConstraints = NO;
         
-        NSDictionary *_bindingViews = NSDictionaryOfVariableBindings(_ivAva,_lblName,_lblDetail);
+        NSDictionary *_bindingViews = NSDictionaryOfVariableBindings(_ivAva,_lblName,_lblDetail,_labelTime);
         
-        
+        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:  @"V:|-11-[_labelTime(20)]" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_labelTime)]];
+
+        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[_labelTime(200)]-11-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_labelTime)]];
+
         [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-13-[_ivAva(width)]" options:0 metrics:@{@"width" :@([RCIM sharedRCIM].globalConversationPortraitSize.width)} views:NSDictionaryOfVariableBindings(_ivAva)]];
         
         [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-10-[_ivAva(height)]" options:0 metrics:@{@"height" :@([RCIM sharedRCIM].globalConversationPortraitSize.height)} views:NSDictionaryOfVariableBindings(_ivAva)]];

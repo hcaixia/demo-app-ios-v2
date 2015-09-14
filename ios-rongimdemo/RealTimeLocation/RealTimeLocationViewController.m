@@ -17,7 +17,7 @@
 #import "RCLocationConvert.h"
 #import "RCDUtilities.h"
 
-@interface RealTimeLocationViewController () <RCRealTimeLocationObserver, MKMapViewDelegate,HeadCollectionTouchDelegate>
+@interface RealTimeLocationViewController () <RCRealTimeLocationObserver, MKMapViewDelegate,HeadCollectionTouchDelegate,UIActionSheetDelegate>
 
 @property(nonatomic, strong) MKMapView *mapView;
 @property(nonatomic, strong) UIView *headBackgroundView;
@@ -104,10 +104,8 @@ MBProgressHUD* hud;
 }
 
 - (BOOL)quitButtonPressed {
-    __weak typeof(&*self) __weakself = self;
-    [self dismissViewControllerAnimated:YES completion:^{
-        [__weakself.realTimeLocationProxy quitRealTimeLocation];
-    }];
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"是否结束位置共享" otherButtonTitles:@"结束", nil];
+    [actionSheet showInView:self.view];
     return YES;
 }
 
@@ -324,7 +322,20 @@ MBProgressHUD* hud;
 {
     self.theRegion=mapView.region;
 }
+-(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    switch (buttonIndex) {
+        case 1:
+        {
+            __weak typeof(&*self) __weakself = self;
+            [self dismissViewControllerAnimated:YES completion:^{
+                [__weakself.realTimeLocationProxy quitRealTimeLocation];
+            }];
 
+        }
+        break;
+    }
+}
 
 - (void)dealloc {
   //  [self.realTimeLocationProxy removeRealTimeLocationObserver:self];

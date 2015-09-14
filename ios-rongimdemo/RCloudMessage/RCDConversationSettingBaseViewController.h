@@ -38,7 +38,7 @@
 /**
  *  设置顶部视图显示的users
  */
-@property(nonatomic, strong) NSArray *users;
+@property(nonatomic, strong) NSMutableArray *users;
 
 /**
  *  禁用删除成员事件

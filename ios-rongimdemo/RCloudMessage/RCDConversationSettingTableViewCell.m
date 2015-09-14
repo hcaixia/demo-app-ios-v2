@@ -28,10 +28,10 @@
                                                                      options:kNilOptions
                                                                      metrics:nil
                                                                        views:NSDictionaryOfVariableBindings(_swich)]];
-        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[_swich(35)]-30-|"
-                                                                     options:kNilOptions
-                                                                     metrics:nil
-                                                                       views:NSDictionaryOfVariableBindings(_swich)]];
+//        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[_swich(35)]-30-|"
+//                                                                     options:kNilOptions
+//                                                                     metrics:nil
+//                                                                       views:NSDictionaryOfVariableBindings(_swich)]];
         [self addConstraint:[NSLayoutConstraint constraintWithItem:_swich
                                                          attribute:NSLayoutAttributeCenterY
                                                          relatedBy:NSLayoutRelationEqual

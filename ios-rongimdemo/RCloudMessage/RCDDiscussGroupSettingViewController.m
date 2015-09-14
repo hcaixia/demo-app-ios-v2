@@ -358,13 +358,13 @@
 {
     RCUserInfo* user = self.users[indexPath.row];
     if ([user.userId isEqualToString:[RCIMClient sharedRCIMClient].currentUserInfo.userId]) {
-        
         return;
     }
     [[RCIMClient sharedRCIMClient] removeMemberFromDiscussion:self.targetId
                                                    userId:user.userId
     success:^(RCDiscussion *discussion) {
         NSLog(@"踢人成功");
+        [self.users removeObject:user];
     } error:^(RCErrorCode status) {
         NSLog(@"踢人失败");
     }];

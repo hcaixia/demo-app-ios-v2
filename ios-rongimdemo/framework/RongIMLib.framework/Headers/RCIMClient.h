@@ -555,6 +555,16 @@ sendImageMessage:(RCConversationType)conversationType
 - (BOOL)setMessageReceivedStatus:(long)messageId
                   receivedStatus:(RCReceivedStatus)receivedStatus;
 
+
+/**
+ *  设置消息发送状态。
+ *
+ *  @param messageId      消息 Id。
+ *  @param sentStatus 接收到的消息状态。
+ */
+- (BOOL)setMessageSentStatus:(long)messageId
+                  sentStatus:(RCSentStatus)sentStatus;
+
 /**
  *  获取某一会话的文字消息草稿。
  *

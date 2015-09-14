@@ -86,7 +86,11 @@
     
     if (userId == nil || [userId length] == 0 )
     {
-        completion(nil);
+        RCUserInfo *user = [RCUserInfo new];
+        user.userId = userId;
+        user.portraitUri = @"";
+        user.name = @"name";
+        completion(user);
         return ;
     }
     if([userId isEqualToString:@"kefu114"])
@@ -103,7 +107,12 @@
                                   }
                                   else
                                   {
-                                      completion(nil);
+                                      RCUserInfo *user = [RCUserInfo new];
+                                      user.userId = userId;
+                                      user.portraitUri = @"";
+                                      user.name = [NSString stringWithFormat:@"name%@", userId];
+                                      completion(user);
+
                                   }
                               }];
 }

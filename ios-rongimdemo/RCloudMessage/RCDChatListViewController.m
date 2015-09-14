@@ -89,7 +89,10 @@
     [rightBtn setTintColor:[UIColor whiteColor]];
     self.tabBarController.navigationItem.rightBarButtonItem = rightButton;
     [self notifyUpdateUnreadMessageCount];
-
+    [[NSNotificationCenter defaultCenter]addObserver:self
+                                            selector:@selector(receiveNeedRefreshNotification:)
+                                                name:@"kRCNeedReloadDiscussionListNotification"
+                                              object:nil];
 
 }
 - (void)viewDidAppear:(BOOL)animated {
@@ -102,6 +105,9 @@
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     self.showConnectingStatusOnNavigatorBar = NO;
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:@"kRCNeedReloadDiscussionListNotification"
+                                                  object:nil];
 }
 
 - (void)setNavigationItemTitleView {
@@ -141,6 +147,16 @@
  */
 -(void)onSelectedTableRow:(RCConversationModelType)conversationModelType conversationModel:(RCConversationModel *)model atIndexPath:(NSIndexPath *)indexPath
 {
+    
+    if (model.conversationModelType == RC_CONVERSATION_MODEL_TYPE_PUBLIC_SERVICE) {
+        RCPublicServiceChatViewController *_conversationVC = [[RCPublicServiceChatViewController alloc] init];
+        _conversationVC.conversationType = model.conversationType;
+        _conversationVC.targetId = model.targetId;
+        _conversationVC.userName = model.conversationTitle;
+        _conversationVC.title = model.conversationTitle;
+
+        [self.navigationController pushViewController:_conversationVC animated:YES];
+    }
     
     if (conversationModelType == RC_CONVERSATION_MODEL_TYPE_NORMAL) {
         RCDChatViewController *_conversationVC = [[RCDChatViewController alloc]init];
@@ -436,7 +452,42 @@
     RCDChatListCell *cell = [[RCDChatListCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@""];
     cell.lblDetail.text =[NSString stringWithFormat:@"来自%@的好友请求",userName];
     [cell.ivAva sd_setImageWithURL:[NSURL URLWithString:portraitUri] placeholderImage:[UIImage imageNamed:@"system_notice"]];
+    cell.labelTime.text = [self ConvertMessageTime:model.sentTime / 1000];
     return cell;
+}
+
+#pragma mark - private
+- (NSString *)ConvertMessageTime:(long long)secs {
+    NSString *timeText = nil;
+    
+    NSDate *messageDate = [NSDate dateWithTimeIntervalSince1970:secs];
+    
+    //    DebugLog(@"messageDate==>%@",messageDate);
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"yyyy-MM-dd"];
+    
+    NSString *strMsgDay = [formatter stringFromDate:messageDate];
+    
+    NSDate *now = [NSDate date];
+    NSString *strToday = [formatter stringFromDate:now];
+    NSDate *yesterday = [[NSDate alloc] initWithTimeIntervalSinceNow:-(24 * 60 * 60)];
+    NSString *strYesterday = [formatter stringFromDate:yesterday];
+    
+    NSString *_yesterday = nil;
+    if ([strMsgDay isEqualToString:strToday]) {
+        [formatter setDateFormat:@"HH':'mm"];
+    } else if ([strMsgDay isEqualToString:strYesterday]) {
+        _yesterday = NSLocalizedStringFromTable(@"Yesterday", @"RongCloudKit", nil);
+        //[formatter setDateFormat:@"HH:mm"];
+    }
+    
+    if (nil != _yesterday) {
+        timeText = _yesterday; //[_yesterday stringByAppendingFormat:@" %@", timeText];
+    } else {
+        timeText = [formatter stringFromDate:messageDate];
+    }
+    
+    return timeText;
 }
 
 //*********************插入自定义Cell*********************//
@@ -531,4 +582,16 @@
 //- (void)tapPicture:(UIGestureRecognizer *)gestureRecognizer {
 //  
 //}
+
+- (void)receiveNeedRefreshNotification:(NSNotification *)status {
+    __weak typeof(&*self) __blockSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (__blockSelf.displayConversationTypeArray.count == 1 && [self.displayConversationTypeArray[0] integerValue]== ConversationType_DISCUSSION) {
+            [__blockSelf refreshConversationTableViewIfNeeded];
+        }
+        
+    });
+}
+
+
 @end

@@ -22,5 +22,12 @@
  * [self.navigationController pushViewController:conversationVC animated:YES];
  */
 @interface RCPublicServiceChatViewController : RCConversationViewController
-
+#pragma mark override
+/**
+ *  用户点击公众号富文本消息; App可以自己覆写此函数，建议使用rcWebViewController来打开链接；
+ *
+ *  @param tapedUrl            点击对象的Url
+ *  @param rcWebViewController 融云JS VC。公众号需要JS SDK才能运行，该ViewController具备JS SDK的能力，建议展现这个VC
+ */
+- (void)didTapImageTxtMsgCell:(NSString *)tapedUrl webViewController:(UIViewController *)rcWebViewController;
 @end

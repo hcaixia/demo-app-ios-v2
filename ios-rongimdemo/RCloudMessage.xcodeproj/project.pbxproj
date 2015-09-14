@@ -2261,7 +2261,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				OTHER_LIBTOOLFLAGS = "$(OTHER_LDFLAGS)";
 				PRODUCT_NAME = RCloudMessage;
-				PROVISIONING_PROFILE = "0e5e0673-cfd4-48c1-bacc-5e2d3e32f2a2";
+				PROVISIONING_PROFILE = "45d4cebe-4ecb-45ce-9bdc-860584271691";
 				VALID_ARCHS = "armv7 armv7s arm64";
 			};
 			name = Debug;

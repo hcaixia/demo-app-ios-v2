@@ -16,16 +16,18 @@
  * -------------------------------------------------------------------
  */
 
-#ifndef OPENCORE_AMRNB_INTERF_DEC_H
-#define OPENCORE_AMRNB_INTERF_DEC_H
+#ifndef OPENCORE_AMRWB_DEC_IF_H
+#define OPENCORE_AMRWB_DEC_IF_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-void* Decoder_Interface_init(void);
-void Decoder_Interface_exit(void* state);
-void Decoder_Interface_Decode(void* state, const unsigned char* in, short* out, int bfi);
+#define _good_frame 0
+
+void* RC_D_IF_init(void);
+void RC_D_IF_decode(void* state, const unsigned char* bits, short* synth, int bfi);
+void RC_D_IF_exit(void* state);
 
 #ifdef __cplusplus
 }

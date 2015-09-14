@@ -121,9 +121,24 @@
         } failure:^(NSError *err) {
             NSLog(@"getUserInfoByUserID error");
             if (completion) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    completion(nil);
-                });
+                @try {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        RCUserInfo *user = [RCUserInfo new];
+                        
+                        user.userId = userID;
+                        user.portraitUri = @"";
+                        user.name = [NSString stringWithFormat:@"name%@", userID];
+
+                        completion(user);
+                    });
+                }
+                @catch (NSException *exception) {
+                    
+                }
+                @finally {
+                    
+                }
+                
             }
         }];
     
