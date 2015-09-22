@@ -200,7 +200,7 @@ FOUNDATION_EXPORT NSString
 /**
  *  断开连接。如果使用IMKit，使用此方法，不再使用RongIMLib的同名方法。
  *
- *  @param isReceivePush 是否接收回调。
+ *  @param isReceivePush 是否接收push消息。
  */
 - (void)disconnect:(BOOL)isReceivePush;
 

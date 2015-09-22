@@ -316,9 +316,9 @@
                                     views:views]]
       arrayByAddingObjectsFromArray:
           [NSLayoutConstraint
-              constraintsWithVisualFormat:@"V:|-80-[_licenseLb(==5)]-20-[_"
+              constraintsWithVisualFormat:@"V:|-80-[_licenseLb(==12)]-20-[_"
                                           @"rongLogo(==60)]-10-[_errorMsgLb(=="
-                                          @"5)]-20-[_inputBackground(==235)]-"
+                                          @"12)]-20-[_inputBackground(==235)]-"
                                           @"20-[userProtocolButton(==20)]"
                                   options:0
                                   metrics:nil
@@ -343,7 +343,7 @@
                                     views:views]]
       arrayByAddingObjectsFromArray:
           [NSLayoutConstraint
-              constraintsWithVisualFormat:@"H:|-50-[_errorMsgLb]-10-|"
+              constraintsWithVisualFormat:@"H:|-40-[_errorMsgLb]-10-|"
                                   options:0
                                   metrics:nil
                                     views:views]];

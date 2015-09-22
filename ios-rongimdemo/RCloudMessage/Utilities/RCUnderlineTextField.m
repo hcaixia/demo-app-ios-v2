@@ -36,14 +36,14 @@
     //NSUInteger numberOfLines = (self.contentSize.height + self.bounds.size.height) / self.font.leading;
     
     //Set the line offset from the baseline. (I'm sure there's a concrete way to calculate this.)
-    CGFloat baselineOffset = 20.0f;
+    CGFloat baselineOffset = 45.0f;
     
     //iterate over numberOfLines and draw each line
     //for (int x = 1; x < numberOfLines; x++) {
         
         //0.5f offset lines up line with pixel boundary
-    CGContextMoveToPoint(context, self.bounds.origin.x, self.font.leading + 1.5f + baselineOffset);
-    CGContextAddLineToPoint(context, self.bounds.size.width-10, self.font.leading + 0.5f + baselineOffset);
+    CGContextMoveToPoint(context, self.bounds.origin.x,baselineOffset);
+    CGContextAddLineToPoint(context, self.bounds.size.width-10, baselineOffset);
     //}
     
     //Close our Path and Stroke (draw) it

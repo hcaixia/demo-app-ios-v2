@@ -1007,6 +1007,27 @@ setConversationNotificationStatus:(RCConversationType)conversationType
 
 #pragma mark - 统计API
 /**
+ *  统计启动事件
+ *
+ *  @param launchOptions    启动原因
+ */
+- (void)recordLaunchOptionsEvent:(NSDictionary *)launchOptions;
+
+/**
+ *  统计本地推送事件
+ *
+ *  @param notification     本地推送内容
+ */
+- (void)recordLocalNotificationEvent:(UILocalNotification *)notification;
+
+/**
+ *  统计远程推送事件
+ *
+ *  @param userInfo     远程推送内容
+ */
+- (void)recordRemoteNotificationEvent:(NSDictionary *)userInfo;
+
+/**
  *  统计事件
  *
  *  @param key      事件名

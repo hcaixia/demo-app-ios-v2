@@ -12,7 +12,6 @@
 #import "RCDRCIMDataSource.h"
 #import "RCDLoginInfo.h"
 #import <AudioToolbox/AudioToolbox.h>
-#import "MobClick.h"
 #import "UIImageView+WebCache.h"
 #import "MBProgressHUD.h"
 #import "UIColor+RCColor.h"
@@ -55,8 +54,6 @@
   //        [self redirectNSlogToDocumentFolder];
   //    }
 
-  //初始化友盟配置
-  [self umengTrack];
 
     /**
      *  推送说明：
@@ -195,6 +192,7 @@
                                        UIRemoteNotificationTypeSound;
     [application registerForRemoteNotificationTypes:myTypes];
   }
+  [[RCIMClient sharedRCIMClient] recordLaunchOptionsEvent:launchOptions];
 
   //统一导航条样式
   UIFont *font = [UIFont systemFontOfSize:19.f];
@@ -249,33 +247,6 @@
   [[RCIMClient sharedRCIMClient] setDeviceToken:token];
 }
 
-- (void)umengTrack {
-
-  //    [MobClick setCrashReportEnabled:NO]; // 如果不需要捕捉异常，注释掉此行
-  // 打开友盟sdk调试，注意Release发布时需要注释掉此行,减少io消耗
-  [MobClick setLogEnabled:YES];
-
-  //参数为NSString *
-  //类型,自定义app版本信息，如果不设置，默认从CFBundleVersion里取
-  [MobClick setAppVersion:XcodeAppVersion];
-
-  //   reportPolicy为枚举类型,可以为 REALTIME, BATCH,SENDDAILY,SENDWIFIONLY几种
-  //   channelId 为NSString * 类型，channelId 为nil或@""时,默认会被被当作@"App
-  //   Store"渠道
-  [MobClick startWithAppkey:UMENG_APPKEY
-               reportPolicy:(ReportPolicy)REALTIME
-                  channelId:nil];
-
-  //      [MobClick checkUpdate];   //自动更新检查,
-  //      如果需要自定义更新请使用下面的方法,需要接收一个(NSDictionary
-  //      *)appInfo的参数
-  //    [MobClick checkUpdateWithDelegate:self
-  //    selector:@selector(updateMethod:)];
-
-  //在线参数配置
-  [MobClick updateOnlineConfig];
-}
-
 - (void)onlineConfigCallBack:(NSNotification *)note {
 
   NSLog(@"online config has fininshed and note = %@", note.userInfo);
@@ -283,6 +254,8 @@
 
 - (void)application:(UIApplication *)application
     didReceiveLocalNotification:(UILocalNotification *)notification {
+  [[RCIMClient sharedRCIMClient] recordLocalNotificationEvent:notification];
+
   //震动
   AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
   AudioServicesPlaySystemSound(1007);
@@ -294,6 +267,7 @@
  */
 - (void)application:(UIApplication *)application
     didReceiveRemoteNotification:(NSDictionary *)userInfo {
+  [[RCIMClient sharedRCIMClient] recordRemoteNotificationEvent:userInfo];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {

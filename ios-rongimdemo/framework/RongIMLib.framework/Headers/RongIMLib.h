@@ -21,12 +21,12 @@ FOUNDATION_EXPORT const unsigned char RongIMLibVersionString[];
 // In this header, you should import all the public headers of your framework
 // using statements like #import <RongIMLib/PublicHeader.h>
 
+#import <RongIMLib/interf_enc.h>
+#import <RongIMLib/interf_dec.h>
 #import <RongIMLib/RCIMClient.h>
 #import <RongIMLib/RCMessageContent.h>
-#import <RongIMLib/rc_dec_if.h>
 #import <RongIMLib/RCMessage.h>
 //#import <RongIMLib/RCNotificationMessage.h>
-#import <RongIMLib/rc_interf_dec.h>
 #import <RongIMLib/RCUserInfo.h>
 #import <RongIMLib/RCPublicServiceProfile.h>
 #import <RongIMLib/RCImageMessage.h>
@@ -38,10 +38,8 @@ FOUNDATION_EXPORT const unsigned char RongIMLibVersionString[];
 #import <RongIMLib/RCInformationNotificationMessage.h>
 #import <RongIMLib/RCContactNotificationMessage.h>
 #import <RongIMLib/RCGroup.h>
-#import <RongIMLib/rc_if_rom.h>
 #import <RongIMLib/RCGroupNotificationMessage.h>
 #import <RongIMLib/RCRichContentMessage.h>
-#import <RongIMLib/rc_interf_enc.h>
 #import <RongIMLib/RCAmrDataConverter.h>
 #import <RongIMLib/RCCommandNotificationMessage.h>
 #import <RongIMLib/RCDiscussion.h>

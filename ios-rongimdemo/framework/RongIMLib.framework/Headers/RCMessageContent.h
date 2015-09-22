@@ -70,7 +70,7 @@
 }
 
 /**
- *  Push消息内容
+ *  发送者信息
  */
 @property(nonatomic, strong) RCUserInfo *senderUserInfo;
 

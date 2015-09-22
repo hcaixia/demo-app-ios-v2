@@ -85,7 +85,11 @@
         self.displayUserNameInCell = NO;
     }
     
-    
+//    self.chatSessionInputBarControl.hidden = YES;
+//    CGRect intputTextRect = self.conversationMessageCollectionView.frame;
+//    intputTextRect.size.height = intputTextRect.size.height+50;
+//    [self.conversationMessageCollectionView setFrame:intputTextRect];
+//    [self scrollToBottomAnimated:YES];
 /***********如何自定义面板功能***********************
  自定义面板功能首先要继承RCConversationViewController，如现在所在的这个文件。
  然后在viewDidLoad函数的super函数之后去编辑按钮：
@@ -333,11 +337,11 @@
       backString = @"返回";
     }
     UIButton *backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    backBtn.frame = CGRectMake(0, 6, 67, 23);
+    backBtn.frame = CGRectMake(0, 6, 87, 23);
     UIImageView *backImg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"navigator_btn_back"]];
     backImg.frame = CGRectMake(-10, 0, 22, 22);
     [backBtn addSubview:backImg];
-    UILabel *backText = [[UILabel alloc] initWithFrame:CGRectMake(12, 0, 65, 22)];
+    UILabel *backText = [[UILabel alloc] initWithFrame:CGRectMake(12, 0, 85, 22)];
     backText.text = backString;//NSLocalizedStringFromTable(@"Back", @"RongCloudKit", nil);
     backText.font = [UIFont systemFontOfSize:15];
     [backText setBackgroundColor:[UIColor clearColor]];
