@@ -27,6 +27,8 @@
 @property(nonatomic, strong) NSString *imageUrl;
 /** 原始图 */
 @property(nonatomic, strong) UIImage *originalImage;
+/** 是否发送原图 */
+@property(nonatomic, getter=isFull) BOOL full;
 /**
  *  根据给定的图片创建消息实例
  *

@@ -310,7 +310,7 @@
 - (void)sendMessage:(RCMessageContent *)messageContent pushContent:(NSString *)pushContent;
 
 /**
- *  发送图片消息，此方法会先上传图片到融云指定的图片服务器，在发送消息。
+ *  发送图片消息，此方法会先上传图片到融云指定的图片服务器，再发送消息。
  *
  *  @param imageMessage 消息
  *

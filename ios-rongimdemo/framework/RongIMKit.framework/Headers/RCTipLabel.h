@@ -9,10 +9,12 @@
 #ifndef __RCTipLabel
 #define __RCTipLabel
 #import <UIKit/UIKit.h>
+#import "RCAttributedLabel.h"
+
 /**
  *  RCTipLabel
  */
-@interface RCTipLabel : UILabel
+@interface RCTipLabel : RCAttributedLabel
 /**
  *  UIEdgeInsets
  */

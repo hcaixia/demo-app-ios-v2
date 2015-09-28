@@ -192,6 +192,9 @@
                                        UIRemoteNotificationTypeSound;
     [application registerForRemoteNotificationTypes:myTypes];
   }
+  /**
+   * 统计Push打开率1
+   */
   [[RCIMClient sharedRCIMClient] recordLaunchOptionsEvent:launchOptions];
 
   //统一导航条样式
@@ -254,6 +257,9 @@
 
 - (void)application:(UIApplication *)application
     didReceiveLocalNotification:(UILocalNotification *)notification {
+  /**
+   * 统计Push打开率2
+   */
   [[RCIMClient sharedRCIMClient] recordLocalNotificationEvent:notification];
 
   //震动
@@ -267,6 +273,9 @@
  */
 - (void)application:(UIApplication *)application
     didReceiveRemoteNotification:(NSDictionary *)userInfo {
+  /**
+   * 统计Push打开率3
+   */
   [[RCIMClient sharedRCIMClient] recordRemoteNotificationEvent:userInfo];
 }
 

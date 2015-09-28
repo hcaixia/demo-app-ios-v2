@@ -56,7 +56,7 @@
  */
 @property(nonatomic, assign) id<RCEmojiViewDelegate> delegate;
 /**
- *  loadLableView
+ *  loadLabelView
  */
-- (void)loadLableView;
+- (void)loadLabelView;
 @end

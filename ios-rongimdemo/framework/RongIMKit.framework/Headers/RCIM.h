@@ -32,14 +32,14 @@ FOUNDATION_EXPORT NSString
                    completion:(void (^)(RCUserInfo *userInfo))completion;
 @end
 /**
- *  获取群主信息。
+ *  获取群组信息。
  */
 @protocol RCIMGroupInfoDataSource <NSObject>
 
 /**
- *  获取群主信息。
+ *  获取群组信息。
  *
- *  @param groupId  群主ID.
+ *  @param groupId  群组ID.
  *  @param completion 获取完成调用的BLOCK.
  */
 

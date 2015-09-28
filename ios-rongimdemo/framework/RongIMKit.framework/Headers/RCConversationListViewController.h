@@ -84,8 +84,8 @@
 /**
  *  init
  *
- *  @param conversationTypeArray1 会话类型，NSNumber类型。
- *  @param conversationTypeArray2 会话类型，NSNumber类型。
+ *  @param conversationTypeArray1 需要显示的会话类型，NSNumber类型。
+ *  @param conversationTypeArray2 需要聚合显示的会话类型，NSNumber类型。
  *
  *  @return conversationList
  */
@@ -124,7 +124,7 @@
 - (void)refreshConversationTableViewIfNeeded;
 
 /**
- *  重新设置空会话列表背景图
+ *  移除默认的空会话列表背景图
  */
 - (void)resetConversationListBackgroundViewIfNeeded;
 

@@ -404,43 +404,46 @@
     //此处需要添加根据userid来获取用户信息的逻辑，extend字段不存在于DB中，当数据来自db时没有extend字段内容，只有userid
     if (nil == model.extend) {
         // Not finished yet, To Be Continue...
-        RCContactNotificationMessage *_contactNotificationMsg = (RCContactNotificationMessage *)model.lastestMessage;
-        if (_contactNotificationMsg.sourceUserId == nil) {
-            RCDChatListCell *cell = [[RCDChatListCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@""];
-            cell.lblDetail.text = @"好友请求";
-            [cell.ivAva sd_setImageWithURL:[NSURL URLWithString:portraitUri] placeholderImage:[UIImage imageNamed:@"system_notice"]];
-            return cell;
-
-        }
-        NSDictionary *_cache_userinfo = [[NSUserDefaults standardUserDefaults]objectForKey:_contactNotificationMsg.sourceUserId];
-        if (_cache_userinfo) {
-            userName = _cache_userinfo[@"username"];
-            portraitUri = _cache_userinfo[@"portraitUri"];
-        } else {
-            NSDictionary *emptyDic = @{};
-            [[NSUserDefaults standardUserDefaults]setObject:emptyDic forKey:_contactNotificationMsg.sourceUserId];
-            [[NSUserDefaults standardUserDefaults]synchronize];
-            [RCDHTTPTOOL getUserInfoByUserID:_contactNotificationMsg.sourceUserId
-                                  completion:^(RCUserInfo *user) {
-                                      if (user == nil) {
-                                          return;
-                                      }
-                                      RCDUserInfo *rcduserinfo_ = [RCDUserInfo new];
-                                      rcduserinfo_.name = user.name;
-                                      rcduserinfo_.userId = user.userId;
-                                      rcduserinfo_.portraitUri = user.portraitUri;
-                                      
-                                      model.extend = rcduserinfo_;
-                                      
-                                      //local cache for userInfo
-                                      NSDictionary *userinfoDic = @{@"username": rcduserinfo_.name,
-                                                                    @"portraitUri":rcduserinfo_.portraitUri
-                                                                    };
-                                      [[NSUserDefaults standardUserDefaults]setObject:userinfoDic forKey:_contactNotificationMsg.sourceUserId];
-                                      [[NSUserDefaults standardUserDefaults]synchronize];
-                                      
-                                      [weakSelf.conversationListTableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-                                  }];
+        if(model.conversationType == ConversationType_SYSTEM && [model.lastestMessage isMemberOfClass:[RCContactNotificationMessage class]])
+        {
+            RCContactNotificationMessage *_contactNotificationMsg = (RCContactNotificationMessage *)model.lastestMessage;
+            if (_contactNotificationMsg.sourceUserId == nil) {
+                RCDChatListCell *cell = [[RCDChatListCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@""];
+                cell.lblDetail.text = @"好友请求";
+                [cell.ivAva sd_setImageWithURL:[NSURL URLWithString:portraitUri] placeholderImage:[UIImage imageNamed:@"system_notice"]];
+                return cell;
+                
+            }
+            NSDictionary *_cache_userinfo = [[NSUserDefaults standardUserDefaults]objectForKey:_contactNotificationMsg.sourceUserId];
+            if (_cache_userinfo) {
+                userName = _cache_userinfo[@"username"];
+                portraitUri = _cache_userinfo[@"portraitUri"];
+            } else {
+                NSDictionary *emptyDic = @{};
+                [[NSUserDefaults standardUserDefaults]setObject:emptyDic forKey:_contactNotificationMsg.sourceUserId];
+                [[NSUserDefaults standardUserDefaults]synchronize];
+                [RCDHTTPTOOL getUserInfoByUserID:_contactNotificationMsg.sourceUserId
+                                      completion:^(RCUserInfo *user) {
+                                          if (user == nil) {
+                                              return;
+                                          }
+                                          RCDUserInfo *rcduserinfo_ = [RCDUserInfo new];
+                                          rcduserinfo_.name = user.name;
+                                          rcduserinfo_.userId = user.userId;
+                                          rcduserinfo_.portraitUri = user.portraitUri;
+                                          
+                                          model.extend = rcduserinfo_;
+                                          
+                                          //local cache for userInfo
+                                          NSDictionary *userinfoDic = @{@"username": rcduserinfo_.name,
+                                                                        @"portraitUri":rcduserinfo_.portraitUri
+                                                                        };
+                                          [[NSUserDefaults standardUserDefaults]setObject:userinfoDic forKey:_contactNotificationMsg.sourceUserId];
+                                          [[NSUserDefaults standardUserDefaults]synchronize];
+                                          
+                                          [weakSelf.conversationListTableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+                                      }];
+            }
         }
         
     }else{

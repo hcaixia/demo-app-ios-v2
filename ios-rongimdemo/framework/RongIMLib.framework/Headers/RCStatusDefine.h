@@ -391,6 +391,10 @@ typedef NS_ENUM(NSInteger, RCErrorCode) {
      */
     NOT_IN_GROUP = 22406,
     /**
+     *  在群组中被禁言。
+     */
+    FORBIDDEN_IN_GROUP = 22408,
+    /**
      *  不在聊天室中。
      */
     NOT_IN_CHATROOM = 23406

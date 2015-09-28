@@ -13,6 +13,7 @@
 #import <RongIMLib/RongIMLib.h>
 #import "RCMessageModel.h"
 #import "RCMessageCellNotificationModel.h"
+#import "RCMessageCellDelegate.h"
 
 /**
  *  消息发送状态通知回调Key
@@ -28,6 +29,11 @@ UIKIT_EXTERN NSString *const KNotificationMessageBaseCellUpdateSendingStatus;
  *  消息Cell基类
  */
 @interface RCMessageBaseCell : UICollectionViewCell
+
+/**
+ *  消息回调
+ */
+@property(nonatomic, weak) id<RCMessageCellDelegate> delegate;
 
 /**
  *   显示时间的Label

@@ -24,10 +24,6 @@
  */
 @interface RCMessageCell : RCMessageBaseCell
 
-/**
- *  消息回调
- */
-@property(nonatomic, weak) id<RCMessageCellDelegate> delegate;
 
 /**
  *  用户头像

@@ -90,6 +90,7 @@
 "PublicService"="服务号";
 "NOT_IN_DISCUSSION"="您当前不在此讨论组";
 "NOT_IN_GROUP"="您当前不在此群组";
+"FORBIDDEN_IN_GROUP"="您在当前群组中被禁言。";
 "NOT_IN_CHATROOM"="您当前不在此聊天室";
 "Message rejected"="您的消息已发出，但被对方拒绝";
 "AccessRightTitle"="无法访问";
@@ -119,3 +120,4 @@
 "HistoryMessageTip"="以上是历史消息";
 "DISCUSSION"="讨论组";
 "DateFormat"="MM月dd日";
+"Full_Image"="原图";
