@@ -193,9 +193,21 @@
     [application registerForRemoteNotificationTypes:myTypes];
   }
   /**
-   * 统计Push打开率1
+   * 统计推送打开率1
    */
   [[RCIMClient sharedRCIMClient] recordLaunchOptionsEvent:launchOptions];
+  /**
+   * 获取融云推送服务扩展字段1
+   */
+  NSDictionary *pushServiceData = [[RCIMClient sharedRCIMClient] getPushExtraFromLaunchOptions:launchOptions];
+  if (pushServiceData) {
+    NSLog(@"该启动事件包含来自融云的推送服务");
+    for (id key in [pushServiceData allKeys]) {
+      NSLog(@"%@", pushServiceData[key]);
+    }
+  } else {
+      NSLog(@"该启动事件不包含来自融云的推送服务");
+  }
 
   //统一导航条样式
   UIFont *font = [UIFont systemFontOfSize:19.f];
@@ -255,28 +267,40 @@
   NSLog(@"online config has fininshed and note = %@", note.userInfo);
 }
 
+/**
+ * 推送处理4
+ * userInfo内容请参考官网文档
+ */
+- (void)application:(UIApplication *)application
+didReceiveRemoteNotification:(NSDictionary *)userInfo {
+    /**
+     * 统计推送打开率2
+     */
+    [[RCIMClient sharedRCIMClient] recordRemoteNotificationEvent:userInfo];
+    /**
+     * 获取融云推送服务扩展字段2
+     */
+    NSDictionary *pushServiceData = [[RCIMClient sharedRCIMClient] getPushExtraFromRemoteNotification:userInfo];
+    if (pushServiceData) {
+        NSLog(@"该远程推送包含来自融云的推送服务");
+        for (id key in [pushServiceData allKeys]) {
+            NSLog(@"key = %@, value = %@", key, pushServiceData[key]);
+        }
+    } else {
+        NSLog(@"该远程推送不包含来自融云的推送服务");
+    }
+}
+
 - (void)application:(UIApplication *)application
     didReceiveLocalNotification:(UILocalNotification *)notification {
   /**
-   * 统计Push打开率2
+   * 统计推送打开率3
    */
   [[RCIMClient sharedRCIMClient] recordLocalNotificationEvent:notification];
 
   //震动
   AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
   AudioServicesPlaySystemSound(1007);
-}
-
-/**
- * 推送处理4
- * userInfo内容请参考官网文档
- */
-- (void)application:(UIApplication *)application
-    didReceiveRemoteNotification:(NSDictionary *)userInfo {
-  /**
-   * 统计Push打开率3
-   */
-  [[RCIMClient sharedRCIMClient] recordRemoteNotificationEvent:userInfo];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {

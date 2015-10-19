@@ -84,6 +84,13 @@
 @property(nonatomic) UIColor *topCellBackgroundColor;
 
 /**
+ *  最后一条消息发送状态
+ */
+@property(strong, nonatomic) UILabel *lastSendMessageStatusLabel;
+
+/**
+
+/**
  *  设置用户头像样式
  *
  *  @param portraitStyle portraitStyle

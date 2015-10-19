@@ -11,7 +11,7 @@
 
 @interface RealTimeLocationStartCell ()
 @property (nonatomic, strong)UIImageView *bubbleBackgroundView;
-@property (nonatomic, strong)UILabel *textLabel;
+@property (nonatomic, strong)RCAttributedLabel *textLabel;
 @property (nonatomic, strong)UIImageView *locationView;
 @end
 
@@ -28,7 +28,7 @@
 //    }
 
     NSString *content = @"我发起了位置共享";
-    self.textLabel.text = content;
+    [self.textLabel setText:content dataDetectorEnabled:NO];
     self.bubbleBackgroundView.userInteractionEnabled = YES;
     UILongPressGestureRecognizer *longPress =
     [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressed:)];

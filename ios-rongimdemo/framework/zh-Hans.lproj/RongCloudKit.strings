@@ -81,9 +81,13 @@
 "VoIP_Talking"="对方正在通话!";
 "VoIP_Offline"="对方不在线!";
 "VoIP_Net_busy"="网络繁忙，稍后再试！";
+"VoIP_Not_Accept"="对方未接听";
+"VoIP_Rejected_By_Blacklist"="您的通话请求已发出，但被对方拒绝";
 "WaitingForAcceptInvitation"="正在等待对方接受邀请...";
 "VoIP_CallingFailed"="呼叫建立失败，请重新再拨";
 "VoIP_invite"="邀请您接受聊天";
+"VoIP_Incoming_Notification"="发起了语音通话";
+"VoIP_Accepted_Notification"="接受了语音通话";
 "VoIP_SessionIDWrong"="呼叫Session ID 错误";
 "Yesterday"="昨天";
 "SearchPublicService"="查找服务号";
@@ -120,4 +124,6 @@
 "HistoryMessageTip"="以上是历史消息";
 "DISCUSSION"="讨论组";
 "DateFormat"="MM月dd日";
+"MessageHasRead"="已读";
+"MessageHasSend"="已发";
 "Full_Image"="原图";

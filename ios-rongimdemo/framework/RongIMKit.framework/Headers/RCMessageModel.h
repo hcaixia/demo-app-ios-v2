@@ -46,6 +46,8 @@
 @property(nonatomic, strong) RCMessageContent *content;
 /** 附加字段 */
 @property(nonatomic, strong) NSString *extra;
+/** 保存的cell高度值，避免重复计算 */
+@property(nonatomic) CGSize cellSize;
 /**
  *  initWithMessage
  *

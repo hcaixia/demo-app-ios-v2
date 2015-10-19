@@ -241,11 +241,11 @@ typedef NS_ENUM(NSUInteger, RCConversationType) {
      */
     ConversationType_CHATROOM,
     /**
-     *  客服消息
+     *  客服
      */
     ConversationType_CUSTOMERSERVICE,
     /**
-     *  系统消息
+     *  系统会话
      */
     ConversationType_SYSTEM,
     /**
@@ -256,8 +256,12 @@ typedef NS_ENUM(NSUInteger, RCConversationType) {
     /**
      *  订阅号 Public
      */
-    ConversationType_PUBLICSERVICE
+    ConversationType_PUBLICSERVICE,
 
+    /**
+     *  推送服务
+     */
+    ConversationType_PUSHSERVICE
 };
 
 /**

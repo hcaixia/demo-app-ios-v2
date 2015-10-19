@@ -55,12 +55,12 @@
 - (void)updateRealTimeLocationStatus {
     switch ([self.delegate getStatus]) {
         case RC_REAL_TIME_LOCATION_STATUS_IDLE:
-            self.isExpended = NO;
             self.hidden = YES;
+            self.isExpended = NO;
             break;
         case RC_REAL_TIME_LOCATION_STATUS_INCOMING:
-            self.isExpended = NO;
             self.hidden = NO;
+            self.isExpended = NO;
             [self setBackgroundColor:[UIColor colorWithRed:((float)0x11)/255 green:((float)0x40)/255 blue:((float)0x60)/255 alpha:0.7]];
             break;
         case RC_REAL_TIME_LOCATION_STATUS_OUTGOING:
@@ -85,18 +85,20 @@
 }
 
 - (void)setIsExpended:(BOOL)isExpended {
-    if (!isExpended) {
-        [self showStatus];
-        [UIView beginAnimations:nil context:NULL];
-        [UIView setAnimationDuration:0.1f];
-        self.frame = RC_REAL_TIME_LOCATION_STATUS_FRAME;
-        [UIView commitAnimations];
-    } else {
-        [self showExtendedView];
-        [UIView beginAnimations:nil context:NULL];
-        [UIView setAnimationDuration:0.1f];
-        self.frame = RC_REAL_TIME_LOCATION_EXPEND_FRAME;
-        [UIView commitAnimations];
+    if (!self.hidden) {
+        if (!isExpended) {
+            [self showStatus];
+            [UIView beginAnimations:nil context:NULL];
+            [UIView setAnimationDuration:0.1f];
+            self.frame = RC_REAL_TIME_LOCATION_STATUS_FRAME;
+            [UIView commitAnimations];
+        } else {
+            [self showExtendedView];
+            [UIView beginAnimations:nil context:NULL];
+            [UIView setAnimationDuration:0.1f];
+            self.frame = RC_REAL_TIME_LOCATION_EXPEND_FRAME;
+            [UIView commitAnimations];
+        }
     }
     _isExpended = isExpended;
 }

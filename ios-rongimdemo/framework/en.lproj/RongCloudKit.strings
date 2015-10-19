@@ -81,9 +81,13 @@
 "VoIP_Talking"="Calling number is talking";
 "VoIP_Offline"="Calling number is offline";
 "VoIP_Net_busy"="Network is busy";
+"VoIP_Not_Accept"="Call has no answer";
+"VoIP_Rejected_By_Blacklist"="Your call has sent out, but been rejected by the receiver";
 "WaitingForAcceptInvitation"="Waiting for accept calling invitation...";
 "VoIP_CallingFailed"="Calling is failed, please try again";
 "VoIP_invite"="Invite you for talking";
+"VoIP_Incoming_Notification"="Invite you for a call";
+"VoIP_Accepted_Notification"="Call accepted";
 "VoIP_SessionIDWrong"="Session ID is wrong";
 "Yesterday"="Yesterday";
 "SearchPublicService"="Search Public Service";
@@ -120,4 +124,6 @@
 "HistoryMessageTip"="Above is the historical messages";
 "DISCUSSION"="discussion";
 "DateFormat"="MM-dd";
+"MessageHasRead"="Read";
+"MessageHasSend"="Sent";
 "Full_Image"="Full Image";

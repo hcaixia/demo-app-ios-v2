@@ -22,6 +22,7 @@
 #import "RCUserData.h"
 #import "RCWatchKitStatusDelegate.h"
 #import "RCUploadImageStatusListener.h"
+#import "RCPublicServiceDataSource.h"
 
 @class RCConversation;
 @class RCDiscussion;
@@ -108,6 +109,11 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
  *  当前的用户信息对象
  */
 @property(nonatomic, strong) RCUserInfo *currentUserInfo;
+
+/**
+ *  公众服务信息提供者
+ */
+@property(nonatomic, strong)id<RCPublicServiceDataSource> publicServiceDataSource;
 
 /**
  *  当前 App 前后台模式
@@ -931,6 +937,19 @@ setConversationNotificationStatus:(RCConversationType)conversationType
                                 (RCPublicServiceType)publicServiceType
                                     publicServiceId:(NSString *)publicServiceId;
 
+
+/**
+ *  获取公众号信息
+ *
+ *  @param publicServiceType  公众号开发者，第三方平台
+ *  @param publicServiceId    目标ID
+ *  @param successBlock       获取成功：返回RCPublicServiceProfile的数据
+ *  @param errorBlock         获取失败：返回错误码
+ */
+- (void)getPublicServiceProfile:(NSString *)targetId
+               conversationType:(RCConversationType)type
+                      onSuccess:(void (^)(RCPublicServiceProfile *serviceProfile))onSuccess
+                        onError:(void (^)(NSError *error))onError;
 /**
  *  查询已关注的公众号
  *
@@ -948,16 +967,6 @@ setConversationNotificationStatus:(RCConversationType)conversationType
  */
 - (UIViewController *)getPublicServiceWebViewController:(NSString *)URLString;
 
-/**
- *  同步用户信息
- *
- *  @param userData          用户信息
- *  @param successBlock 成功回调
- *  @param errorBlock   失败回调
- */
-- (void)syncUserData:(RCUserData *)userData
-             success:(void (^)())successBlock
-               error:(void (^)(RCErrorCode status))errorBlock;
 /**
  *  查询当前连接状态
  *
@@ -1026,6 +1035,24 @@ setConversationNotificationStatus:(RCConversationType)conversationType
  *  @param userInfo     远程推送内容
  */
 - (void)recordRemoteNotificationEvent:(NSDictionary *)userInfo;
+
+/**
+ *  获取点击的启动事件中，融云推送服务的扩展字段
+ *
+ *  @param launchOptions    启动原因
+ *
+ *  @return                 收到的融云推送服务的扩展字段，nil表示该启动事件不包含来自融云的推送服务
+ */
+- (NSDictionary *)getPushExtraFromLaunchOptions:(NSDictionary *)launchOptions;
+
+/**
+ *  获取点击的远程推送中，融云推送服务的扩展字段
+ *
+ *  @param userInfo     远程推送内容
+ *
+ *  @return             收到的融云推送服务的扩展字段，nil表示该远程推送不包含来自融云的推送服务
+ */
+- (NSDictionary *)getPushExtraFromRemoteNotification:(NSDictionary *)userInfo;
 
 /**
  *  统计事件
@@ -1114,6 +1141,35 @@ extern NSString* const kRCUserBirthYear;
  *  用户信息Key值，用户自定义信息
  */
 extern NSString* const kRCUserCustom;
+- (void)uploadUserInfoWithName:(NSString *)name
+                          data:(NSString *)data
+                       success:(void (^)(NSString *token))successBlock
+                         error:(void (^)(RCErrorCode status, NSString *errorMsg))errorBlock;
+
+/**
+ *  获取消息发送成功时间
+ *
+ *  @param messageId       消息的Id
+ */
+-(long long)getMessageSendTime:(long)messageId;
+
+
+/**
+ *  获取消息回执功能开通状态
+ *  @param conversationType       会话类型（目前只支持单聊）
+ */
+-(BOOL)getConversationMessageReceiptStatus:(RCConversationType)conversationType;
+
+/**
+ *  发送已读消息回执
+ *
+ *  @param conversationType       会话类型（目前只支持单聊）
+ *  @param targetId               会话Id
+ *  @param time                   最后一条发送消息的时间戳
+ */
+-(void)sendReceiptMessage:(RCConversationType)conversationType
+                 targetId:(NSString *)targetId
+                     time: (long long)timestamp;
 
 @end
 #endif

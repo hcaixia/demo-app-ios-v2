@@ -71,6 +71,18 @@
 @property(nonatomic, readonly) BOOL isDisplayNickname;
 
 /**
+ *  消息已读状态视图
+ */
+@property(nonatomic, strong) UIView *messageHasReadStatusView;
+
+/**
+ *  消息发送成功状态视图
+ */
+@property(nonatomic, strong) UIView *messageSendSuccessStatusView;
+
+
+
+/**
  *  设置数据模型
  *
  *  @param model 消息数据模型

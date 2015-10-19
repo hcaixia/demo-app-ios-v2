@@ -61,6 +61,11 @@ UIKIT_EXTERN NSString *const KNotificationMessageBaseCellUpdateSendingStatus;
 @property(nonatomic, readonly) BOOL isDisplayMessageTime;
 
 /**
+ *  是否显示已读状态
+ */
+@property(nonatomic) BOOL isDisplayReadStatus;
+
+/**
  *  类初始化方法
  *
  *  @param frame cellFrame
