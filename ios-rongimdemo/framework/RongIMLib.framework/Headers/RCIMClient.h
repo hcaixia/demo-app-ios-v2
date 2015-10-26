@@ -941,10 +941,10 @@ setConversationNotificationStatus:(RCConversationType)conversationType
 /**
  *  获取公众号信息
  *
- *  @param publicServiceType  公众号开发者，第三方平台
- *  @param publicServiceId    目标ID
- *  @param successBlock       获取成功：返回RCPublicServiceProfile的数据
- *  @param errorBlock         获取失败：返回错误码
+ *  @param targetId  目标 Id
+ *  @param type    会话类型
+ *  @param onSuccess       获取成功：返回RCPublicServiceProfile的数据
+ *  @param onError         获取失败：返回错误码
  */
 - (void)getPublicServiceProfile:(NSString *)targetId
                conversationType:(RCConversationType)type
@@ -1139,7 +1139,13 @@ extern NSString* const kRCUserPicturePath;
 extern NSString* const kRCUserBirthYear;
 /**
  *  用户信息Key值，用户自定义信息
+ *
+ *  @param name       名称
+ *  @param data       信息内容
+ *  @param successBlock     成功后处理方法
+ *  @param errorBlock       失败后处理方法
  */
+
 extern NSString* const kRCUserCustom;
 - (void)uploadUserInfoWithName:(NSString *)name
                           data:(NSString *)data
@@ -1165,7 +1171,7 @@ extern NSString* const kRCUserCustom;
  *
  *  @param conversationType       会话类型（目前只支持单聊）
  *  @param targetId               会话Id
- *  @param time                   最后一条发送消息的时间戳
+ *  @param timestamp                   最后一条发送消息的时间戳
  */
 -(void)sendReceiptMessage:(RCConversationType)conversationType
                  targetId:(NSString *)targetId

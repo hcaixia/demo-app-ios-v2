@@ -93,6 +93,7 @@
 		A6B1D8FB1B201B3600AD32EC /* RCWKUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = A6B1D8F61B201B3600AD32EC /* RCWKUtility.m */; };
 		A6B1D9051B204E6600AD32EC /* RongIMLib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A6BD04171B1EEA6B00ACAF17 /* RongIMLib.framework */; };
 		A6BD04181B1EEA6B00ACAF17 /* RongIMLib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A6BD04171B1EEA6B00ACAF17 /* RongIMLib.framework */; };
+		A6CF8A351BD4CB6E00F3EA1A /* RCConfig.plist in Resources */ = {isa = PBXBuildFile; fileRef = A6CF8A341BD4CB6E00F3EA1A /* RCConfig.plist */; settings = {ASSET_TAGS = (); }; };
 		A6EFAB9F1BB0ED94007E9D67 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = A6EFAB9E1BB0ED94007E9D67 /* libz.tbd */; };
 		A6EFABA11BB0EDAC007E9D67 /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = A6EFABA01BB0EDAC007E9D67 /* libxml2.tbd */; };
 		A6EFABA31BB0EDD7007E9D67 /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = A6EFABA21BB0EDD7007E9D67 /* libstdc++.tbd */; };
@@ -413,6 +414,7 @@
 		A6BD040F1B1E938000ACAF17 /* 融云 Demo WatchKit Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "融云 Demo WatchKit Extension.entitlements"; sourceTree = "<group>"; };
 		A6BD04101B1E941D00ACAF17 /* RCloudMessage.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = RCloudMessage.entitlements; path = RCloudMessage/RCloudMessage.entitlements; sourceTree = SOURCE_ROOT; };
 		A6BD04171B1EEA6B00ACAF17 /* RongIMLib.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RongIMLib.framework; path = framework/RongIMLib.framework; sourceTree = SOURCE_ROOT; };
+		A6CF8A341BD4CB6E00F3EA1A /* RCConfig.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = RCConfig.plist; path = framework/RCConfig.plist; sourceTree = SOURCE_ROOT; };
 		A6EFAB9E1BB0ED94007E9D67 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		A6EFABA01BB0EDAC007E9D67 /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
 		A6EFABA21BB0EDD7007E9D67 /* libstdc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.tbd"; path = "usr/lib/libstdc++.tbd"; sourceTree = SDKROOT; };
@@ -1101,6 +1103,7 @@
 		E4C4E7E71A0A309100140067 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A6CF8A341BD4CB6E00F3EA1A /* RCConfig.plist */,
 				A6EFABA61BB0EDFB007E9D67 /* libc++.tbd */,
 				A6EFABA41BB0EDE1007E9D67 /* libsqlite3.tbd */,
 				A6EFABA21BB0EDD7007E9D67 /* libstdc++.tbd */,
@@ -1570,6 +1573,7 @@
 				8C55EB511B2A8CE5004285F4 /* Emoji.plist in Resources */,
 				E42A2E5A1AAEE76800F4C3AB /* Main.storyboard in Resources */,
 				5111B07D1AE6A11A00317E71 /* RongCloud.bundle in Resources */,
+				A6CF8A351BD4CB6E00F3EA1A /* RCConfig.plist in Resources */,
 				E4BFAE251A121839007165B1 /* Images.xcassets in Resources */,
 				510624851AD63A9E00348452 /* RongCloudKit.strings in Resources */,
 			);

@@ -41,4 +41,9 @@ UIKIT_EXTERN NSString *const kNotificationStopVoicePlayer;
  */
 @property(nonatomic, strong) UILabel *voiceDurationLabel;
 
+/**
+ *  播放语音
+ */
+- (void)playVoice;
+
 @end

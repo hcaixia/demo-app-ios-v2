@@ -90,6 +90,11 @@
 @property(nonatomic, assign) BOOL enableNewComingMessageIcon;
 
 /**
+ *  是否开启语音消息连读，设置为Yes，播放语音消息时 会连续播放下面所有收到的未读语音消息
+ */
+@property(nonatomic, assign) BOOL enableContinuousReadUnreadVoice;
+
+/**
  * 是否允许保存新拍照片到本地系统
  */
 @property(nonatomic, assign) BOOL enableSaveNewPhotoToLocalSystem;

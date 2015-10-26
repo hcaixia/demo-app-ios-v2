@@ -89,11 +89,9 @@
 @property(strong, nonatomic) UILabel *lastSendMessageStatusLabel;
 
 /**
-
-/**
  *  设置用户头像样式
  *
- *  @param portraitStyle portraitStyle
+ *  @param portraitStyle 用户头像样式
  */
 - (void)setHeaderImagePortraitStyle:(RCUserAvatarStyle)portraitStyle;
 

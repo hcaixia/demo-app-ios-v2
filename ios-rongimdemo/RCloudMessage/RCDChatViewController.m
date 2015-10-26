@@ -136,6 +136,8 @@
     }
     [self appendAndDisplayMessage:savedMsg];
 */
+    
+    self.enableContinuousReadUnreadVoice = YES;//开启语音连读功能
 }
 
 - (void)leftBarButtonItemPressed:(id)sender {

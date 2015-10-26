@@ -84,7 +84,11 @@
   //设置用户信息源和群组信息源
   [RCIM sharedRCIM].userInfoDataSource = RCDDataSource;
   [RCIM sharedRCIM].groupInfoDataSource = RCDDataSource;
-    [RCIM sharedRCIM].receiveMessageDelegate=self;
+  //设置群组内用户信息源。如果不使用群名片功能，可以不设置
+  [RCIM sharedRCIM].groupUserInfoDataSource = RCDDataSource;
+    
+  //设置接收消息代理
+  [RCIM sharedRCIM].receiveMessageDelegate=self;
   //    [RCIM sharedRCIM].globalMessagePortraitSize = CGSizeMake(46, 46);
 
   //登录

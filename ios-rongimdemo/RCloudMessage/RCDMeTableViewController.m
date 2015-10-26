@@ -17,8 +17,11 @@
 @property (weak, nonatomic) IBOutlet UILabel *currentUserNickNameLabel;
 @property (nonatomic)BOOL hasNewVersion;
 @property (nonatomic)NSString *versionUrl;
+@property (nonatomic, strong)NSString *versionString;
+
 @property (nonatomic, strong)NSURLConnection *connection;
 @property (nonatomic, strong)NSMutableData *receiveData;
+
 @end
 
 @implementation RCDMeTableViewController
@@ -30,14 +33,15 @@
         //设置为不用默认渲染方式
         self.tabBarItem.image = [[UIImage imageNamed:@"icon_me"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
         self.tabBarItem.selectedImage = [[UIImage imageNamed:@"icon_me_hover"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-        self.hasNewVersion = [[NSUserDefaults standardUserDefaults] boolForKey:@"hasNewVersion"];
         self.versionUrl= [[NSUserDefaults standardUserDefaults] stringForKey:@"newVersionUrl"];
+        self.versionUrl= [[NSUserDefaults standardUserDefaults] stringForKey:@"newVersionString"];
+        self.hasNewVersion = [[NSUserDefaults standardUserDefaults] boolForKey:@"hasNewVersion"];
         [self checkNewVersion];
     }
     return self;
 }
 #if DEBUG
-#define DEMO_VERSION_BOARD @""
+#define DEMO_VERSION_BOARD @"http://bj.rongcloud.net/list.php"
 #else
 #define DEMO_VERSION_BOARD @"http://rongcloud.cn/demo"
 #endif
@@ -46,7 +50,7 @@
     long lastCheckTime = [[NSUserDefaults standardUserDefaults] integerForKey:@"lastupdatetimestamp"];
     
     NSDate *now = [[NSDate alloc] init];
-    if (now.timeIntervalSince1970 - lastCheckTime > 24*60*60) {
+    if (now.timeIntervalSince1970 - lastCheckTime > 0) {
         if (DEMO_VERSION_BOARD.length == 0) {
             return;
         }
@@ -127,6 +131,12 @@
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
+- (void)setvrsionString:(NSString *)newVersionString {
+    _versionString = newVersionString;
+    [[NSUserDefaults standardUserDefaults] setObject:self.versionUrl forKey:@"newVersionString"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
     NSHTTPURLResponse *res = (NSHTTPURLResponse *)response;
     NSLog(@"%@",[res allHeaderFields]);
@@ -148,40 +158,39 @@
 
 #if DEBUG
 -(void)compareVersion:(NSString *)receiveStr {
-    NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
 
     NSLog(@"%@",receiveStr);
     NSRange strRange = NSMakeRange(0, receiveStr.length);
-    while (true) {
+ 
         NSRange startRange = [receiveStr rangeOfString:@"<a href='itms-services:" options:0 range:strRange];
         if (startRange.location != NSNotFound) {
             NSRange endRange = [receiveStr rangeOfString:@"'>" options:0 range:NSMakeRange(startRange.location + startRange.length, receiveStr.length - startRange.location - startRange.length)];
             NSString *url = [receiveStr substringWithRange:NSMakeRange(startRange.location + 9, endRange.location - startRange.location - 9)];
             NSRange nameEndRange = [receiveStr rangeOfString:@"</a>" options:0 range:NSMakeRange(endRange.location, receiveStr.length - endRange.location)];
             NSString *name = [receiveStr substringWithRange:NSMakeRange(endRange.location+2, nameEndRange.location - endRange.location - 2)];
-
-            NSString *model= @"debug";
-            NSRange range = [name rangeOfString:model];
-            if (range.location != NSNotFound) {
-                range = [name rangeOfString:version];
-                if (range.location == NSNotFound) {
-                    self.hasNewVersion = YES;
-                    self.versionUrl = url;
-                    break;
-                } else {
-                    self.hasNewVersion = NO;
-                    self.versionUrl = nil;
-                    break;
-                }
+            NSRange versionBegin = [name rangeOfString:@"_201"];
+            if (versionBegin.location == NSNotFound) {
+                self.hasNewVersion = NO;
+                self.versionUrl = nil;
+                return;
             }
-            strRange.location = nameEndRange.location + nameEndRange.length;
-            strRange.length = receiveStr.length - strRange.location;
+            NSString *versionString = [name substringWithRange:NSMakeRange(versionBegin.location+1, 12)];
+
+            if ([versionString compare:version] == NSOrderedDescending) {
+                self.versionUrl = url;
+                self.versionString = versionString;
+                self.hasNewVersion = YES;
+            } else {
+                self.versionUrl = nil;
+                self.versionString = nil;
+                self.hasNewVersion = NO;
+            }
         } else {
-            self.hasNewVersion = NO;
             self.versionUrl = nil;
-            break;
+            self.versionString = nil;
+            self.hasNewVersion = NO;
         }
-    }
 }
 
 #else
@@ -234,7 +243,12 @@
 }
 
 - (void)updateNewVersionBadge {
+#if DEBUG
+    NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
+    if (self.hasNewVersion && ([self.versionString compare:version] == NSOrderedDescending)) {
+#else
     if (self.hasNewVersion) {
+#endif
         self.tabBarItem.badgeValue = @"有新版本！";
         _versionLb.attributedText = [[NSAttributedString alloc] initWithString:@"有新版本啦。。。" attributes:@{NSForegroundColorAttributeName:[UIColor redColor]}];
     } else {
