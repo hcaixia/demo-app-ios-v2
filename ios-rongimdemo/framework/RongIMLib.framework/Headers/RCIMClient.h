@@ -983,13 +983,14 @@ setConversationNotificationStatus:(RCConversationType)conversationType
  *  @param recordTime  最早消息的 sendtime，第一次取传0。
  *  @param count            要获取的消息数量（1-20条）。
  *  @param successBlock 成功回调返回历史记录
- *  @return 。
+ *  @param errorBlock         获取失败：返回错误码
  */
 - (void)getRemoteHistoryMessages:(RCConversationType)conversationType
                   targetId:(NSString *)targetId
                 recordTime:(long)recordTime
                      count:(int)count
-                   success:(void (^)(NSArray *messages))successBlock;
+                   success:(void (^)(NSArray *messages))successBlock
+                     error:(void (^)(RCErrorCode status))errorBlock;
 
 /**
  *  发起客服会话（kit中会话页面已经有客服会话的判断，不用调用此消息，如果用使用Lib 在发起客服会话时调用，这里会发送握手消息）

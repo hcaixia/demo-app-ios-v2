@@ -21,11 +21,12 @@
 #import "RCDHttpTool.h"
 #import "AFHttpTool.h"
 #import "RCDataBaseManager.h"
+#import "MobClick.h"
 
 //#define RONGCLOUD_IM_APPKEY @"e0x9wycfx7flq" //offline key
 #define RONGCLOUD_IM_APPKEY @"z3v5yqkbv8v30" // online key
 
-#define UMENG_APPKEY @"551ce859fd98c57cdf000678"
+#define UMENG_APPKEY @"563755cbe0f55a5cb300139c"
 
 #define iPhone6                                                                \
   ([UIScreen instancesRespondToSelector:@selector(currentMode)]                \
@@ -53,6 +54,7 @@
   //    Simulator"]) {
   //        [self redirectNSlogToDocumentFolder];
   //    }
+    [self umengTrack];
 
 
     /**
@@ -482,7 +484,6 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
                                     delegate:nil
                            cancelButtonTitle:@"确定"
                            otherButtonTitles:nil, nil];
-          ;
           [alertView show];
       });
   }
@@ -506,4 +507,22 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
                 name:RCKitDispatchMessageNotification
               object:nil];
 }
+
+- (void)umengTrack {
+    //    [MobClick setCrashReportEnabled:NO]; // 如果不需要捕捉异常，注释掉此行
+    [MobClick setLogEnabled:YES];  // 打开友盟sdk调试，注意Release发布时需要注释掉此行,减少io消耗
+    [MobClick setAppVersion:XcodeAppVersion]; //参数为NSString * 类型,自定义app版本信息，如果不设置，默认从CFBundleVersion里取
+    //
+    [MobClick startWithAppkey:UMENG_APPKEY reportPolicy:(ReportPolicy) REALTIME channelId:nil];
+    //   reportPolicy为枚举类型,可以为 REALTIME, BATCH,SENDDAILY,SENDWIFIONLY几种
+    //   channelId 为NSString * 类型，channelId 为nil或@""时,默认会被被当作@"App Store"渠道
+    
+    [MobClick updateOnlineConfig];  //在线参数配置
+    
+    //    1.6.8之前的初始化方法
+    //    [MobClick setDelegate:self reportPolicy:REALTIME];  //建议使用新方法
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onlineConfigCallBack:) name:UMOnlineConfigDidFinishedNotification object:nil];
+    
+}
+
 @end

@@ -10,7 +10,7 @@
 //  RCPublicServiceMultiRichContentMessage.h
 //  Created by litao on 15/4/15.
 
-#import <RongIMLib/RongIMLib.h>
+#import "RCMessageContent.h"
 #import "RCRichContentItem.h"
 #define RCSingleNewsMessageTypeIdentifier @"RC:PSImgTxtMsg"
 

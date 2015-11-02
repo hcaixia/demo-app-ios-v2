@@ -22,11 +22,11 @@
 
 - (IBAction)acService:(UIButton *)sender {
 
-#define SERVICE_ID @"kefu114"
+#define SERVICE_ID @"KEFU144542424649464"
     RCDChatViewController *chatService = [[RCDChatViewController alloc] init];
     chatService.userName = @"客服";
     chatService.targetId = SERVICE_ID;
-    chatService.conversationType = ConversationType_CUSTOMERSERVICE;
+    chatService.conversationType = ConversationType_APPSERVICE;
     chatService.title = chatService.userName;
 
 //    RCHandShakeMessage* textMsg = [[RCHandShakeMessage alloc] init];

@@ -46,6 +46,10 @@
  */
 @property(nonatomic, strong) UIButton *unReadButton;
 /**
+ *  未读消息label，开发者可以按照需求修改未读消息数的显示
+ */
+@property(nonatomic,strong) UILabel *unReadMessageLabel;
+/**
  *  会话类型
  */
 @property(nonatomic) RCConversationType conversationType;

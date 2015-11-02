@@ -16,41 +16,14 @@
 #import <UIKit/UIKit.h>
 #import "RCMessageContent.h"
 
-#define __BASE64(text) [CommonFunc base64StringFromText:text]
-#define __TEXT(base64) [CommonFunc textFromBase64String:base64]
-
 @class RCMessageContent;
 
-typedef uint32_t CCAlgorithm;
 /**
  *  工具类
  */
 @interface RCUtilities : NSObject
-/**
- *  methodsInClass
- *
- *  @param aClass 类名
- *
- *  @return  methodArray
- */
-+ (NSArray *)methodsInClass:(Class)aClass;
-/**
- *  iVarsInClass
- *
- *  @param aClass 类名
- *
- *  @return  ivarsArray
- */
-+ (NSArray *)iVarsInClass:(Class)aClass;
-/**
- *  get currentSystemTime
- *
- *  @return currentSystemTime
- */
-+ (NSString *)currentSystemTime;
 
 // Base64 Encode & Decode
-
 /**
  *  base64格式字符串转换为文本数据
  *
@@ -68,46 +41,6 @@ typedef uint32_t CCAlgorithm;
  *  @return 转换后的字符串
  */
 + (NSString *)base64EncodedStringFrom:(NSData *)data;
-
-/**
- *  文本数据进行DES加密。备注：此函数不可用于过长文本。
- *
- *  @param data data
- *  @param key  key
- *
- *  @return (NSData *)
- */
-+ (NSData *)desEncrypt:(NSData *)data WithKey:(NSString *)key;
-
-/**
- *  文本数据进行DES解密。备注：此函数不可用于过长文本。
- *
- *  @param data data
- *  @param key  key
- *
- *  @return (NSData *)
- */
-+ (NSData *)desDecrypt:(NSData *)data WithKey:(NSString *)key;
-
-/**
- *  string to base64String
- *
- *  @param text 要转换的文本字符串
- *
- *  @return base64string
- */
-+ (NSString *)base64StringFromText:(NSString *)text;
-
-/**
- *  base64stirng to string
- *
- *  @param base64 string
- *
- *  @return string
- */
-+ (NSString *)textFromBase64String:(NSString *)base64;
-
-//+ (NSString *)obtainLegalUTF8String:(char *)rawstr length:(int)length;
 
 /**
  *  scaleImage
@@ -185,6 +118,13 @@ typedef uint32_t CCAlgorithm;
  *  @return rongImageCacheDirectory
  */
 + (NSString *)rongImageCacheDirectory;
+
+/**
+ *  获取当前系统时间
+ *
+ *  @return 当前系统时间
+ */
++ (NSString *)currentSystemTime;
 
 /**
  *  获取当前运营商名称

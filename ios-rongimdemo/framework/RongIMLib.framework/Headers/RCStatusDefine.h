@@ -241,7 +241,7 @@ typedef NS_ENUM(NSUInteger, RCConversationType) {
      */
     ConversationType_CHATROOM,
     /**
-     *  客服
+     *  客服(仅用于客服1.0系统。客服2.0系统使用订阅号方式，因此需要使用ConversationType_APPSERVICE会话类型）
      */
     ConversationType_CUSTOMERSERVICE,
     /**
@@ -401,7 +401,12 @@ typedef NS_ENUM(NSInteger, RCErrorCode) {
     /**
      *  不在聊天室中。
      */
-    NOT_IN_CHATROOM = 23406
+    NOT_IN_CHATROOM = 23406,
+    
+    /**
+     *  从服务器获取历史消息服务未开通
+     */
+    MSG_ROAMING_SERVICE_UNAVAILABLE = 33007,
 };
 
 /**

@@ -252,7 +252,7 @@
           for (RCDGroupInfo *group in groups) {
               if ([group.groupId isEqualToString: self.targetId]) {
                   detail.groupInfo=group;
-                  [self.navigationController pushViewController:detail animated:NO];
+                  [self.navigationController pushViewController:detail animated:YES];
                   return;
               }
           }

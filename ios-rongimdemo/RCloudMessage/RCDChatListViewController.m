@@ -27,6 +27,7 @@
 //@property (nonatomic,strong) NSMutableArray *myDataSource;
 @property (nonatomic,strong) RCConversationModel *tempModel;
 
+@property (nonatomic,assign) BOOL isClick;
 - (void) updateBadgeValueForTabBarItem;
 
 @end
@@ -50,6 +51,7 @@
         //聚合会话类型
         [self setCollectionConversationType:@[@(ConversationType_GROUP),@(ConversationType_DISCUSSION)]];
         
+
         //设置为不用默认渲染方式
         self.tabBarItem.image = [[UIImage imageNamed:@"icon_chat"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
         self.tabBarItem.selectedImage = [[UIImage imageNamed:@"icon_chat_hover"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
@@ -63,7 +65,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+   
     self.edgesForExtendedLayout = UIRectEdgeNone;
 
     //设置tableView样式
@@ -71,16 +73,18 @@
     self.conversationListTableView.tableFooterView = [UIView new];
 //    self.conversationListTableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 12)];
     
-    
+    //自定义空会话的背景View。当会话列表为空时，将显示该View
+    //UIView *blankView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height)];
+    //blankView.backgroundColor=[UIColor redColor];
+    //self.emptyConversationView=blankView;
 }
 
 
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
+    _isClick = YES;
     [self setNavigationItemTitleView];
-    
     //自定义rightBarButtonItem
     UIButton *rightBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 17, 17)];
     [rightBtn setImage:[UIImage imageNamed:@"add"] forState:UIControlStateNormal];
@@ -108,6 +112,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:@"kRCNeedReloadDiscussionListNotification"
                                                   object:nil];
+    
 }
 
 - (void)setNavigationItemTitleView {
@@ -148,54 +153,58 @@
 -(void)onSelectedTableRow:(RCConversationModelType)conversationModelType conversationModel:(RCConversationModel *)model atIndexPath:(NSIndexPath *)indexPath
 {
     
-    if (model.conversationModelType == RC_CONVERSATION_MODEL_TYPE_PUBLIC_SERVICE) {
-        RCPublicServiceChatViewController *_conversationVC = [[RCPublicServiceChatViewController alloc] init];
-        _conversationVC.conversationType = model.conversationType;
-        _conversationVC.targetId = model.targetId;
-        _conversationVC.userName = model.conversationTitle;
-        _conversationVC.title = model.conversationTitle;
-
-        [self.navigationController pushViewController:_conversationVC animated:YES];
-    }
-    
-    if (conversationModelType == RC_CONVERSATION_MODEL_TYPE_NORMAL) {
-        RCDChatViewController *_conversationVC = [[RCDChatViewController alloc]init];
-        _conversationVC.conversationType = model.conversationType;
-        _conversationVC.targetId = model.targetId;
-        _conversationVC.userName = model.conversationTitle;
-        _conversationVC.title = model.conversationTitle;
-        _conversationVC.conversation = model;
-        _conversationVC.unReadMessage = model.unreadMessageCount;
-        _conversationVC.enableNewComingMessageIcon=YES;//开启消息提醒
-        _conversationVC.enableUnreadMessageIcon=YES;
-        [self.navigationController pushViewController:_conversationVC animated:YES];
-    }
-    
-    //聚合会话类型，此处自定设置。
-    if (conversationModelType == RC_CONVERSATION_MODEL_TYPE_COLLECTION) {
+    if (_isClick) {
+        _isClick = NO;
+        if (model.conversationModelType == RC_CONVERSATION_MODEL_TYPE_PUBLIC_SERVICE) {
+            RCPublicServiceChatViewController *_conversationVC = [[RCPublicServiceChatViewController alloc] init];
+            _conversationVC.conversationType = model.conversationType;
+            _conversationVC.targetId = model.targetId;
+            _conversationVC.userName = model.conversationTitle;
+            _conversationVC.title = model.conversationTitle;
+            
+            [self.navigationController pushViewController:_conversationVC animated:YES];
+        }
         
-        RCDChatListViewController *temp = [[RCDChatListViewController alloc] init];
-        NSArray *array = [NSArray arrayWithObject:[NSNumber numberWithInt:model.conversationType]];
-        [temp setDisplayConversationTypes:array];
-        [temp setCollectionConversationType:nil];
-        temp.isEnteredToCollectionViewController = YES;
-        [self.navigationController pushViewController:temp animated:YES];
+        if (conversationModelType == RC_CONVERSATION_MODEL_TYPE_NORMAL) {
+            RCDChatViewController *_conversationVC = [[RCDChatViewController alloc]init];
+            _conversationVC.conversationType = model.conversationType;
+            _conversationVC.targetId = model.targetId;
+            _conversationVC.userName = model.conversationTitle;
+            _conversationVC.title = model.conversationTitle;
+            _conversationVC.conversation = model;
+            _conversationVC.unReadMessage = model.unreadMessageCount;
+            _conversationVC.enableNewComingMessageIcon=YES;//开启消息提醒
+            _conversationVC.enableUnreadMessageIcon=YES;
+            [self.navigationController pushViewController:_conversationVC animated:YES];
+        }
+        
+        //聚合会话类型，此处自定设置。
+        if (conversationModelType == RC_CONVERSATION_MODEL_TYPE_COLLECTION) {
+            
+            RCDChatListViewController *temp = [[RCDChatListViewController alloc] init];
+            NSArray *array = [NSArray arrayWithObject:[NSNumber numberWithInt:model.conversationType]];
+            [temp setDisplayConversationTypes:array];
+            [temp setCollectionConversationType:nil];
+            temp.isEnteredToCollectionViewController = YES;
+            [self.navigationController pushViewController:temp animated:YES];
+        }
+        
+        //自定义会话类型
+        if (conversationModelType == RC_CONVERSATION_MODEL_TYPE_CUSTOMIZATION) {
+            RCConversationModel *model = self.conversationListDataSource[indexPath.row];
+            
+            UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+            RCDFriendInvitationTableViewController *temp = [mainStoryboard instantiateViewControllerWithIdentifier:@"RCDFriendInvitationTableViewController"];
+            temp.conversationType = model.conversationType;
+            temp.targetId = model.targetId;
+            temp.userName = model.conversationTitle;
+            temp.title = model.conversationTitle;
+            temp.conversation = model;
+            [self.navigationController pushViewController:temp animated:YES];
+        }
+
     }
     
-    //自定义会话类型
-    if (conversationModelType == RC_CONVERSATION_MODEL_TYPE_CUSTOMIZATION) {
-        RCConversationModel *model = self.conversationListDataSource[indexPath.row];
-        
-        UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-        RCDFriendInvitationTableViewController *temp = [mainStoryboard instantiateViewControllerWithIdentifier:@"RCDFriendInvitationTableViewController"];
-        temp.conversationType = model.conversationType;
-        temp.targetId = model.targetId;
-        temp.userName = model.conversationTitle;
-        temp.title = model.conversationTitle;
-        temp.conversation = model;
-        [self.navigationController pushViewController:temp animated:YES];
-    }
-
 }
 
 /**
@@ -540,7 +549,7 @@
               //调用父类刷新未读消息数
               [blockSelf_ refreshConversationTableViewWithConversationModel:customModel];
               //[super didReceiveMessageNotification:notification];
-              [blockSelf_ resetConversationListBackgroundViewIfNeeded];
+//              [blockSelf_ resetConversationListBackgroundViewIfNeeded];
               [self notifyUpdateUnreadMessageCount];
               
               //当消息为RCContactNotificationMessage时，没有调用super，如果是最后一条消息，可能需要刷新一下整个列表。
@@ -555,7 +564,7 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             //调用父类刷新未读消息数
             [super didReceiveMessageNotification:notification];
-            [blockSelf_ resetConversationListBackgroundViewIfNeeded];
+//            [blockSelf_ resetConversationListBackgroundViewIfNeeded];
 //            [self notifyUpdateUnreadMessageCount]; super会调用notifyUpdateUnreadMessageCount
         });
     }
@@ -568,23 +577,6 @@
 {
     [self updateBadgeValueForTabBarItem];
 }
-//重写展示空列表的方法，展示自定义的view
-//- (void)showEmptyConversationView
-//{
-//    UIView *blankView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height)];
-//    blankView.backgroundColor=[UIColor redColor];
-//    UITapGestureRecognizer *pictureTap =
-//    [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapPicture:)];
-//    pictureTap.numberOfTapsRequired = 1;
-//    pictureTap.numberOfTouchesRequired = 1;
-//    [blankView addGestureRecognizer:pictureTap];
-//    self.emptyConversationView=blankView;
-//    [self.view addSubview:self.emptyConversationView];
-//}
-//
-//- (void)tapPicture:(UIGestureRecognizer *)gestureRecognizer {
-//  
-//}
 
 - (void)receiveNeedRefreshNotification:(NSNotification *)status {
     __weak typeof(&*self) __blockSelf = self;
