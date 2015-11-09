@@ -471,6 +471,7 @@ MBProgressHUD* hud ;
 {
     //登陆融云服务器
     [[RCIM sharedRCIM] connectWithToken:token success:^(NSString *userId) {
+        NSLog([NSString stringWithFormat:@"token is %@  userId is %@",token,userId],nil);
         [self loginSuccess:userName password:password token:token userId:userId];
     } error:^(RCConnectErrorCode status) {
         //关闭HUD
@@ -530,18 +531,10 @@ MBProgressHUD* hud ;
         [AFHttpTool loginWithEmail:userName password:password env:(self.currentModel == nil ? 1 : self.currentModel.env)
             success:^(id response) {
                if ([response[@"code"] intValue] == 200) {
+                   NSString *token = response[@"result"][@"token"];
                    RCDLoginInfo *loginInfo = [RCDLoginInfo shareLoginInfo];
                    loginInfo = [loginInfo initWithDictionary:response[@"result"] error:NULL];
-                   [AFHttpTool getTokenSuccess:^(id response) {
-                       NSString *token = response[@"result"][@"token"];
-                       [self loginRongCloud:userName token:token password:password];
-                   } failure:^(NSError *err) {
-                       //关闭HUD
-                       [hud hide:YES];
-                       NSLog(@"NSError is %@",err);
-                       _errorMsgLb.text=@"APP服务器错误！";
-                       [_pwdTextField shake];
-                   }];
+                   [self loginRongCloud:userName token:token password:password];
                }else{
                    //关闭HUD
                    [hud hide:YES];

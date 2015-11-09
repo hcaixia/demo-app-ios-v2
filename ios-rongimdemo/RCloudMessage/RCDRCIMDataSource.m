@@ -89,7 +89,7 @@
         RCUserInfo *user = [RCUserInfo new];
         user.userId = userId;
         user.portraitUri = @"";
-        user.name = @"name";
+        user.name = @"";
         completion(user);
         return ;
     }

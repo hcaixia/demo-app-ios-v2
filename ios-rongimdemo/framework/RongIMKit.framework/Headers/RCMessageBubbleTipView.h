@@ -96,6 +96,11 @@ typedef NS_ENUM(NSInteger, RCMessageBubbleTipViewAlignment) {
  *  frameToPositionInRelationWith
  */
 @property(nonatomic, assign) CGRect frameToPositionInRelationWith;
+
+/**
+ *  是否新消息数字
+ */
+@property(nonatomic) BOOL isShowNotificationNumber;
 /**
  *  initWithParentView
  *

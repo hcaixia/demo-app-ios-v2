@@ -72,6 +72,14 @@
 //删除好友
 -(void) deleteFriend:(NSString*) userId
            complete:(void (^)(BOOL result))result;
+//更新自己的用户名
+- (void)updateName:(NSString*) userName
+           success:(void (^)(id response))success
+           failure:(void (^)(NSError* err))failure;
 
+//从demo server 获取用户的信息，更新本地数据库
+- (void)updateUserInfo:(NSString *) userID
+           success:(void (^)(RCUserInfo * user))success
+           failure:(void (^)(NSError* err))failure;
 
 @end

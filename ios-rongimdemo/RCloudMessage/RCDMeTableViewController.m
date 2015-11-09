@@ -14,7 +14,6 @@
 
 @interface RCDMeTableViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *currentUserNameLabel;
-@property (weak, nonatomic) IBOutlet UILabel *currentUserNickNameLabel;
 @property (nonatomic)BOOL hasNewVersion;
 @property (nonatomic)NSString *versionUrl;
 @property (nonatomic, strong)NSString *versionString;
@@ -35,7 +34,7 @@
         self.tabBarItem.selectedImage = [[UIImage imageNamed:@"icon_me_hover"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
         self.versionUrl= [[NSUserDefaults standardUserDefaults] stringForKey:@"newVersionUrl"];
         self.versionUrl= [[NSUserDefaults standardUserDefaults] stringForKey:@"newVersionString"];
-        self.hasNewVersion = [[NSUserDefaults standardUserDefaults] boolForKey:@"hasNewVersion"];
+//        self.hasNewVersion = [[NSUserDefaults standardUserDefaults] boolForKey:@"hasNewVersion"];
         [self checkNewVersion];
     }
     return self;
@@ -66,11 +65,6 @@
     //设置分割线颜色
     self.tableView.separatorColor = [UIColor colorWithHexString:@"dfdfdf" alpha:1.0f];
     self.currentUserNameLabel.text = [RCIMClient sharedRCIMClient].currentUserInfo.name;
-    [[RCDRCIMDataSource shareInstance]getUserInfoWithUserId:[RCIMClient sharedRCIMClient].currentUserInfo.userId completion:^(RCUserInfo *userInfo) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            self.currentUserNickNameLabel.text=userInfo.name;
-        });
-    }];
     self.tabBarController.navigationItem.rightBarButtonItem = nil;
     self.tabBarController.navigationController.navigationBar.tintColor = [UIColor whiteColor];
 }
@@ -197,7 +191,13 @@
 
 -(void)compareVersion:(NSString *)receiveStr {
     NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    NSCharacterSet *setToRemove =
+    [[ NSCharacterSet characterSetWithCharactersInString:@"0123456789."]
+     invertedSet ];
     
+    NSString *versionNum =
+    [[version componentsSeparatedByCharactersInSet:setToRemove]
+     componentsJoinedByString:@""];
     NSLog(@"%@",receiveStr);
     NSRange strRange = NSMakeRange(0, receiveStr.length);
     while (true) {
@@ -210,12 +210,12 @@
             
             NSRange nameEndRange = [receiveStr rangeOfString:@"</a>" options:0 range:NSMakeRange(endRange.location, receiveStr.length - endRange.location)];
             NSString *name = [receiveStr substringWithRange:NSMakeRange(nameStartRange.location+1, nameEndRange.location - nameStartRange.location - 1)];
-
+            
             NSString *model = @"稳定";
             
             NSRange range = [name rangeOfString:model];
             if (range.location != NSNotFound) {
-                range = [name rangeOfString:version];
+                range = [name rangeOfString:versionNum];
                 if (range.location == NSNotFound) {
                     self.hasNewVersion = YES;
                     self.versionUrl = url;

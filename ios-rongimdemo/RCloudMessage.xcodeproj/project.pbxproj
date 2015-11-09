@@ -29,6 +29,8 @@
 		5C7629831B54F7E60027DA82 /* RCDBlackListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C7629821B54F7E60027DA82 /* RCDBlackListCell.m */; };
 		8C55EB511B2A8CE5004285F4 /* Emoji.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C55EB501B2A8CE5004285F4 /* Emoji.plist */; };
 		8CCBC9871AEDDF8600BA1135 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CCBC9861AEDDF8600BA1135 /* AssetsLibrary.framework */; };
+		A61647881BE9BF7C00E90813 /* RCDMeInfoTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A61647871BE9BF7C00E90813 /* RCDMeInfoTableViewController.m */; };
+		A616478B1BE9D97D00E90813 /* RCDEditUserNameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A616478A1BE9D97D00E90813 /* RCDEditUserNameViewController.m */; };
 		A6447A0C1B1DBE6500EA2CEE /* InterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = A6447A0B1B1DBE6500EA2CEE /* InterfaceController.m */; };
 		A6447A0F1B1DBE6500EA2CEE /* NotificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = A6447A0E1B1DBE6500EA2CEE /* NotificationController.m */; };
 		A6447A111B1DBE6500EA2CEE /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A6447A101B1DBE6500EA2CEE /* Images.xcassets */; };
@@ -295,6 +297,10 @@
 		5C7629821B54F7E60027DA82 /* RCDBlackListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = RCDBlackListCell.m; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		8C55EB501B2A8CE5004285F4 /* Emoji.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Emoji.plist; path = framework/Emoji.plist; sourceTree = SOURCE_ROOT; };
 		8CCBC9861AEDDF8600BA1135 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
+		A61647861BE9BF7C00E90813 /* RCDMeInfoTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RCDMeInfoTableViewController.h; path = RCloudMessage/RCDMeInfoTableViewController.h; sourceTree = SOURCE_ROOT; };
+		A61647871BE9BF7C00E90813 /* RCDMeInfoTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RCDMeInfoTableViewController.m; path = RCloudMessage/RCDMeInfoTableViewController.m; sourceTree = SOURCE_ROOT; };
+		A61647891BE9D97D00E90813 /* RCDEditUserNameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RCDEditUserNameViewController.h; path = RCloudMessage/RCDEditUserNameViewController.h; sourceTree = SOURCE_ROOT; };
+		A616478A1BE9D97D00E90813 /* RCDEditUserNameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RCDEditUserNameViewController.m; path = RCloudMessage/RCDEditUserNameViewController.m; sourceTree = SOURCE_ROOT; };
 		A6447A051B1DBE6500EA2CEE /* 融云 Demo WatchKit Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "融云 Demo WatchKit Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A6447A081B1DBE6500EA2CEE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A6447A091B1DBE6500EA2CEE /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
@@ -1092,6 +1098,10 @@
 				5C0253F31B53D6F8003F48D9 /* RCDBlackListViewController.m */,
 				5C7629811B54F7E60027DA82 /* RCDBlackListCell.h */,
 				5C7629821B54F7E60027DA82 /* RCDBlackListCell.m */,
+				A61647861BE9BF7C00E90813 /* RCDMeInfoTableViewController.h */,
+				A61647871BE9BF7C00E90813 /* RCDMeInfoTableViewController.m */,
+				A61647891BE9D97D00E90813 /* RCDEditUserNameViewController.h */,
+				A616478A1BE9D97D00E90813 /* RCDEditUserNameViewController.m */,
 			);
 			name = Me;
 			sourceTree = "<group>";
@@ -1530,7 +1540,6 @@
 					};
 					E4D40F271A031F460045097C = {
 						CreatedOnToolsVersion = 6.0.1;
-						DevelopmentTeam = 9CVMN4UZK4;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
 								enabled = 1;
@@ -1763,11 +1772,13 @@
 				E4E9395D1AD65A95001E0AC6 /* KxMenu.m in Sources */,
 				E4E9399D1AD65C61001E0AC6 /* RCDRoomSettingViewController.m in Sources */,
 				46E17CCC1B0EC32A001AC57A /* FMResultSet.m in Sources */,
+				A61647881BE9BF7C00E90813 /* RCDMeInfoTableViewController.m in Sources */,
 				466684271B5DEA5B000B7504 /* RCDConversationSettingBaseViewController.m in Sources */,
 				A6447A3F1B1DC12500EA2CEE /* RCWKSharedUserDefault.m in Sources */,
 				E4E939531AD65A95001E0AC6 /* JSONModel.m in Sources */,
 				E4E939971AD65C15001E0AC6 /* RCDGroupInfo.m in Sources */,
 				A677D69F1B81EBB9007D5D90 /* RealTimeLocationStartCell.m in Sources */,
+				A616478B1BE9D97D00E90813 /* RCDEditUserNameViewController.m in Sources */,
 				E4E939431AD65A95001E0AC6 /* AFHTTPRequestOperationManager.m in Sources */,
 				E4BFAE5F1A121996007165B1 /* AFHttpTool.m in Sources */,
 				E412BD211ADE55BF000DCA7A /* RCDAddFriendTableViewController.m in Sources */,
@@ -1872,8 +1883,8 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = NO;
 				CODE_SIGN_ENTITLEMENTS = RCloudMessage/RCloudMessage.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Beijing Rong Cloud Network Technology CO., LTD";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Beijing Rong Cloud Network Technology CO., LTD";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/framework";
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
@@ -2001,8 +2012,8 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = NO;
 				CODE_SIGN_ENTITLEMENTS = RCloudMessage/RCloudMessage.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Beijing Rong Cloud Network Technology CO., LTD";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Beijing Rong Cloud Network Technology CO., LTD";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/framework";
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
@@ -2276,8 +2287,8 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = NO;
 				CODE_SIGN_ENTITLEMENTS = RCloudMessage/RCloudMessage.entitlements;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/framework";
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
@@ -2295,7 +2306,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				OTHER_LIBTOOLFLAGS = "$(OTHER_LDFLAGS)";
 				PRODUCT_NAME = RCloudMessage;
-				PROVISIONING_PROFILE = "45d4cebe-4ecb-45ce-9bdc-860584271691";
+				PROVISIONING_PROFILE = "";
 				VALID_ARCHS = "armv7 armv7s arm64";
 			};
 			name = Debug;
@@ -2308,8 +2319,8 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = NO;
 				CODE_SIGN_ENTITLEMENTS = RCloudMessage/RCloudMessage.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Beijing Rong Cloud Network Technology CO., LTD";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Beijing Rong Cloud Network Technology CO., LTD";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/framework";
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
@@ -2327,7 +2338,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				OTHER_LIBTOOLFLAGS = "$(OTHER_LDFLAGS)";
 				PRODUCT_NAME = RCloudMessage;
-				PROVISIONING_PROFILE = "5935ba81-982a-494c-afb1-a673b8d21d32";
+				PROVISIONING_PROFILE = "";
 				VALID_ARCHS = "armv7 armv7s arm64";
 			};
 			name = Release;

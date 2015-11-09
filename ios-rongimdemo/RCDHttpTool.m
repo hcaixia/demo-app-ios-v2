@@ -50,24 +50,34 @@
     RCGroup *groupInfo=[[RCDataBaseManager shareInstance] getGroupByGroupId:groupID];
     if(groupInfo==nil)
     {
-    [AFHttpTool getAllGroupsSuccess:^(id response) {
-        NSArray *allGroups = response[@"result"];
-        if (allGroups) {
-            for (NSDictionary *dic in allGroups) {
-                RCGroup *group = [[RCGroup alloc] init];
-                group.groupId = [dic objectForKey:@"id"];
-                group.groupName = [dic objectForKey:@"name"];
-                group.portraitUri = (NSNull *)[dic objectForKey:@"portrait"] == [NSNull null] ? nil: [dic objectForKey:@"portrait"];
+        [AFHttpTool getGroupByID:groupID success:^(id response) {
+            NSString *code = [NSString stringWithFormat:@"%@",response[@"code"]];
+            NSDictionary *result = response[@"result"];
+            if (result && [code isEqualToString:@"200"]) {
+                RCDGroupInfo *group = [[RCDGroupInfo alloc] init];
+                group.groupId = [result objectForKey:@"id"];
+                group.groupName = [result objectForKey:@"name"];
+                group.portraitUri = [result objectForKey:@"portrait"];
+                if (group.portraitUri) {
+                    group.portraitUri=@"";
+                }
+                group.creatorId = [result objectForKey:@"create_user_id"];
+                group.introduce = [result objectForKey:@"introduce"];
+                if (group.introduce) {
+                    group.introduce=@"";
+                }
+                group.number = [result objectForKey:@"number"];
+                group.maxNumber = [result objectForKey:@"max_number"];
+                group.creatorTime = [result objectForKey:@"creat_datetime"];
+                [[RCDataBaseManager shareInstance] insertGroupToDB:group];
                 if ([group.groupId isEqualToString:groupID] && completion) {
                     completion(group);
                 }
             }
-
-        }
-        
-    } failure:^(NSError* err){
-        
-    }];
+            
+        } failure:^(NSError* err){
+            
+        }];
     }else{
         if (completion) {
             completion(groupInfo);
@@ -101,8 +111,6 @@
                             completion(user);
                         });
                     }
-                    
-                    
                 }
                 else
                 {
@@ -284,7 +292,15 @@
                 group.number = [dic objectForKey:@"number"];
                 group.maxNumber = [dic objectForKey:@"max_number"];
                 group.creatorTime = [dic objectForKey:@"creat_datetime"];
+                if (!group.number) {
+                    group.number=@"";
+                }
+                if (!group.maxNumber) {
+                    group.maxNumber=@"";
+                }
                 [tempArr addObject:group];
+                group.isJoin = YES;
+                [[RCDataBaseManager shareInstance] insertGroupToDB:group];
                 //[_allGroups addObject:group];
             }
             
@@ -600,5 +616,42 @@
         }
     }];
 }
+- (void)updateName:(NSString*) userName
+          success:(void (^)(id response))success
+           failure:(void (^)(NSError* err))failure {
+    [AFHttpTool updateName:userName success:^(id response) {
+        success(response);
+    } failure:^(NSError *err) {
+        failure(err);
+    }];
+}
 
+- (void)updateUserInfo:(NSString *) userID
+               success:(void (^)(RCUserInfo * user))success
+               failure:(void (^)(NSError* err))failure{
+    [AFHttpTool getUserById:userID success:^(id response) {
+        if (response) {
+            NSString *code = [NSString stringWithFormat:@"%@",response[@"code"]];
+            if ([code isEqualToString:@"200"]) {
+                NSDictionary *dic = response[@"result"];
+                // NSLog(@"isMainThread > %d", [NSThread isMainThread]);
+                RCUserInfo *user = [RCUserInfo new];
+                NSNumber *idNum = [dic objectForKey:@"id"];
+                user.userId = [NSString stringWithFormat:@"%d",idNum.intValue];
+                user.portraitUri = [dic objectForKey:@"portrait"];
+                user.name = [dic objectForKey:@"username"];
+                [[RCDataBaseManager shareInstance] insertUserToDB:user];
+                if (success) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        success(user);
+                    });
+                }
+            }
+        }
+        
+    } failure:^(NSError *err) {
+         failure(err);
+    }];
+
+}
 @end

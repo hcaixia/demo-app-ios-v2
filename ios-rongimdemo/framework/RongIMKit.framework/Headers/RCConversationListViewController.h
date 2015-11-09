@@ -51,6 +51,7 @@
  */
 @property(nonatomic, assign) BOOL isShowNetworkIndicatorView;
 
+
 /**
  *  会话列表为空时的背景视图
  */

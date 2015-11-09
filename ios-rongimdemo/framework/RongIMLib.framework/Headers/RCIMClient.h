@@ -202,6 +202,13 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
 - (void)logout;
 
 /**
+ *  获取当前SDK版本号。
+ *
+ *  @return 当前SDK版本号，如：@"2.0.0"
+ */
+- (NSString *)getSDKVersion;
+
+/**
  *  设置接收消息的监听器。
  *
  *  所有接收到的消息、通知、状态都经由此处设置的监听器处理。包括私聊消息、讨论组消息、群组消息、聊天室消息以及各种状态。
@@ -1178,5 +1185,24 @@ extern NSString* const kRCUserCustom;
                  targetId:(NSString *)targetId
                      time: (long long)timestamp;
 
+/**
+ *  AMR-NB转换成WAVE格式的音频.
+ *
+ *  @param data AMR格式数据
+ *
+ *  @return WAVE格式数据
+ */
+- (NSData *)dcodeAMRToWAVE:(NSData *)data;
+
+/**
+ *  WAVE转换成AMR-NB格式音频
+ *
+ *  @param data           WAVE格式数据 注意声音的采样率  AVNumberOfChannelsKey=1 AVLinearPCMBitDepthKey=16
+ *  @param nChannels      默认传入1。
+ *  @param nBitsPerSample 默认传入16。
+ *
+ *  @return AMR格式数据
+ */
+- (NSData *)ecodeWAVEToAMR:(NSData *)data channel:(int)nChannels nBitsPerSample:(int)nBitsPerSample;
 @end
 #endif

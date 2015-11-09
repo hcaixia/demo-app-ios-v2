@@ -80,7 +80,7 @@
 {
     NSDictionary *params = @{@"email":email,@"password":password,@"env":[NSString stringWithFormat:@"%d", env]};
     [AFHttpTool requestWihtMethod:RequestMethodTypePost
-                              url:@"email_login"
+                              url:@"email_login_token"
                            params:params
                           success:success
                           failure:failure];
@@ -152,13 +152,13 @@
 }
 
 //get group by id
-+(void) getGroupByID:(int) groupID
++(void) getGroupByID:(NSString *) groupID
              success:(void (^)(id response))success
              failure:(void (^)(NSError* err))failure
 {
-    [AFHttpTool requestWihtMethod:RequestMethodTypePost
+    [AFHttpTool requestWihtMethod:RequestMethodTypeGet
                               url:@"get_group"
-                           params:@{@"id":[NSNumber numberWithInt:groupID]}
+                           params:@{@"id":groupID}
                           success:success
                           failure:failure];
 
@@ -290,6 +290,16 @@
     [AFHttpTool requestWihtMethod:RequestMethodTypeGet
                               url:@"profile"
                            params:@{@"id":userId}
+                          success:success
+                          failure:failure];
+}
++(void)updateName:(NSString*) userName
+           success:(void (^)(id response))success
+           failure:(void (^)(NSError* err))failure
+{
+    [AFHttpTool requestWihtMethod:RequestMethodTypePost
+                              url:@"update_profile"
+                           params:@{@"username":userName}
                           success:success
                           failure:failure];
 }

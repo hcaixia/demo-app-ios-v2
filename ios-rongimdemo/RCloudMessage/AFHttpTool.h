@@ -61,7 +61,7 @@ typedef NS_ENUM(NSInteger, RequestMethodType){
 +(void) getAllGroupsSuccess:(void (^)(id response))success
                    failure:(void (^)(NSError* err))failure;
 //get group by id
-+(void) getGroupByID:(int) groupID
++(void) getGroupByID:(NSString *) groupID
              success:(void (^)(id response))success
              failure:(void (^)(NSError* err))failure;
 
@@ -114,5 +114,10 @@ typedef NS_ENUM(NSInteger, RequestMethodType){
 +(void)getUserById:(NSString*) userId
             success:(void (^)(id response))success
             failure:(void (^)(NSError* err))failure;
+
+//更新当前用户名称
++(void)updateName:(NSString*) userName
+          success:(void (^)(id response))success
+          failure:(void (^)(NSError* err))failure;
 @end
 

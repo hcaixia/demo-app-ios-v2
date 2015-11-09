@@ -19,6 +19,7 @@
 #import "RealTimeLocationStartCell.h"
 #import "RealTimeLocationStatusView.h"
 #import "RealTimeLocationEndCell.h"
+#import "RCDPersonDetailViewController.h"
 
 @interface RCDChatViewController () <UIActionSheetDelegate, RCRealTimeLocationObserver, RealTimeLocationStatusViewDelegate, UIAlertViewDelegate, RCMessageCellDelegate>
 @property (nonatomic, weak)id<RCRealTimeLocationProxy> realTimeLocation;
@@ -136,8 +137,27 @@
     }
     [self appendAndDisplayMessage:savedMsg];
 */
+//    self.enableContinuousReadUnreadVoice = YES;//开启语音连读功能
+    //打开单聊强制从demo server 获取用户信息更新本地数据库
+    if (self.conversationType == ConversationType_PRIVATE) {
+        [[RCDRCIMDataSource shareInstance]getUserInfoWithUserId:self.targetId completion:^(RCUserInfo *userInfo) {
+            [[RCDHttpTool shareInstance]updateUserInfo:self.targetId success:^(RCUserInfo * user) {
+                if (![userInfo.name isEqualToString:user.name]) {
+                    self.navigationItem.title = user.name;
+                    [[RCIM sharedRCIM]refreshUserInfoCache:user withUserId:user.userId];
+//                    [[NSNotificationCenter defaultCenter]
+//                     postNotificationName:@"kRCUpdateUserNameNotification"
+//                     object:user];
+                }
+                
+            } failure:^(NSError *err) {
+                
+            }];
+        }];
+        
+    }
     
-    self.enableContinuousReadUnreadVoice = YES;//开启语音连读功能
+    
 }
 
 - (void)leftBarButtonItemPressed:(id)sender {
@@ -222,20 +242,6 @@
 
   //群组设置
   else if (self.conversationType == ConversationType_GROUP) {
-//    RCSettingViewController *settingVC = [[RCSettingViewController alloc] init];
-//    settingVC.conversationType = self.conversationType;
-//    settingVC.targetId = self.targetId;
-//    //清除聊天记录之后reload data
-//    __weak RCDChatViewController *weakSelf = self;
-//    settingVC.clearHistoryCompletion = ^(BOOL isSuccess) {
-//      if (isSuccess) {
-//        [weakSelf.conversationDataRepository removeAllObjects];
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//          [weakSelf.conversationMessageCollectionView reloadData];
-//        });
-//      }
-//    };
-//    [self.navigationController pushViewController:settingVC animated:YES];
       UIStoryboard *secondStroyBoard=[UIStoryboard storyboardWithName:@"Main" bundle:nil];
       RCDGroupDetailViewController *detail=[secondStroyBoard instantiateViewControllerWithIdentifier:@"RCDGroupDetailViewController"];
       NSMutableArray *groups=RCDHTTPTOOL.allGroups ;
@@ -248,15 +254,23 @@
               });
           }
       };
-      if (groups) {
-          for (RCDGroupInfo *group in groups) {
-              if ([group.groupId isEqualToString: self.targetId]) {
-                  detail.groupInfo=group;
-                  [self.navigationController pushViewController:detail animated:YES];
-                  return;
-              }
-          }
-      }
+      
+      [RCDHTTPTOOL getGroupByID:self.targetId
+              successCompletion:^(RCGroup *group)
+       {
+           detail.groupInfo=group;
+           [self.navigationController pushViewController:detail animated:YES];
+           return;
+       }];
+//      if (groups) {
+//          for (RCDGroupInfo *group in groups) {
+//              if ([group.groupId isEqualToString: self.targetId]) {
+//                  detail.groupInfo=group;
+//                  [self.navigationController pushViewController:detail animated:YES];
+//                  return;
+//              }
+//          }
+//      }
       
       //没有找到群组信息，可能是获取群组信息失败，这里重新获取一些群众信息。
       [RCDHTTPTOOL getAllGroupsWithCompletion:^(NSMutableArray *result) {
@@ -291,6 +305,7 @@
     };
     [self.navigationController pushViewController:settingVC animated:YES];
   }
+
 }
 
 /**
@@ -454,6 +469,29 @@
     if ([model.content isKindOfClass:[RCRealTimeLocationStartMessage class]]) {
         [self showRealTimeLocationViewController];
     }
+}
+
+- (void)didTapCellPortrait:(NSString *)userId{
+    if (self.conversationType == ConversationType_GROUP || self.conversationType == ConversationType_DISCUSSION) {
+        [[RCDRCIMDataSource shareInstance]getUserInfoWithUserId:userId completion:^(RCUserInfo *userInfo) {
+            [[RCDHttpTool shareInstance]updateUserInfo:userId success:^(RCUserInfo * user) {
+                if (![userInfo.name isEqualToString:user.name]) {
+                    [[RCIM sharedRCIM]refreshUserInfoCache:user withUserId:user.userId];
+                    
+                }
+                UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+                RCDPersonDetailViewController *temp = [mainStoryboard instantiateViewControllerWithIdentifier:@"RCDPersonDetailViewController"];
+                temp.userInfo = user;
+                
+                [self.navigationController pushViewController:temp animated:YES];
+                
+            } failure:^(NSError *err) {
+                
+            }];
+        }];
+
+    }
+    
 }
 
 #pragma mark override

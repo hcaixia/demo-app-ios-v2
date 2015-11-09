@@ -14,6 +14,7 @@
 #import "RCDChatViewController.h"
 #import "RCDHttpTool.h"
 #import "RCDRCIMDataSource.h"
+#import "RCDPersonDetailViewController.h"
 
 
 @interface RCDDiscussGroupSettingViewController ()<UIActionSheetDelegate>
@@ -374,38 +375,21 @@
 
 - (void)didTipHeaderClicked:(NSString*)userId
 {
-    [[RCDRCIMDataSource shareInstance]getUserInfoWithUserId:userId completion:^(RCUserInfo *userInfo)
-    {
-        if (userInfo) {
-            NSUInteger count = self.navigationController.viewControllers.count;
-            if (count > 1) {
-                UIViewController *preVC =
-                self.navigationController.viewControllers[count - 2];
-                if ([preVC isKindOfClass:[RCConversationViewController class]]) {
-                    [self.navigationController popViewControllerAnimated:YES];
-                    return;
-                } else {
-                    RCDChatViewController *_conversationVC = [[RCDChatViewController alloc]init];
-                    _conversationVC.conversationType = ConversationType_PRIVATE;
-                    _conversationVC.targetId = userId;
-                    _conversationVC.userName=userInfo.name;
-                    _conversationVC.title=userInfo.name;
-                    [self.navigationController pushViewController:_conversationVC animated:YES];
-                }
-            }else{
-                RCDChatViewController *_conversationVC = [[RCDChatViewController alloc]init];
-                _conversationVC.conversationType = ConversationType_PRIVATE;
-                _conversationVC.targetId = userId;
-                _conversationVC.userName=userInfo.name;
-                _conversationVC.title=userInfo.name;
-                [self.navigationController pushViewController:_conversationVC animated:YES];
+    [[RCDRCIMDataSource shareInstance]getUserInfoWithUserId:userId completion:^(RCUserInfo *userInfo) {
+        [[RCDHttpTool shareInstance]updateUserInfo:userId success:^(RCUserInfo * user) {
+            if (![userInfo.name isEqualToString:user.name]) {
+                [[RCIM sharedRCIM]refreshUserInfoCache:user withUserId:user.userId];
+                
             }
-
-        }
-        else
-        {
-            NSLog(@"无效的userInfo");
-        }
+            UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+            RCDPersonDetailViewController *temp = [mainStoryboard instantiateViewControllerWithIdentifier:@"RCDPersonDetailViewController"];
+            temp.userInfo = user;
+            
+            [self.navigationController pushViewController:temp animated:YES];
+            
+        } failure:^(NSError *err) {
+            
+        }];
     }];
 }
 

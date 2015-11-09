@@ -136,7 +136,12 @@
     cell.lblInstru.text = @"群组介绍";
     cell.delegate=self;
     cell.isJoin = group.isJoin;
-    cell.lblPersonNumber.text=[NSString stringWithFormat:@"%@/%@",group.number,group.maxNumber];
+    if ([group.number isEqualToString:@""]) {
+         cell.lblPersonNumber.text=@"";
+    }else{
+        cell.lblPersonNumber.text=[NSString stringWithFormat:@"%@/%@",group.number,group.maxNumber];
+    }
+   
     cell.selectionStyle = UITableViewCellSelectionStyleDefault;
     return cell;
 }

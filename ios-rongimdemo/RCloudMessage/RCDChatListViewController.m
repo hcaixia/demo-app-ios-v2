@@ -97,6 +97,7 @@
                                             selector:@selector(receiveNeedRefreshNotification:)
                                                 name:@"kRCNeedReloadDiscussionListNotification"
                                               object:nil];
+    
 
 }
 - (void)viewDidAppear:(BOOL)animated {
@@ -573,6 +574,16 @@
 {
     
 }
+//会话有新消息通知的时候显示数字提醒，设置为NO,不显示数字只显示红点
+//-(void)willDisplayConversationTableCell:(RCConversationBaseCell *)cell atIndexPath:(NSIndexPath *)indexPath
+//{
+//    RCConversationModel *model= self.conversationListDataSource[indexPath.row];
+//    
+//    if (model.conversationType == ConversationType_PRIVATE) {
+//        ((RCConversationCell *)cell).isShowNotificationNumber = NO;
+//    }
+//    
+//}
 - (void)notifyUpdateUnreadMessageCount
 {
     [self updateBadgeValueForTabBarItem];
@@ -587,6 +598,5 @@
         
     });
 }
-
 
 @end
