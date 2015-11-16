@@ -737,6 +737,8 @@ setConversationNotificationStatus:(RCConversationType)conversationType
 
 /**
  *  同步当前用户的群组信息。
+ *  该方法已弃用，我们建议您通过请求您的服务器，来进行群组操作。
+ *  参考：http://support.rongcloud.cn/kb/MzY5
  *
  *  @param groupList        群组对象列表。
  *  @param successBlock     调用完成的处理。
@@ -748,6 +750,8 @@ setConversationNotificationStatus:(RCConversationType)conversationType
 
 /**
  *  加入群组。
+ *  该方法已弃用，我们建议您通过请求您的服务器，来进行群组操作。
+ *  参考：http://support.rongcloud.cn/kb/MzY5
  *
  *  @param groupId          群组Id。
  *  @param groupName        群组名称。
@@ -761,6 +765,8 @@ setConversationNotificationStatus:(RCConversationType)conversationType
 
 /**
  *  退出群组。
+ *  该方法已弃用，我们建议您通过请求您的服务器，来进行群组操作。
+ *  参考：http://support.rongcloud.cn/kb/MzY5
  *
  *  @param groupId          群组Id。
  *  @param successBlock     调用完成的处理。

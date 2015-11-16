@@ -93,6 +93,15 @@
  */
 + (NSData *)compressedImageAndScalingSize:(UIImage *)image targetSize:(CGSize)targetSize percent:(CGFloat)percent;
 /**
+ *  compressedImage
+ *
+ *  @param image      image
+ *  @param percent    percent
+ *
+ *  @return image nsdata
+ */
++ (NSData *)compressedImage:(UIImage *)image percent:(CGFloat)percent;
+/**
  *  excludeBackupKeyForURL
  *
  *  @param storageURL storageURL
