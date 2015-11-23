@@ -45,6 +45,7 @@
 "Audio"="Audio";
 "Albums"="Albums";
 "unknown_message_cell_tip"="The current version is not available for viewing this message";
+"unknown_message_notification_tip"="Receive an unkown message";
 "Copy"="Copy";
 "Delete"="Delete";
 "Save"="Save";
@@ -106,6 +107,8 @@
 "OfficialAccounts"="Official Accounts";
 "Share"="Share Name Card";
 "Report"="Report";
+"OpenURLInBrowser"="Open in Safari";
+"CopyURL"="Copy URL";
 "ClearHistory"="Clear History";
 "Unfollow"="Unfollow";
 "Introduced"="Intro";

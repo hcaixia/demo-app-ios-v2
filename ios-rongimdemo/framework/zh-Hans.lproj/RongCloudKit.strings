@@ -45,6 +45,7 @@
 "Audio"="语音通话";
 "Albums"="相册列表";
 "unknown_message_cell_tip"="当前版本暂不支持查看此消息";
+"unknown_message_notification_tip"="收到一条不支持的消息";
 "Copy"="复制";
 "Delete"="删除";
 "Save"="保存";
@@ -106,6 +107,8 @@
 "OfficialAccounts"="公共账号";
 "Share"="推荐给朋友";
 "Report"="举报";
+"OpenURLInBrowser"="在Safari中打开";
+"CopyURL"="复制链接";
 "ClearHistory"="清空内容";
 "Unfollow"="不再关注";
 "Introduced"="功能介绍";

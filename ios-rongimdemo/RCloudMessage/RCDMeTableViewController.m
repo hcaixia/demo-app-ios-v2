@@ -11,7 +11,7 @@
 #import <RongIMLib/RongIMLib.h>
 #import "RCDChatViewController.h"
 #import "RCDRCIMDataSource.h"
-
+#import "RCDCommonDefine.h"
 @interface RCDMeTableViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *currentUserNameLabel;
 @property (nonatomic)BOOL hasNewVersion;
@@ -64,7 +64,7 @@
     self.tableView.tableFooterView=[UIView new];
     //设置分割线颜色
     self.tableView.separatorColor = [UIColor colorWithHexString:@"dfdfdf" alpha:1.0f];
-    self.currentUserNameLabel.text = [RCIMClient sharedRCIMClient].currentUserInfo.name;
+    self.currentUserNameLabel.text = [DEFAULTS objectForKey:@"userName"];;
     self.tabBarController.navigationItem.rightBarButtonItem = nil;
     self.tabBarController.navigationController.navigationBar.tintColor = [UIColor whiteColor];
 }

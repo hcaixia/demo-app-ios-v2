@@ -63,6 +63,7 @@
 
 /**
  *  根据服务器返回JSON创建新实例
+ *  已废弃，如需要，请使用initWithType:targetId:direction:messageId:content:方法。
  *
  *  @param  jsonData    JSON数据字典
  */

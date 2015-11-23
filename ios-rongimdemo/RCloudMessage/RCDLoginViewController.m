@@ -564,6 +564,8 @@ MBProgressHUD* hud ;
                }
 
             }];
+    }else {
+        _errorMsgLb.text=@"请检查用户名密码";
     }
 }
 

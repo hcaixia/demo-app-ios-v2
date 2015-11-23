@@ -107,6 +107,13 @@ RCDConversationSettingTableViewHeaderItemDelegate>
          action:@selector(showDeleteTip:)];
         longPressGestureRecognizer.minimumPressDuration = 0.28;
         [cell addGestureRecognizer:longPressGestureRecognizer];
+        
+        //点击去除减号
+        UITapGestureRecognizer *singleTapGestureRecognizer =
+        [[UITapGestureRecognizer alloc]
+         initWithTarget:self
+         action:@selector(notShowDeleteTip:)];
+        [cell addGestureRecognizer:singleTapGestureRecognizer];
     }
     
     return cell;
@@ -150,6 +157,22 @@ RCDConversationSettingTableViewHeaderItemDelegate>
         [self reloadData];
     }
 }
+
+//点击去除减号
+
+- (void)notShowDeleteTip:(RCDConversationSettingTableViewHeaderItem *)cell {
+    
+    if (self.showDeleteTip == YES) {
+        
+        self.showDeleteTip = NO;
+        
+        [self reloadData];
+        
+    }
+    
+}
+
+
 
 //点击隐藏减号
 - (void)hidesDeleteTip:(UITapGestureRecognizer *)recognizer {

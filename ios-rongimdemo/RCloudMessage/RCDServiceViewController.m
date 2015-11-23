@@ -23,7 +23,7 @@
 - (IBAction)acService:(UIButton *)sender {
 
 #define SERVICE_ID @"KEFU144542424649464"
-    RCDChatViewController *chatService = [[RCDChatViewController alloc] init];
+    RCPublicServiceChatViewController *chatService = [[RCPublicServiceChatViewController alloc] init];
     chatService.userName = @"客服";
     chatService.targetId = SERVICE_ID;
     chatService.conversationType = ConversationType_APPSERVICE;

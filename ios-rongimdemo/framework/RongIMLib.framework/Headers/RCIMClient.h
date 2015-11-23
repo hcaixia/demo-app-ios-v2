@@ -1028,6 +1028,17 @@ setConversationNotificationStatus:(RCConversationType)conversationType
                           error:(void (^)(RCErrorCode status))errorBlock;
 
 
+/**
+ *  从本地获取消息数量。
+ *
+ *  @param conversationType 会话类型。
+ *  @param targetId         目标 Id。根据不同的 conversationType，可能是聊天 Id、讨论组 Id、群组 Id。
+ *
+ *  @return 会话的消息数量，如果返回 -1 说明执行查询操作出错。
+ */
+- (int)GetMessageCount:(RCConversationType)conversationType
+                       targetId:(NSString *)targetId;
+
 #pragma mark - 统计API
 /**
  *  统计启动事件

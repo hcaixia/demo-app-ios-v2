@@ -93,6 +93,11 @@
   [RCIM sharedRCIM].receiveMessageDelegate=self;
   //    [RCIM sharedRCIM].globalMessagePortraitSize = CGSizeMake(46, 46);
 
+  //设置显示未注册的消息
+  //如：新版本增加了某种自定义消息，但是老版本不能识别，开发者可以在旧版本中预先自定义这种未识别的消息的显示
+  [RCIM sharedRCIM].showUnkownMessage = YES;
+  [RCIM sharedRCIM].showUnkownMessageNotificaiton = YES;
+
   //登录
   NSString *token =[[NSUserDefaults standardUserDefaults] objectForKey:@"userToken"];
   NSString *userId=[DEFAULTS objectForKey:@"userId"];

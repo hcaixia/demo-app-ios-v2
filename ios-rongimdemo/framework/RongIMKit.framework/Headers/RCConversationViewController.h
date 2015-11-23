@@ -185,6 +185,15 @@
 
 #pragma mark override
 /**
+ *  将要显示会话消息，可以修改RCMessageBaseCell的头像形状，添加自定定义的UI修饰，建议不要修改里面label 文字的大小，cell 大小是根据文字来计算的，如果修改大小可能造成cell 显示出现问题
+ *
+ *  @param cell      cell
+ *  @param indexPath indexPath
+ */
+- (void)willDisplayConversationTableCell:(RCMessageBaseCell *)cell atIndexPath:(NSIndexPath *)indexPath;
+
+#pragma mark override
+/**
  *  重写方法实现自定义消息的显示
  *
  *  @param collectionView collectionView
@@ -194,14 +203,6 @@
  */
 - (RCMessageBaseCell *)rcConversationCollectionView:(UICollectionView *)collectionView
                              cellForItemAtIndexPath:(NSIndexPath *)indexPath;
-#pragma mark override
-/**
- *  将要显示会话消息，可以修改RCMessageBaseCell的头像形状，添加自定定义的UI修饰，建议不要修改里面label 文字的大小，cell 大小是根据文字来计算的，如果修改大小可能造成cell 显示出现问题
- *
- *  @param cell      cell
- *  @param indexPath indexPath
- */
-- (void)willDisplayConversationTableCell:(RCMessageBaseCell *)cell atIndexPath:(NSIndexPath *)indexPath;
 
 #pragma mark override
 /**
@@ -214,6 +215,37 @@
  *  @return 显示的高度
  */
 - (CGSize)rcConversationCollectionView:(UICollectionView *)collectionView
+                                layout:(UICollectionViewLayout *)collectionViewLayout
+                sizeForItemAtIndexPath:(NSIndexPath *)indexPath;
+
+
+#pragma mark override
+/**
+ *  重写方法实现未注册的消息的显示
+ *  如：新版本增加了某种自定义消息，但是老版本不能识别，开发者可以在旧版本中预先自定义这种未识别的消息的显示
+ *  需要设置RCIM showUnkownMessage属性
+ *
+ *  @param collectionView collectionView
+ *  @param indexPath      indexPath
+ *
+ *  @return RCMessageTemplateCell
+ */
+- (RCMessageBaseCell *)rcUnkownConversationCollectionView:(UICollectionView *)collectionView
+                             cellForItemAtIndexPath:(NSIndexPath *)indexPath;
+
+#pragma mark override
+/**
+ *  重写方法实现未注册的消息的显示的高度
+ *  如：新版本增加了某种自定义消息，但是老版本不能识别，开发者可以在旧版本中预先自定义这种未识别的消息的显示
+ *  需要设置RCIM showUnkownMessage属性
+ *
+ *  @param collectionView       collectionView
+ *  @param collectionViewLayout collectionViewLayout
+ *  @param indexPath            indexPath
+ *
+ *  @return 显示的高度
+ */
+- (CGSize)rcUnkownConversationCollectionView:(UICollectionView *)collectionView
                                 layout:(UICollectionViewLayout *)collectionViewLayout
                 sizeForItemAtIndexPath:(NSIndexPath *)indexPath;
 

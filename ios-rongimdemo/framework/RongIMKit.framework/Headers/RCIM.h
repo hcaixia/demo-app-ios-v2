@@ -12,7 +12,9 @@
 #import <RongIMLib/RongIMLib.h>
 #import "RCConversationViewController.h"
 #import "RCThemeDefine.h"
-// dispatch message notification name
+/**
+ *  收到消息的Notification，接收到消息后会通知。
+ */
 FOUNDATION_EXPORT NSString *const RCKitDispatchMessageNotification;
 
 FOUNDATION_EXPORT NSString
@@ -184,6 +186,21 @@ FOUNDATION_EXPORT NSString
 @property(nonatomic, assign) BOOL disableMessageAlertSound;
 
 /**
+ *  显示未注册的消息，默认值是NO。
+ *  如：新版本增加了某种自定义消息，但是老版本不能识别，开发者可以在旧版本中预先自定义这种未识别的消息的显示
+ *  会话界面开发者可以通过rcUnkownConversationCollectionView:cellForItemAtIndexPath:和rcUnkownConversationCollectionView:layout:sizeForItemAtIndexPath:方法定制
+ *  会话列表界面可以通过修改unknown_message_cell_tip字符串资源进行定制
+ */
+@property(nonatomic, assign) BOOL showUnkownMessage;
+
+/**
+ *  未知的消息显示本地通知，默认值是NO。
+ *  如：新版本增加了某种自定义消息，但是老版本不能识别，开发者可以在旧版本中预先自定义这种未识别的消息的显示
+ *  可以通过修改unknown_message_notification_tip字符串资源进行定制
+ */
+@property(nonatomic, assign) BOOL showUnkownMessageNotificaiton;
+
+/**
  获取界面组件的核心类单例。
 
  @return 界面组件的核心类单例。
@@ -274,6 +291,79 @@ FOUNDATION_EXPORT NSString
  *  清除所有本地群组信息的缓存。
  */
 - (void)clearGroupInfoCache;
+
+/**
+ *  发送消息，可以发送任何类型的消息，会自动更新UI。
+ *  注：如果通过该接口发送图片消息，需要自己实现上传图片，把imageUrl传入content（注意它将是一个RCImageMessage）。
+ *  @param conversationType 会话类型。
+ *  @param targetId         目标 Id。根据不同的 conversationType，可能是聊天 Id、讨论组 Id、群组 Id 或聊天室 Id。
+ *  @param content          消息内容。
+ *  @param pushContent      推送消息内容
+ *  @param pushData         推送消息附加信息
+ *  @param successBlock     调用完成的处理。
+ *  @param errorBlock       调用返回的错误信息。
+ *
+ *  @return 发送的消息实体。
+ */
+- (RCMessage *)sendMessage:(RCConversationType)conversationType
+                  targetId:(NSString *)targetId
+                   content:(RCMessageContent *)content
+               pushContent:(NSString *)pushContent
+                  pushData:(NSString *)pushData
+                   success:(void (^)(long messageId))successBlock
+                     error:(void (^)(RCErrorCode nErrorCode,
+                                     long messageId))errorBlock;
+
+/**
+ *  发送图片消息，上传图片并且发送，会自动更新UI。
+ *  使用该方法，默认原图会上传到融云的服务，并且发送消息,如果使用普通的sendMessage方法，
+ *  需要自己实现上传图片，并且添加ImageMessage的URL之后发送
+ *
+ *  @param conversationType 会话类型。
+ *  @param targetId         目标 Id。根据不同的 conversationType，可能是聊天 Id、讨论组 Id、群组 Id 或聊天室 Id。
+ *  @param content          消息内容
+ *  @param pushContent      推送消息内容
+ *  @param pushData         推送消息附加信息
+ *  @param progressBlock    进度块
+ *  @param successBlock     成功处理块
+ *  @param errorBlock       失败处理块
+ *
+ *  @return 发送的消息实体。
+ */
+- (RCMessage *)sendImageMessage:(RCConversationType)conversationType
+                       targetId:(NSString *)targetId
+                        content:(RCMessageContent *)content
+                    pushContent:(NSString *)pushContent
+                       pushData:(NSString *)pushData
+                       progress:(void (^)(int progress, long messageId))progressBlock
+                        success:(void (^)(long messageId))successBlock
+                          error:(void (^)(RCErrorCode errorCode, long messageId))errorBlock;
+
+/**
+ *  发送图片消息，由APP实现上传图片。
+ *  请在uploadPrepareBlock中上传图片，并通知融云上传进度和结果
+ *
+ *  @param conversationType   会话类型。
+ *  @param targetId           目标 Id。根据不同的 conversationType，可能是聊天 Id、讨论组 Id、群组 Id 或聊天室 Id。
+ *  @param content            消息内容
+ *  @param pushContent        推送消息内容
+ *  @param pushData         推送消息附加信息
+ *  @param uploadPrepareBlock 应用上传图片Block
+ *  @param progressBlock      进度块
+ *  @param successBlock       成功处理块
+ *  @param errorBlock         失败处理块
+ *
+ *  @return 发送的消息实体。
+ */
+- (RCMessage *)sendImageMessage:(RCConversationType)conversationType
+                       targetId:(NSString *)targetId
+                        content:(RCMessageContent *)content
+                    pushContent:(NSString *)pushContent
+                       pushData:(NSString *)pushData
+                  uploadPrepare:(void (^)(RCUploadImageStatusListener *uploadListener))uploadPrepareBlock
+                       progress:(void (^)(int progress, long messageId))progressBlock
+                        success:(void (^)(long messageId))successBlock
+                          error:(void (^)(RCErrorCode errorCode, long messageId))errorBlock;
 
 @end
 

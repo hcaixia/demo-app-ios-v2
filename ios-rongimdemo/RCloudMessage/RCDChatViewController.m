@@ -66,6 +66,7 @@
 /*******************实时地理位置共享***************/
     [self registerClass:[RealTimeLocationStartCell class] forCellWithReuseIdentifier:RCRealTimeLocationStartMessageTypeIdentifier];
     [self registerClass:[RealTimeLocationEndCell class] forCellWithReuseIdentifier:RCRealTimeLocationEndMessageTypeIdentifier];
+    [self registerClass:[RCUnknownMessageCell class] forCellWithReuseIdentifier:RCUnknownMessageTypeIdentifier];
     
     __weak typeof(&*self) weakSelf = self;
     [[RCRealTimeLocationManager sharedManager] getRealTimeLocationProxy:self.conversationType targetId:self.targetId success:^(id<RCRealTimeLocationProxy> realTimeLocation) {
@@ -517,6 +518,46 @@
     } else {
         return [super rcConversationCollectionView:collectionView layout:collectionViewLayout sizeForItemAtIndexPath:indexPath];
     }
+}
+
+/**
+ *  重写方法实现未注册的消息的显示
+ *  如：新版本增加了某种自定义消息，但是老版本不能识别，开发者可以在旧版本中预先自定义这种未识别的消息的显示
+ *  需要设置RCIM showUnkownMessage属性
+ *
+ *  @param collectionView collectionView
+ *  @param indexPath      indexPath
+ *
+ *  @return RCMessageTemplateCell
+ */
+- (RCMessageBaseCell *)rcUnkownConversationCollectionView:(UICollectionView *)collectionView
+                                   cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    RCMessageModel *model = [self.conversationDataRepository objectAtIndex:indexPath.row];
+    NSLog(@"message objectName = %@", model.objectName);
+    RCMessageCell *cell = [collectionView
+                             dequeueReusableCellWithReuseIdentifier:RCUnknownMessageTypeIdentifier
+                             forIndexPath:indexPath];
+    [cell setDataModel:model];
+    return cell;
+}
+
+/**
+ *  重写方法实现未注册的消息的显示的高度
+ *  如：新版本增加了某种自定义消息，但是老版本不能识别，开发者可以在旧版本中预先自定义这种未识别的消息的显示
+ *  需要设置RCIM showUnkownMessage属性
+ *
+ *  @param collectionView       collectionView
+ *  @param collectionViewLayout collectionViewLayout
+ *  @param indexPath            indexPath
+ *
+ *  @return 显示的高度
+ */
+- (CGSize) rcUnkownConversationCollectionView:(UICollectionView *)collectionView
+                                       layout:(UICollectionViewLayout *)collectionViewLayout
+                       sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    RCMessageModel *model = [self.conversationDataRepository objectAtIndex:indexPath.row];
+    NSLog(@"message objectName = %@", model.objectName);
+    return CGSizeMake(collectionView.frame.size.width, 66);
 }
 
 #pragma mark override

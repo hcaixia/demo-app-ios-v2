@@ -176,6 +176,9 @@ static NSString * const blackTableName = @"BLACKTABLE";
 //存储群组信息
 -(void)insertGroupToDB:(RCDGroupInfo *)group
 {
+    if(group == nil || [group.groupId length]<1)
+        return;
+    
     NSString *insertSql = @"REPLACE INTO GROUPTABLEV2 (groupId, name,portraitUri,inNumber,maxNumber,introduce,creatorId,creatorTime,isJoin) VALUES (?,?,?,?,?,?,?,?,?)";
     FMDatabaseQueue *queue = [DBHelper getDatabaseQueue];
         if (queue==nil) {
