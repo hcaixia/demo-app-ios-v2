@@ -528,7 +528,8 @@ MBProgressHUD* hud ;
         hud= [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         hud.labelText = @"登录中...";
         [hud show:YES];
-        [AFHttpTool loginWithEmail:userName password:password env:(self.currentModel == nil ? 1 : self.currentModel.env)
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey :@"UserCookies"];
+        [AFHttpTool loginWithEmail:userName password:password env:0
             success:^(id response) {
                if ([response[@"code"] intValue] == 200) {
                    NSString *token = response[@"result"][@"token"];

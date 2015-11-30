@@ -15,15 +15,17 @@
 #import "RCDHttpTool.h"
 #import "RCDRCIMDataSource.h"
 #import "RCDPersonDetailViewController.h"
-
+#import "RCDataBaseManager.h"
+#import "RCDAddFriendViewController.h"
 
 @interface RCDDiscussGroupSettingViewController ()<UIActionSheetDelegate>
 
 @property (nonatomic, copy) NSString* discussTitle;
 
-@property (nonatomic, strong) NSArray* members;
+@property (nonatomic, strong) NSMutableDictionary* members;
 
 @property (nonatomic)BOOL isOwner;
+@property (nonatomic,assign) BOOL isClick;
 @end
 
 @implementation RCDDiscussGroupSettingViewController
@@ -34,7 +36,7 @@
     
     //显示顶部视图
     self.headerHidden = NO;
-
+    _members = [[NSMutableDictionary alloc]init];
     
     //添加当前聊天用户
     if (self.conversationType == ConversationType_PRIVATE) {
@@ -42,7 +44,7 @@
         [RCDHTTPTOOL getUserInfoByUserID:self.targetId
                               completion:^(RCUserInfo* user) {
                                           [self addUsers:@[user]];
-                                          _members = @[user];
+                                          [_members setObject:user forKey:user.userId];
 
                               }];
     }
@@ -73,7 +75,7 @@
                         [RCDHTTPTOOL getUserInfoByUserID:targetId
                                                               completion:^(RCUserInfo *user) {
                                                                   [users addObject:user];
-                                                                  _members = users;
+                                                                  [_members setObject:user forKey:user.userId];
                                                                   [weakSelf addUsers:users];
                                                               }];
                     
@@ -98,7 +100,10 @@
 
 }
 
-
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    _isClick = YES;
+}
 
 -(void)buttonAction:(UIButton*)sender{
     UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"删除并且退出讨论组" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"确定" otherButtonTitles:nil];
@@ -216,19 +221,17 @@
         selectPersonVC.clickDoneCompletion = ^(RCDSelectPersonViewController* selectPersonViewController, NSArray* selectedUsers) {
             
             if (selectedUsers && selectedUsers.count) {
-                
-                NSString *_currentTargetId = [RCIMClient sharedRCIMClient].currentUserInfo.userId;
-                
-                                [RCDHTTPTOOL getUserInfoByUserID:_currentTargetId completion:^(RCUserInfo *user) {
-                                    RCUserInfo *userInfo =  user;
-                                    NSMutableArray *_allUsers = [NSMutableArray new];
-                                    [_allUsers addObject:userInfo];//add current user info object
-                                    [_allUsers addObjectsFromArray:selectedUsers];//add the selected users
-                                    [self addUsers:(NSArray *)_allUsers];
-                
-                                    [self createDiscussionOrInvokeMemberWithSelectedUsers:selectedUsers];
-                
-                                }];
+                NSMutableArray *newUsers = [[NSMutableArray alloc]init];
+                for (int i=0;i<selectedUsers.count; i++) {
+                    RCUserInfo *user = (RCUserInfo *)selectedUsers[i];
+                    if (![_members.allKeys containsObject:user.userId]) {
+                        [_members setObject:user forKey:user.userId];
+                        [newUsers addObject:user];
+                    }
+                }
+                [self addUsers:_members.allValues];
+                [self createDiscussionOrInvokeMemberWithSelectedUsers:selectedUsers];
+
             }
             
             [selectPersonViewController.navigationController popViewControllerAnimated:YES];
@@ -375,22 +378,34 @@
 
 - (void)didTipHeaderClicked:(NSString*)userId
 {
-    [[RCDRCIMDataSource shareInstance]getUserInfoWithUserId:userId completion:^(RCUserInfo *userInfo) {
-        [[RCDHttpTool shareInstance]updateUserInfo:userId success:^(RCUserInfo * user) {
-            if (![userInfo.name isEqualToString:user.name]) {
-                [[RCIM sharedRCIM]refreshUserInfoCache:user withUserId:user.userId];
+    if(_isClick){
+        _isClick = NO;
+        [[RCDRCIMDataSource shareInstance]getUserInfoWithUserId:userId completion:^(RCUserInfo *userInfo) {
+            [[RCDHttpTool shareInstance]updateUserInfo:userId success:^(RCUserInfo * user) {
+                if (![userInfo.name isEqualToString:user.name]) {
+                    [[RCIM sharedRCIM]refreshUserInfoCache:user withUserId:user.userId];
+                    
+                }
+                NSArray *friendList = [[RCDataBaseManager shareInstance] getAllFriends];
+                for (RCUserInfo *USER in friendList) {
+                    if ([userId isEqualToString:USER.userId] || [userId isEqualToString:[RCIM sharedRCIM].currentUserInfo.userId]) {
+                        UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+                        RCDPersonDetailViewController *temp = [mainStoryboard instantiateViewControllerWithIdentifier:@"RCDPersonDetailViewController"];
+                        temp.userInfo = user;
+                        [self.navigationController pushViewController:temp animated:YES];
+                        return;
+                    }
+                }
+                UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+                RCDAddFriendViewController *addViewController = [mainStoryboard instantiateViewControllerWithIdentifier:@"RCDAddFriendViewController"];
+                addViewController.targetUserInfo = userInfo;
+                [self.navigationController pushViewController:addViewController animated:YES];
                 
-            }
-            UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-            RCDPersonDetailViewController *temp = [mainStoryboard instantiateViewControllerWithIdentifier:@"RCDPersonDetailViewController"];
-            temp.userInfo = user;
-            
-            [self.navigationController pushViewController:temp animated:YES];
-            
-        } failure:^(NSError *err) {
-            
+            } failure:^(NSError *err) {
+                
+            }];
         }];
-    }];
+    }
 }
 
 

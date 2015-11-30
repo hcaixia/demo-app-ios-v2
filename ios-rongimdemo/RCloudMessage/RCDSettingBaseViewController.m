@@ -25,11 +25,20 @@
     
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     self.navigationItem.title = NSLocalizedStringFromTable(@"Setting", @"RongCloudKit", nil); //@"设置";
-    self.navigationItem.leftBarButtonItem =
-    [[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringFromTable(@"Back", @"RongCloudKit", nil)
-                                     style:UIBarButtonItemStylePlain
-                                    target:self
-                                    action:@selector(backBarButtonItemClicked:)];
+    UIButton *backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    backBtn.frame = CGRectMake(0, 6, 87, 23);
+    UIImageView *backImg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"navigator_btn_back"]];
+    backImg.frame = CGRectMake(-10, 0, 22, 22);
+    [backBtn addSubview:backImg];
+    UILabel *backText = [[UILabel alloc] initWithFrame:CGRectMake(12, 0, 85, 22)];
+    backText.text = NSLocalizedStringFromTable(@"Back", @"RongCloudKit", nil);
+    backText.font = [UIFont systemFontOfSize:15];
+    [backText setBackgroundColor:[UIColor clearColor]];
+    [backText setTextColor:[UIColor whiteColor]];
+    [backBtn addSubview:backText];
+    [backBtn addTarget:self action:@selector(backBarButtonItemClicked:) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *leftButton = [[UIBarButtonItem alloc] initWithCustomView:backBtn];
+    [self.navigationItem setLeftBarButtonItem:leftButton];
 }
 
 - (void)backBarButtonItemClicked:(id)sender {

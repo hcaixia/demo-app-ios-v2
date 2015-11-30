@@ -493,6 +493,22 @@ sendImageMessage:(RCConversationType)conversationType
                           count:(int)count;
 
 /**
+ *  获取历史消息记录。
+ *
+ *  @param conversationType 会话类型。不支持传入 RCConversationType.CHATROOM。
+ *  @param targetId         目标 Id。根据不同的 conversationType，可能是聊天 Id、讨论组 Id、群组 Id。
+ *  @param objectName       消息类型
+ *  @param oldestMessageId  最后一条消息的 Id，获取此消息之前的 count 条消息；如果传入 -1，则从最新一条消息开始获取。
+ *  @param count            要获取的消息数量。
+ *
+ *  @return 历史消息记录，按照时间顺序新到旧排列。
+ */
+-(NSArray*)getHistoryMessages:(RCConversationType)conversationType
+                     targetId:(NSString*)targetId
+                   objectName:(NSString *)objectName
+              oldestMessageId:(long)oldestMessageId
+                        count:(int)count;
+/**
  *  插入一条消息。
  *
  *  @param conversationType 会话类型。不支持传入 RCConversationType.CHATROOM。
@@ -989,6 +1005,7 @@ setConversationNotificationStatus:(RCConversationType)conversationType
 
 /**
  *  从服务端获取历史消息记录（不保存在本地数据库）。
+ *  必须先开通历史消息漫游功能。
  *
  *  @param conversationType 会话类型。不支持传入 RCConversationType.CHATROOM。
  *  @param targetId         目标 Id。根据不同的 conversationType，可能是聊天

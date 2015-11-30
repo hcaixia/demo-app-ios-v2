@@ -190,7 +190,7 @@
    */
   if ([application
           respondsToSelector:@selector(registerUserNotificationSettings:)]) {
-    //注册推送, iOS 8
+    //注册推送, 用于iOS8以及iOS8之后的系统
     UIUserNotificationSettings *settings = [UIUserNotificationSettings
         settingsForTypes:(UIUserNotificationTypeBadge |
                           UIUserNotificationTypeSound |
@@ -198,6 +198,7 @@
               categories:nil];
     [application registerUserNotificationSettings:settings];
   } else {
+    //注册推送，用于iOS8之前的系统
     UIRemoteNotificationType myTypes = UIRemoteNotificationTypeBadge |
                                        UIRemoteNotificationTypeAlert |
                                        UIRemoteNotificationTypeSound;

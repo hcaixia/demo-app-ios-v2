@@ -34,6 +34,11 @@
 #endif
     mgr.requestSerializer.HTTPShouldHandleCookies = YES;
     
+    NSString *cookieString = [[NSUserDefaults standardUserDefaults] objectForKey:@"UserCookies"];
+
+    if(cookieString)
+       [mgr.requestSerializer setValue: cookieString forHTTPHeaderField:@"Cookie"];
+ 
     switch (methodType) {
         case RequestMethodTypeGet:
         {
@@ -41,6 +46,7 @@
             [mgr GET:url parameters:params
              success:^(AFHTTPRequestOperation* operation, NSDictionary* responseObj) {
                  if (success) {
+                     
                      success(responseObj);
                  }
              } failure:^(AFHTTPRequestOperation* operation, NSError* error) {
@@ -57,6 +63,9 @@
             [mgr POST:url parameters:params
               success:^(AFHTTPRequestOperation* operation, NSDictionary* responseObj) {
                   if (success) {
+                      NSString *cookieString = [[operation.response allHeaderFields] valueForKey:@"Set-Cookie"];
+                      NSData *data = [NSKeyedArchiver archivedDataWithRootObject:cookieString];
+                      [[NSUserDefaults standardUserDefaults] setObject:cookieString forKey:@"UserCookies"];
                       success(responseObj);
                   }
               } failure:^(AFHTTPRequestOperation* operation, NSError* error) {
@@ -78,7 +87,8 @@
                 success:(void (^)(id response))success
                 failure:(void (^)(NSError* err))failure
 {
-    NSDictionary *params = @{@"email":email,@"password":password,@"env":[NSString stringWithFormat:@"%d", env]};
+    NSDictionary *params = @{@"email":email,@"password":password};
+//    [[NSUserDefaults standardUserDefaults] removeObjectForKey :@"UserCookies"];
     [AFHttpTool requestWihtMethod:RequestMethodTypePost
                               url:@"email_login_token"
                            params:params

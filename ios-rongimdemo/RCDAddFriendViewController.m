@@ -33,6 +33,10 @@
             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:@"请求已发送" delegate:nil
                                                       cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
             [alertView show];
+        }else{
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:@"请求失败，请重试" delegate:nil
+                                                      cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [alertView show];
         }
     }];
 }

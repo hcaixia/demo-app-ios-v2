@@ -75,16 +75,16 @@ FOUNDATION_EXPORT NSString
 @protocol RCIMReceiveMessageDelegate <NSObject>
 
 /**
- 接收消息到消息后执行。
-
- @param message 接收到的消息。
- @param left    剩余消息数.
+ *  接收消息到消息后执行。
+ *
+ *  @param message 接收到的消息。
+ *  @param left    剩余消息数.
  */
 - (void)onRCIMReceiveMessage:(RCMessage *)message left:(int)left;
 
 @optional
 /**
- *  收到消息Notifiction处理。用户可以自定义通知，不实现SDK会处理。
+ *  App处于后台时，收到消息Notifiction处理。用户可以自定义通知，不实现SDK会处理。
  *
  *  @param message    收到的消息实体。
  *  @param senderName 发送者的名字
@@ -94,7 +94,7 @@ FOUNDATION_EXPORT NSString
 -(BOOL)onRCIMCustomLocalNotification:(RCMessage*)message withSenderName:(NSString *)senderName;
 
 /**
- *  收到消息铃声处理。用户可以自定义新消息铃声，不实现SDK会处理。
+ *  App处于前台时，收到消息铃声处理。用户可以自定义新消息铃声，不实现SDK会处理。
  *
  *  @param message 收到的消息实体。
  *

@@ -20,6 +20,8 @@
 #import "RealTimeLocationStatusView.h"
 #import "RealTimeLocationEndCell.h"
 #import "RCDPersonDetailViewController.h"
+#import "RCDAddFriendViewController.h"
+#import "RCDataBaseManager.h"
 
 @interface RCDChatViewController () <UIActionSheetDelegate, RCRealTimeLocationObserver, RealTimeLocationStatusViewDelegate, UIAlertViewDelegate, RCMessageCellDelegate>
 @property (nonatomic, weak)id<RCRealTimeLocationProxy> realTimeLocation;
@@ -157,7 +159,6 @@
         }];
         
     }
-    
     
 }
 
@@ -361,7 +362,7 @@
     [backBtn addSubview:backImg];
     UILabel *backText = [[UILabel alloc] initWithFrame:CGRectMake(12, 0, 85, 22)];
     backText.text = backString;//NSLocalizedStringFromTable(@"Back", @"RongCloudKit", nil);
-    backText.font = [UIFont systemFontOfSize:15];
+//   backText.font = [UIFont systemFontOfSize:17];
     [backText setBackgroundColor:[UIColor clearColor]];
     [backText setTextColor:[UIColor whiteColor]];
     [backBtn addSubview:backText];
@@ -480,12 +481,20 @@
                     [[RCIM sharedRCIM]refreshUserInfoCache:user withUserId:user.userId];
                     
                 }
+                NSArray *friendList = [[RCDataBaseManager shareInstance] getAllFriends];
+                for (RCUserInfo *USER in friendList) {
+                    if ([userId isEqualToString:USER.userId] || [userId isEqualToString:[RCIM sharedRCIM].currentUserInfo.userId]) {
+                        UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+                        RCDPersonDetailViewController *temp = [mainStoryboard instantiateViewControllerWithIdentifier:@"RCDPersonDetailViewController"];
+                        temp.userInfo = user;
+                        [self.navigationController pushViewController:temp animated:YES];
+                        return;
+                    }
+                }
                 UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-                RCDPersonDetailViewController *temp = [mainStoryboard instantiateViewControllerWithIdentifier:@"RCDPersonDetailViewController"];
-                temp.userInfo = user;
-                
-                [self.navigationController pushViewController:temp animated:YES];
-                
+                RCDAddFriendViewController *addViewController = [mainStoryboard instantiateViewControllerWithIdentifier:@"RCDAddFriendViewController"];
+                addViewController.targetUserInfo = userInfo;
+                [self.navigationController pushViewController:addViewController animated:YES];
             } failure:^(NSError *err) {
                 
             }];

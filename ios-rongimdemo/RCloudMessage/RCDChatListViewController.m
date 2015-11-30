@@ -176,6 +176,10 @@
             _conversationVC.unReadMessage = model.unreadMessageCount;
             _conversationVC.enableNewComingMessageIcon=YES;//开启消息提醒
             _conversationVC.enableUnreadMessageIcon=YES;
+            if (model.conversationType == ConversationType_SYSTEM) {
+                _conversationVC.userName = @"系统消息";
+                _conversationVC.title = @"系统消息";
+            }
             [self.navigationController pushViewController:_conversationVC animated:YES];
         }
         
