@@ -63,12 +63,20 @@ RCDConversationSettingTableViewHeaderItemDelegate>
     [collectionView dequeueReusableCellWithReuseIdentifier:
      @"RCDConversationSettingTableViewHeaderItem"
                                               forIndexPath:indexPath];
+    
     if (self.users.count && (self.users.count - 1 >= indexPath.row)) {
         RCUserInfo *user = self.users[indexPath.row];
+        if ([user.userId isEqualToString:[RCIMClient sharedRCIMClient]
+             .currentUserInfo.userId]) {
+            [cell.btnImg setHidden:YES];
+        }else
+        {
+            [cell.btnImg setHidden:!self.showDeleteTip];
+        }
         [cell.ivAva sd_setImageWithURL:[NSURL URLWithString:user.portraitUri] placeholderImage:[UIImage imageNamed:@"icon_person"]];
         cell.titleLabel.text = user.name;
         cell.userId=user.userId;
-        [cell.btnImg setHidden:!self.showDeleteTip];
+        
         
         cell.delegate = self;
         
@@ -115,6 +123,7 @@ RCDConversationSettingTableViewHeaderItemDelegate>
          action:@selector(notShowDeleteTip:)];
         [cell addGestureRecognizer:singleTapGestureRecognizer];
     }
+    
     
     return cell;
 }

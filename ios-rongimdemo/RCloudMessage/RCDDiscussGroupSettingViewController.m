@@ -70,11 +70,15 @@
                 }
                 
                 NSMutableArray *users = [NSMutableArray new];
-                
                 for (NSString *targetId in discussion.memberIdList) {
                         [RCDHTTPTOOL getUserInfoByUserID:targetId
                                                               completion:^(RCUserInfo *user) {
-                                                                  [users addObject:user];
+                                                                  if (discussion.creatorId == user.userId) {
+                                                                      [users insertObject:user atIndex:0];
+                                                                  }else{
+                                                                  
+                                                                       [users addObject:user];
+                                                                  }
                                                                   [_members setObject:user forKey:user.userId];
                                                                   [weakSelf addUsers:users];
                                                               }];
@@ -402,7 +406,7 @@
                 [self.navigationController pushViewController:addViewController animated:YES];
                 
             } failure:^(NSError *err) {
-                
+                _isClick = NO;
             }];
         }];
     }

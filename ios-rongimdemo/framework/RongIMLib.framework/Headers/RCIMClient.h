@@ -228,7 +228,7 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
     (id<RCConnectionStatusChangeDelegate>)delegate;
 
 /**
- *  发送状态消息。可以发送任何类型的消息。但建议您发送自定义的消息类型
+ *  发送透传消息。可以发送任何类型的消息。但建议您发送自定义的消息类型
  *  注：如果通过该接口发送图片消息，需要自己实现上传图片，把imageUrl传入content（注意它将是一个RCImageMessage）。
  *  @param conversationType 会话类型。
  *  @param targetId         目标 Id。根据不同的 conversationType，可能是聊天 Id、讨论组 Id、群组 Id 或聊天室 Id。
