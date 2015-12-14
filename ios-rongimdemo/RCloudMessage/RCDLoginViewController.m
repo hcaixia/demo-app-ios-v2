@@ -441,7 +441,9 @@ MBProgressHUD* hud ;
     [RCDHTTPTOOL getUserInfoByUserID:userId
                           completion:^(RCUserInfo* user) {
                               [[RCIM sharedRCIM]refreshUserInfoCache:user withUserId:userId];
-                              
+                              [DEFAULTS setObject:user.portraitUri forKey:@"userPortraitUri"];
+                              [DEFAULTS setObject:user.name forKey:@"userNickName"];
+                              [DEFAULTS synchronize];
                           }];
     //同步群组
     [RCDDataSource syncGroups];

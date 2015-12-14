@@ -88,7 +88,7 @@
   [RCIM sharedRCIM].groupInfoDataSource = RCDDataSource;
   //设置群组内用户信息源。如果不使用群名片功能，可以不设置
   [RCIM sharedRCIM].groupUserInfoDataSource = RCDDataSource;
-    
+  [RCIM sharedRCIM].enableMessageAttachUserInfo = YES;
   //设置接收消息代理
   [RCIM sharedRCIM].receiveMessageDelegate=self;
   //    [RCIM sharedRCIM].globalMessagePortraitSize = CGSizeMake(46, 46);
@@ -103,11 +103,14 @@
   NSString *userId=[DEFAULTS objectForKey:@"userId"];
   NSString *userName = [DEFAULTS objectForKey:@"userName"];
   NSString *password = [DEFAULTS objectForKey:@"userPwd"];
+    NSString *userNickName = [DEFAULTS objectForKey:@"userNickName"];
+    NSString *userPortraitUri = [DEFAULTS objectForKey:@"userPortraitUri"];
+  
   if (token.length && userId.length && password.length && !debugMode) {
     RCUserInfo *_currentUserInfo =
     [[RCUserInfo alloc] initWithUserId:userId
-                                    name:userName
-                                portrait:nil];
+                                    name:userNickName
+                                portrait:userPortraitUri];
       [RCIMClient sharedRCIMClient].currentUserInfo = _currentUserInfo;
     [[RCIM sharedRCIM] connectWithToken:token
         success:^(NSString *userId) {
@@ -121,6 +124,14 @@
                                           [[RCIM sharedRCIM]
                                               refreshUserInfoCache:user
                                                         withUserId:userId];
+                                            [RCDHTTPTOOL getUserInfoByUserID:userId
+                                                                  completion:^(RCUserInfo* user) {
+                                                                      [[RCIM sharedRCIM]refreshUserInfoCache:user withUserId:userId];
+                                                                      [DEFAULTS setObject:user.portraitUri forKey:@"userPortraitUri"];
+                                                                      [DEFAULTS setObject:user.name forKey:@"userNickName"];
+                                                                      [DEFAULTS synchronize];
+                                                                      [RCIMClient sharedRCIMClient].currentUserInfo = user;
+                                                                  }];
                                         }];
                     //登陆demoserver成功之后才能调demo 的接口
                     [RCDDataSource syncGroups];

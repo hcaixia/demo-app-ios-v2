@@ -69,6 +69,22 @@
  */
 @property(nonatomic, strong) id<RCAttributedDataSource> attributeDataSource;
 /**
+ * 可以通过设置attributedStrings可以给一些字符添加点击事件等，例如在实现的会话列表里修改文本消息内容
+ *  -(void)willDisplayConversationTableCell:(RCMessageBaseCell *)cell atIndexPath:(NSIndexPath *)indexPath{
+ *
+ *   if ([cell isKindOfClass:[RCTextMessageCell class]]) {
+ *      RCTextMessageCell *newCell = (RCTextMessageCell *)cell;
+ *      if (newCell.textLabel.text.length>3) {
+ *          NSTextCheckingResult *textCheckingResult = [NSTextCheckingResult linkCheckingResultWithRange:(NSMakeRange(0, 3)) URL:[NSURL URLWithString:@"http://www.baidu.com"]];
+ *          [newCell.textLabel.attributedStrings addObject:textCheckingResult];
+ *          [newCell.textLabel setTextHighlighted:YES atPoint:CGPointMake(0, 3)];
+ *       }
+ *    }
+ *}
+ *
+ */
+@property(nonatomic, strong) NSMutableArray *attributedStrings;
+/**
  * 设置点击事件，比如打开超链接等等
  */
 @property (nonatomic, assign) id <RCAttributedLabelDelegate> delegate;

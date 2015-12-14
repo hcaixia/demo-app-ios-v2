@@ -157,12 +157,13 @@
     if (_isClick) {
         _isClick = NO;
         if (model.conversationModelType == RC_CONVERSATION_MODEL_TYPE_PUBLIC_SERVICE) {
-            RCPublicServiceChatViewController *_conversationVC = [[RCPublicServiceChatViewController alloc] init];
+            RCDChatViewController *_conversationVC = [[RCDChatViewController alloc] init];
             _conversationVC.conversationType = model.conversationType;
             _conversationVC.targetId = model.targetId;
             _conversationVC.userName = model.conversationTitle;
             _conversationVC.title = model.conversationTitle;
-            
+            _conversationVC.conversation = model;
+            _conversationVC.unReadMessage = model.unreadMessageCount;
             [self.navigationController pushViewController:_conversationVC animated:YES];
         }
         

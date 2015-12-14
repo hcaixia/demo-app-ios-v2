@@ -15,130 +15,232 @@
 #ifndef __RCStatusDefine
 #define __RCStatusDefine
 
-/**
- *  @enum 融云连接业务的返回码。
+#pragma mark - 错误码相关
+
+#pragma mark RCConnectErrorCode - 建立连接返回的错误码
+/*!
+ 建立连接返回的错误码
  */
 typedef NS_ENUM(NSInteger, RCConnectErrorCode) {
-    /**
-     * 连接过程中，获取路由导航数据失败。
+    /*!
+     连接过程中，获取路由导航数据失败
      */
     RC_NET_NAVI_ERROR = 30000,
-    /**
-     * 当前连接已经被释放，可能需要做重连处理。
+    
+    /*!
+     当前连接已经被释放，可能需要做重连处理
      */
     RC_NET_CHANNEL_INVALID = 30001,
-    /**
-     * 当前连接不可用，可能需要做重连处理。
+    
+    /*!
+     当前连接不可用，可能需要做重连处理
      */
     RC_NET_UNAVAILABLE = 30002,
-    /**
-     * 当前请求响应超时。
+    
+    /*!
+     当前请求响应超时
      */
     RC_MSG_RESP_TIMEOUT = 30003,
-    /**
-     * 连接过程中，当前HTTP发送失败。
+    
+    /*!
+     连接过程中，当前HTTP发送失败
      */
     RC_HTTP_SEND_FAIL = 30004,
-    /**
-     * 连接过程中，当前HTTP请求超时。
+    
+    /*!
+     连接过程中，当前HTTP请求超时
      */
     RC_HTTP_REQ_TIMEOUT = 30005,
-    /**
-     * 连接过程中，当前HTTP接收失败。
+    
+    /*!
+     连接过程中，当前HTTP接收失败
      */
     RC_HTTP_RECV_FAIL = 30006,
-    /**
-     * 连接过程中，当前HTTP返回错误码。
+    
+    /*!
+     连接过程中，当前HTTP返回错误码
      */
     RC_NAVI_RESOURCE_ERROR = 30007,
-    /**
-     * 连接过程中，当前HTTP返回错误码。
+    
+    /*!
+     连接过程中，当前HTTP返回错误码
      */
     RC_NODE_NOT_FOUND = 30008,
-    /**
-     * 连接过程中，当前HTTP返回错误码。
+    
+    /*!
+     连接过程中，当前HTTP返回错误码
      */
     RC_DOMAIN_NOT_RESOLVE = 30009,
-    /**
-     * 创建Socket连接失败。
+    
+    /*!
+     创建Socket连接失败
      */
     RC_SOCKET_NOT_CREATED = 30010,
-    /**
-     * Socket主动断开，或者被动被服务器断开。
+    
+    /*!
+     Socket主动断开，或者被动被服务器断开
      */
     RC_SOCKET_DISCONNECTED = 30011,
-    /**
-     * PING操作失败。
+    
+    /*!
+     PING操作失败
      */
     RC_PING_SEND_FAIL = 30012,
-    /**
-     * PING操作没有得到返回响应。
+    
+    /*!
+     PING操作没有得到返回响应
      */
     RC_PONG_RECV_FAIL = 30013,
-    /**
-     * 信令发送失败。
+    
+    /*!
+     信令发送失败
      */
     RC_MSG_SEND_FAIL = 30014,
-    /**
-     * 由服务器返回，connect 响应超时。
+    
+    /*!
+     由服务器返回，connect 响应超时
      */
     RC_CONN_ACK_TIMEOUT = 31000,
-    /**
-     * 由服务器返回，信令版本号错误。
+    
+    /*!
+     由服务器返回，信令版本号错误
      */
     RC_CONN_PROTO_VERSION_ERROR = 31001,
-    /**
-     * 由服务器返回，App ID被拒绝。
+    
+    /*!
+     由服务器返回，App ID被拒绝
      */
     RC_CONN_ID_REJECT = 31002,
-    /**
-     * 由服务器返回，服务不可用。
+    
+    /*!
+     由服务器返回，服务不可用
      */
     RC_CONN_SERVER_UNAVAILABLE = 31003,
-    /**
-     * 由服务器返回，Token不正确，App需要重新向App服务器请求Token。
+    
+    /*!
+     由服务器返回，Token不正确，App需要重新向App服务器请求Token
      */
     RC_CONN_TOKEN_INCORRECT = 31004,
-    /**
-     * 由服务器返回，未授权。
+    
+    /*!
+     由服务器返回，未授权
      */
     RC_CONN_NOT_AUTHRORIZED = 31005,
-    /**
-     * 由服务器返回，重定向。
+    
+    /*!
+     由服务器返回，重定向
      */
     RC_CONN_REDIRECTED = 31006,
-    /**
-     * 由服务器返回，包名不正确。
+    
+    /*!
+     由服务器返回，包名不正确
      */
     RC_CONN_PACKAGE_NAME_INVALID = 31007,
-    /**
-     * 由服务器返回，应用被封禁。
+    
+    /*!
+     由服务器返回，应用被封禁
      */
     RC_CONN_APP_BLOCKED_OR_DELETED = 31008,
-    /**
-     * 由服务器返回，用户被封禁。
+    
+    /*!
+     由服务器返回，用户被封禁
      */
     RC_CONN_USER_BLOCKED = 31009,
-    /**
-     * 由服务器返回，重复登陆。
+    
+    /*!
+     由服务器返回，重复登陆
      */
     RC_DISCONN_KICK = 31010,
-    /**
-     * 信令返回数据不完整。
+    
+    /*!
+     信令返回数据不完整
      */
     RC_QUERY_ACK_NO_DATA = 32001,
-    /**
-     * 数据传输失败。
+    
+    /*!
+     数据传输失败
      */
     RC_MSG_DATA_INCOMPLETE = 32002,
-    /**
-     * 本地调用传入参数错误。
+    
+    /*!
+     本地调用传入参数错误
      */
     RC_INVALID_ARGUMENT = -1000
-
+    
 };
-/**
- @enum 网络连接状态码
+
+#pragma mark RCErrorCode - 具体业务错误码
+/*!
+ 具体业务错误码
+ */
+typedef NS_ENUM(NSInteger, RCErrorCode) {
+    /*!
+     未知错误
+     */
+    ERRORCODE_UNKNOWN = -1,
+    
+    /*!
+     超时
+     */
+    ERRORCODE_TIMEOUT = 5004,
+    
+    /*!
+     已被对方加入黑名单
+     */
+    REJECTED_BY_BLACKLIST = 405,
+    
+    /*!
+     不在该讨论组中
+     */
+    NOT_IN_DISCUSSION = 21406,
+    
+    /*!
+     不在该群组中
+     */
+    NOT_IN_GROUP = 22406,
+    
+    /*!
+     在群组中已被禁言
+     */
+    FORBIDDEN_IN_GROUP = 22408,
+    
+    /*!
+     不在该聊天室中
+     */
+    NOT_IN_CHATROOM = 23406,
+    
+    /*!
+     消息漫游业务未开通
+     */
+    MSG_ROAMING_SERVICE_UNAVAILABLE = 33007,
+};
+
+#pragma mark - 连接状态
+
+#pragma mark RCCurrentConnectionStatus - 当前连接状态
+/*!
+ 当前连接状态
+ */
+typedef NS_ENUM(NSUInteger, RCCurrentConnectionStatus) {
+    /*!
+     已断开连接
+     */
+    RC_DISCONNECTED = 9,
+    
+    /*!
+     连接成功
+     */
+    RC_CONNECTED = 0,
+    
+    /*!
+     连接中
+     */
+    RC_CONNECTING = 2
+};
+
+#pragma mark RCConnectionStatus - 网络连接状态码
+/*!
+ 网络连接状态码
  */
 typedef NS_ENUM(NSInteger, RCConnectionStatus) {
     /**
@@ -220,269 +322,300 @@ typedef NS_ENUM(NSInteger, RCConnectionStatus) {
     ConnectionStatus_DISCONN_EXCEPTION = 31011
 };
 
+#pragma mark RCNetworkStatus - 当前所处的网络
 /*!
- @enum RCConversationType 会话类型
+ 当前所处的网络
+ */
+typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
+    /*!
+     当前网络不可用
+     */
+    RC_NotReachable = 0,
+    /*!
+     当前处于WiFi网络
+     */
+    RC_ReachableViaWiFi,
+    /*!
+     当前处于LTE网络
+     */
+    RC_ReachableViaLTE,
+    /*!
+     当前处于3G网络
+     */
+    RC_ReachableVia3G,
+    /*!
+     当前处于2G网络
+     */
+    RC_ReachableVia2G
+};
+
+#pragma mark RCSDKRunningMode - SDK当前所处的状态
+/*!
+ SDK当前所处的状态
+ */
+typedef NS_ENUM(NSUInteger, RCSDKRunningMode) {
+    /*!
+     前台运行状态
+     */
+    RCSDKRunningMode_Backgroud = 0,
+    /*!
+     后台运行状态
+     */
+    RCSDKRunningMode_Foregroud = 1
+};
+
+#pragma mark - 会话相关
+
+#pragma mark RCConversationType - 会话类型
+/*!
+ 会话类型
  */
 typedef NS_ENUM(NSUInteger, RCConversationType) {
-    /**
-     * 私聊
+    /*!
+     单聊
      */
     ConversationType_PRIVATE = 1,
-    /**
-     * 讨论组
+    
+    /*!
+     讨论组
      */
     ConversationType_DISCUSSION,
-    /**
-     * 群组
+    
+    /*!
+     群组
      */
     ConversationType_GROUP,
-    /**
-     * 聊天室
+    
+    /*!
+     聊天室
      */
     ConversationType_CHATROOM,
-    /**
-     *  客服(仅用于客服1.0系统。客服2.0系统使用订阅号方式，因此需要使用ConversationType_APPSERVICE会话类型，并且会话页面要是RCPublicServiceChatViewController，否则无法显示自定义菜单）
+    
+    /*!
+     客服1.0会话
+     
+     @discussion 客服2.0使用应用内公众服务会话（ConversationType_APPSERVICE）的方式实现。
+     即客服2.0会话是其中一个应用内公众服务会话，我们推荐您使用和迁移到客服2.0服务。
      */
     ConversationType_CUSTOMERSERVICE,
-    /**
-     *  系统会话
+    
+    /*!
+     系统会话
      */
     ConversationType_SYSTEM,
-    /**
-     *  订阅号 Custom
+    
+    /*!
+     应用内公众服务会话
      */
-    ConversationType_APPSERVICE, // 7
-
-    /**
-     *  订阅号 Public
+    ConversationType_APPSERVICE,
+    
+    /*!
+     跨应用公众服务会话
      */
     ConversationType_PUBLICSERVICE,
-
-    /**
-     *  推送服务
+    
+    /*!
+     推送服务会话
      */
     ConversationType_PUSHSERVICE
 };
 
-/**
- *  @enum 消息方向枚举。
+#pragma mark RCConversationNotificationStatus - 会话提醒状态
+/*!
+ 会话提醒状态
  */
-typedef NS_ENUM(NSUInteger, RCMessageDirection) {
-    /**
-     * 发送
+typedef NS_ENUM(NSUInteger, RCConversationNotificationStatus) {
+    /*!
+     免打扰
      */
-    MessageDirection_SEND = 1, // false
-
-    /**
-     * 接收
+    DO_NOT_DISTURB = 0,
+    
+    /*!
+     新消息提醒
      */
-    MessageDirection_RECEIVE // true
-};
-/**
- *  @enum 媒体文件类型枚举。
- */
-typedef NS_ENUM(NSUInteger, RCMediaType) {
-    /**
-     * 图片。
-     */
-    MediaType_IMAGE = 1,
-
-    /**
-     * 声音。
-     */
-    MediaType_AUDIO,
-
-    /**
-     * 视频。
-     */
-    MediaType_VIDEO,
-
-    /**
-     * 通用文件。
-     */
-    MediaType_FILE = 100
+    NOTIFY = 1,
 };
 
-/**
- *  @enum 消息记录状态
+#pragma mark - 消息相关
+
+#pragma mark RCMessagePersistent - 消息的存储策略
+/*!
+ 消息的存储策略
  */
 typedef NS_OPTIONS(NSUInteger, RCMessagePersistent) {
-    /** 不记录消息 */
+    /*!
+     本地不做存储
+     */
     MessagePersistent_NONE = 0,
-    /** 记录消息 */
+    /*!
+     本地进行消息存储
+     */
     MessagePersistent_ISPERSISTED = 1 << 0,
-    /** 需要计数 */
+    /*!
+     计入未读数
+     */
     MessagePersistent_ISCOUNTED = 1 << 1
 };
 
-/**
- * @enum RCSentStatus 发送出的消息的状态。
+#pragma mark RCMessageDirection - 消息的方向
+/*!
+ 消息的方向
+ */
+typedef NS_ENUM(NSUInteger, RCMessageDirection) {
+    /*!
+     发送
+     */
+    MessageDirection_SEND = 1,
+    
+    /*!
+     接收
+     */
+    MessageDirection_RECEIVE
+};
+
+#pragma mark RCSentStatus - 消息的发送状态
+/*!
+ 消息的发送状态
  */
 typedef NS_ENUM(NSUInteger, RCSentStatus) {
-    /**
-     * 发送中。
+    /*!
+     发送中
      */
     SentStatus_SENDING = 10,
-
-    /**
-     * 发送失败。
+    
+    /*!
+     发送失败
      */
     SentStatus_FAILED = 20,
-
-    /**
-     * 已发送。
+    
+    /*!
+     已发送成功
      */
     SentStatus_SENT = 30,
-
-    /**
-     * 对方已接收。
+    
+    /*!
+     对方已接收
      */
     SentStatus_RECEIVED = 40,
-
-    /**
-     * 对方已读。
+    
+    /*!
+     对方已阅读
      */
     SentStatus_READ = 50,
-
-    /**
-     * 对方已销毁。
+    
+    /*!
+     对方已销毁
      */
     SentStatus_DESTROYED = 60
 };
 
+#pragma mark RCReceivedStatus - 消息的接收状态
 /*!
- @enum RCReceivedStatus 消息阅读状态
+ 消息的接收状态
  */
 typedef NS_ENUM(NSUInteger, RCReceivedStatus) {
-    /**
-     * 未读。
+    /*!
+     未读
      */
     ReceivedStatus_UNREAD = 0,
-    /**
-     * 已读。
+    
+    /*!
+     已读
      */
     ReceivedStatus_READ = 1,
-    /**
-     * 已收听（语音消息）。
+    
+    /*!
+     已听
+     
+     @discussion 仅用于语音消息
      */
     ReceivedStatus_LISTENED = 2,
-
-    /**
+    
+    /*!
      已下载
      */
     ReceivedStatus_DOWNLOADED = 4,
-
 };
 
-/**
- @enum   RCErrorCode 错误码
+#pragma mark RCMediaType - 消息内容中多媒体文件的类型
+/*!
+ 消息内容中多媒体文件的类型
  */
-typedef NS_ENUM(NSInteger, RCErrorCode) {
-    /** 未知错误 */
-    ERRORCODE_UNKNOWN = -1,
-    /** 超时错误 */
-    ERRORCODE_TIMEOUT = 5004,
-    /**
-     *  被对方加入黑名单时发送消息的状态
+typedef NS_ENUM(NSUInteger, RCMediaType) {
+    /*!
+     图片
      */
-    REJECTED_BY_BLACKLIST = 405,
-    /**
-     *  不在讨论组中。
-     */
-    NOT_IN_DISCUSSION = 21406,
-    /**
-     *  不在群组中。
-     */
-    NOT_IN_GROUP = 22406,
-    /**
-     *  在群组中被禁言。
-     */
-    FORBIDDEN_IN_GROUP = 22408,
-    /**
-     *  不在聊天室中。
-     */
-    NOT_IN_CHATROOM = 23406,
+    MediaType_IMAGE = 1,
     
-    /**
-     *  从服务器获取历史消息服务未开通
+    /*!
+     语音
      */
-    MSG_ROAMING_SERVICE_UNAVAILABLE = 33007,
+    MediaType_AUDIO,
+    
+    /*!
+     视频
+     */
+    MediaType_VIDEO,
+    
+    /*!
+     其他文件
+     */
+    MediaType_FILE = 100
 };
 
-/**
- @enum RCConversationNotificationStatus  会话通知状态
- */
-typedef NS_ENUM(NSUInteger, RCConversationNotificationStatus) {
-    /** 免打扰 */
-    DO_NOT_DISTURB = 0,
-    /** 接收新消息通知 */
-    NOTIFY = 1,
-};
-/**
- *  当前连接状态
- */
-typedef NS_ENUM(NSUInteger, RCCurrentConnectionStatus) {
-    /**
-     *  断开连接
-     */
-    RC_DISCONNECTED = 9,
-    /**
-     *  连接成功
-     */
-    RC_CONNECTED = 0,
-    /**
-     *  连接中
-     */
-    RC_CONNECTING = 2
-};
+#pragma mark - 公众服务相关
 
-/**
- *  查询方式
- */
-typedef NS_ENUM(NSUInteger, RCSearchType) {
-    /**
-     *  精确查询
-     */
-    RC_SEARCH_TYPE_EXACT = 0,
-    /**
-     *  模糊查询
-     */
-    RC_SEARCH_TYPE_FUZZY = 1,
-
-};
-
-/**
- *  公众服务号类型
+#pragma mark RCPublicServiceType - 公众服务账号类型
+/*!
+ 公众服务账号类型
  */
 typedef NS_ENUM(NSUInteger, RCPublicServiceType) {
-    /**
-     *  App服务号
+    /*!
+     应用内公众服务账号
      */
     RC_APP_PUBLIC_SERVICE = 7,
-    /**
-     *  公众服务号
+    
+    /*!
+     跨应用公众服务账号
      */
     RC_PUBLIC_SERVICE = 8,
-    
 };
 
-/**
- *  公众服务号菜单项类型
+#pragma mark RCPublicServiceMenuItemType - 公众服务菜单类型
+/*!
+ 公众服务菜单类型
  */
 typedef NS_ENUM(NSUInteger, RCPublicServiceMenuItemType) {
-    /**
-     *  公众账号菜单组，内含有子菜单
+    /*!
+     包含子菜单的一组菜单
      */
     RC_PUBLIC_SERVICE_MENU_ITEM_GROUP = 0,
-    /**
-     *  公众账号菜单项, 响应查看事件
+    
+    /*!
+     包含查看事件的菜单
      */
     RC_PUBLIC_SERVICE_MENU_ITEM_VIEW = 1,
-    /**
-     *  公众账号菜单项, 响应点击事件
+    
+    /*!
+     包含点击事件的菜单
      */
     RC_PUBLIC_SERVICE_MENU_ITEM_CLICK = 2,
+};
 
+#pragma mark RCSearchType - 公众服务查找匹配方式
+/*!
+ 公众服务查找匹配方式
+ */
+typedef NS_ENUM(NSUInteger, RCSearchType) {
+    /*!
+     精确匹配
+     */
+    RC_SEARCH_TYPE_EXACT = 0,
+    
+    /*!
+     模糊匹配
+     */
+    RC_SEARCH_TYPE_FUZZY = 1,
 };
 
 #endif

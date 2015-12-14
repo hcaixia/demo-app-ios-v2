@@ -21,7 +21,7 @@
 @interface RCDDiscussGroupSettingViewController ()<UIActionSheetDelegate>
 
 @property (nonatomic, copy) NSString* discussTitle;
-
+@property (nonatomic, copy) NSString* creatorId;
 @property (nonatomic, strong) NSMutableDictionary* members;
 
 @property (nonatomic)BOOL isOwner;
@@ -55,7 +55,7 @@
         __weak RCDSettingBaseViewController* weakSelf = self;
         [[RCIMClient sharedRCIMClient] getDiscussion:self.targetId success:^(RCDiscussion* discussion) {
             if (discussion) {
-                
+                _creatorId = discussion.creatorId;
                 if([[RCIMClient sharedRCIMClient].currentUserInfo.userId isEqualToString:discussion.creatorId])
                 {
                     [weakSelf disableDeleteMemberEvent:NO];
@@ -73,7 +73,7 @@
                 for (NSString *targetId in discussion.memberIdList) {
                         [RCDHTTPTOOL getUserInfoByUserID:targetId
                                                               completion:^(RCUserInfo *user) {
-                                                                  if (discussion.creatorId == user.userId) {
+                                                                  if ([discussion.creatorId isEqualToString: user.userId]) {
                                                                       [users insertObject:user atIndex:0];
                                                                   }else{
                                                                   
@@ -233,7 +233,19 @@
                         [newUsers addObject:user];
                     }
                 }
-                [self addUsers:_members.allValues];
+                //创建者第一个显示
+                RCUserInfo *creator = _members[_creatorId];
+                if(creator){
+                    [_members removeObjectForKey:_creatorId];
+                    NSMutableArray *users = [[NSMutableArray alloc]initWithArray: _members.allValues];
+                    [users insertObject:creator atIndex:0];
+                    [self addUsers:users];
+                    [_members setObject:creator forKey:creator.userId];
+                }else{
+                    NSMutableArray *users = [[NSMutableArray alloc]initWithArray: _members.allValues];
+                    [self addUsers:users];
+                }
+                
                 [self createDiscussionOrInvokeMemberWithSelectedUsers:selectedUsers];
 
             }
@@ -269,13 +281,13 @@
         }else if (ConversationType_PRIVATE == self.conversationType)
         {
             //create new discussion with the new invoked member.
-            NSUInteger _count = [selectedUsers count];
+            NSUInteger _count = [_members.allKeys count];
             if (_count > 1) {
                 
                 NSMutableString *discussionTitle = [NSMutableString string];
                 NSMutableArray *userIdList = [NSMutableArray new];
                 for (int i=0; i<_count; i++) {
-                    RCUserInfo *_userInfo = (RCUserInfo *)selectedUsers[i];
+                    RCUserInfo *_userInfo = (RCUserInfo *)_members.allValues[i];
                     [discussionTitle appendString:[NSString stringWithFormat:@"%@%@", _userInfo.name,@","]];
 
                     [userIdList addObject:_userInfo.userId];
