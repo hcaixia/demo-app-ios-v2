@@ -11,25 +11,26 @@
 
 #define Text_Message_Font_Size 16
 
-/**
- *  文本消息Cell
+/*!
+ 文本消息Cell
  */
 @interface RCTextMessageCell : RCMessageCell<RCAttributedLabelDelegate>
 
-/**
- *  消息显示Label
+/*!
+ 显示消息内容的Label
  */
 @property(strong, nonatomic) RCAttributedLabel *textLabel;
 
-/**
- *  消息背景
+/*!
+ 消息的背景View
  */
 @property(nonatomic, strong) UIImageView *bubbleBackgroundView;
 
-/**
- *  设置消息数据模型
- *
- *  @param model 消息数据模型
+/*!
+ 设置当前消息Cell的数据模型
+ 
+ @param model 消息Cell的数据模型
  */
 - (void)setDataModel:(RCMessageModel *)model;
+
 @end

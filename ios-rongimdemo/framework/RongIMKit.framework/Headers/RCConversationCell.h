@@ -10,7 +10,6 @@
 #define __RCConversationTableCell
 #import <UIKit/UIKit.h>
 #import "RCConversationBaseCell.h"
-
 #import "RCMessageBubbleTipView.h"
 #import "RCThemeDefine.h"
 
@@ -18,116 +17,124 @@
 @protocol RCConversationCellDelegate;
 @class RCloudImageView;
 
-/**
- *  会话Cell子类
+/*!
+ 会话Cell类
  */
 @interface RCConversationCell : RCConversationBaseCell
 
-/**
- *  会话Cell 回调
+/*!
+ 会话Cell的点击监听器
  */
 @property(weak, nonatomic) id<RCConversationCellDelegate> delegate;
 
-/**
- *  会话头像背景图
+/*!
+ Cell的头像背景View
  */
 @property(strong, nonatomic) UIView *headerImageViewBackgroundView;
 
-/**
- *  会话头像
+/*!
+ Cell头像View
  */
 @property(strong, nonatomic) RCloudImageView *headerImageView;
 
-/**
- *  会话title
+/*!
+ 会话的标题
  */
 @property(strong, nonatomic) UILabel *conversationTitle;
 
-/**
- *  会话内容label
+/*!
+ 显示最后一条内容的Label
  */
 @property(strong, nonatomic) UILabel *messageContentLabel;
 
-/**
- * 消息创建时间label
+/*!
+ 显示最后一条消息发送时间的Label
  */
 @property(strong, nonatomic) UILabel *messageCreatedTimeLabel;
 
-/**
- *  tip number视图
+/*!
+ 头像右上角未读消息提示的View
  */
 @property(strong, nonatomic) RCMessageBubbleTipView *bubbleTipView;
 
-/**
- *  会话状态视图
+/*!
+ 会话免打扰状态显示的View
  */
 @property(strong, nonatomic) UIImageView *conversationStatusImageView;
 
-/**
- *  会话头像样式
+/*!
+ Cell中显示的头像形状
+ 
+ @discussion 默认值为当前IMKit的全局设置值（RCIM中的globalConversationAvatarStyle）。
  */
 @property(nonatomic) RCUserAvatarStyle portraitStyle;
 
-/**
- *  是否通知状态
+/*!
+ 是否进行新消息提醒
+ 
+ @discussion 此属性默认会根据会话设置的提醒状态进行设置。
  */
 @property(nonatomic) BOOL enableNotification;
 
-/**
- *  会话有新消息通知的时候显示数字提醒，设置为NO,不显示数字只显示红点，默认是YES ,您可以在会话列表willDisplayConversationTableCell 方法里修改这个属性
+/*!
+ 会话中有未读消息时，是否在头像右上角的bubbleTipView中显示数字
+ 
+ @discussion 默认值为YES。
+ 您可以在RCConversationListViewController的willDisplayConversationTableCell:atIndexPath:回调中进行设置。
  */
 @property(nonatomic) BOOL isShowNotificationNumber;
 
-/**
- *  cell 背景颜色
+/*!
+ Cell的背景颜色
  */
 @property(nonatomic) UIColor *cellBackgroundColor;
 
-/**
- *  置顶cell 背景颜色
+/*!
+ 置顶Cell的背景颜色
  */
 @property(nonatomic) UIColor *topCellBackgroundColor;
 
-/**
- *  最后一条消息发送状态
+/*!
+ 显示最后一台消息发送状态的Label
  */
 @property(strong, nonatomic) UILabel *lastSendMessageStatusLabel;
 
-/**
- *  设置用户头像样式
- *
- *  @param portraitStyle 用户头像样式
+/*!
+ 设置Cell中显示的头像形状
+ 
+ @param portraitStyle 头像形状
+ 
+ @discussion 此设置仅当前会话Cell有效。
  */
 - (void)setHeaderImagePortraitStyle:(RCUserAvatarStyle)portraitStyle;
 
-/**
- *  设置会话数据模型
- *
- *  @param model 会话数据模型
+/*!
+ 设置当前会话Cell的数据模型
+ 
+ @param model 会话Cell的数据模型
  */
 - (void)setDataModel:(RCConversationModel *)model;
 
 @end
 
-/**
- *  会话Cell回调
+/*!
+ 会话Cell的点击监听器
  */
 @protocol RCConversationCellDelegate <NSObject>
 
-/**
- *  点击会话头像事件
- *
- *  @param model 会话的model
+/*!
+ 点击Cell头像的回调
+ 
+ @param model 会话Cell的数据模型
  */
 - (void)didTapCellPortrait:(RCConversationModel *)model;
 
-/**
- *  长按头像事件
- *
- *  @param model 会话的model
+/*!
+ 长按Cell头像的回调
+ 
+ @param model 会话Cell的数据模型
  */
 - (void)didLongPressCellPortrait:(RCConversationModel *)model;
 
 @end
-
 #endif

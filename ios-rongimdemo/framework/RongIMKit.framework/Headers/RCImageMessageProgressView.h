@@ -7,32 +7,37 @@
 //
 
 #import <UIKit/UIKit.h>
-/**
- *  RCImageMessageProgressView
+
+/*!
+ 图片消息进度的View
  */
 @interface RCImageMessageProgressView : UIView
 
-/**
- *  进度显示Label
+/*!
+ 显示进度的Label
  */
 @property(nonatomic, assign) UILabel *label;
 
-/**
- *  进度指示
+/*!
+ 进度指示的View
  */
 @property(nonatomic, strong) UIActivityIndicatorView *indicatorView;
-/**
- *  updateProgress
- *
- *  @param progress persent
+
+/*!
+ 更新进度
+ 
+ @param progress 进度值，0 <= progress <= 100
  */
 - (void)updateProgress:(NSInteger)progress;
-/**
- *  startAnimating
+
+/*!
+ 开始播放动画
  */
 - (void)startAnimating;
-/**
- *  stopAnimating
+
+/*!
+ 停止播放动画
  */
 - (void)stopAnimating;
+
 @end

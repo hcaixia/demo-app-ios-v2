@@ -7,35 +7,35 @@
 //
 
 #import "RCMessageCell.h"
-
-@class RCAttributedLabel;
+#import "RCAttributedLabel.h"
 
 #define RichContent_Title_Font_Size 16
 #define RichContent_Message_Font_Size 12
 #define RICH_CONTENT_THUMBNAIL_WIDTH 60
 #define RICH_CONTENT_THUMBNAIL_HIGHT 60
-/**
- *  富文本消息Cell
+
+/*!
+ 富文本（图文）消息Cell
  */
 @interface RCRichContentMessageCell : RCMessageCell
 
-/**
- *  消息背景
+/*!
+ 消息的背景View
  */
 @property(nonatomic, strong) UIImageView *bubbleBackgroundView;
 
-/**
- * 富文本图片
+/*!
+ 图片内容显示的View
  */
 @property(nonatomic, strong) RCloudImageView *richContentImageView;
 
-/**
- *  富文本内容
+/*!
+ 文本内容显示的Label
  */
 @property(nonatomic, strong) RCAttributedLabel *digestLabel;
 
-/**
- *  富文本标题
+/*!
+ 标题显示的Label
  */
 @property(nonatomic, strong) RCAttributedLabel *titleLabel;
 

@@ -11,19 +11,22 @@
 #import <UIKit/UIKit.h>
 #import "RCAttributedLabel.h"
 
-/**
- *  RCTipLabel
+/*!
+ 灰条提示Label
  */
 @interface RCTipLabel : RCAttributedLabel
-/**
- *  UIEdgeInsets
+
+/*!
+ 边缘间隙
  */
 @property(nonatomic, assign) UIEdgeInsets marginInsets;
-/**
- *  greyTipLabel
- *
- *  @return return greyTipLabel
+
+/*!
+ 初始化灰条提示Label对象
+ 
+ @return 灰条提示Label对象
  */
 + (instancetype)greyTipLabel;
+
 @end
 #endif

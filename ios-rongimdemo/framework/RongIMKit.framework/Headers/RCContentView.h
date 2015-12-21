@@ -7,18 +7,21 @@
 //
 
 #import <UIKit/UIKit.h>
-/**
- *  RCContentView
+
+/*!
+ 消息内容的View
  */
 @interface RCContentView : UIView
-/**
- *  eventBlock
+
+/*!
+ Frame发生变化的回调
  */
 @property(nonatomic, copy) void (^eventBlock)(CGRect frame);
-/**
- *  registerFrameChangedEvent
- *
- *  @param eventBlock event block
+
+/*!
+ 注册Frame发生变化的回调
+ 
+ @param eventBlock Frame发生变化的回调
  */
 - (void)registerFrameChangedEvent:(void (^)(CGRect frame))eventBlock;
 

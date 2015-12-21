@@ -210,6 +210,8 @@
 		E4E939D21AD6805E001E0AC6 /* RCDPersonDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E4E939D11AD6805E001E0AC6 /* RCDPersonDetailViewController.m */; };
 		E4FCD7C41AD69DFB00915650 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4FCD7C31AD69DFB00915650 /* ImageIO.framework */; };
 		F821B7F51BE75BFD00F0D14C /* libMobClickLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F821B7F41BE75BFD00F0D14C /* libMobClickLibrary.a */; };
+		F836AB0E1C2262C400A1A5D2 /* RCDTestMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = F836AB0D1C2262C400A1A5D2 /* RCDTestMessage.m */; };
+		F836AB151C226A7F00A1A5D2 /* RCDTestMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F836AB141C226A7F00A1A5D2 /* RCDTestMessageCell.m */; };
 		F8B7DBD21BAC189700E9F9BD /* libopencore-amrnb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F8B7DBD11BAC189700E9F9BD /* libopencore-amrnb.a */; };
 		F8B7DBD31BAC1A1C00E9F9BD /* libopencore-amrnb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F8B7DBD11BAC189700E9F9BD /* libopencore-amrnb.a */; };
 /* End PBXBuildFile section */
@@ -643,6 +645,10 @@
 		F821B7F21BE75BF500F0D14C /* MobClick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MobClick.h; path = UMAnalytics/MobClick.h; sourceTree = "<group>"; };
 		F821B7F31BE75BF500F0D14C /* MobClickSocialAnalytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MobClickSocialAnalytics.h; path = UMAnalytics/MobClickSocialAnalytics.h; sourceTree = "<group>"; };
 		F821B7F41BE75BFD00F0D14C /* libMobClickLibrary.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libMobClickLibrary.a; path = ../RCloudMessage/Utilities/UMAnalytics/libMobClickLibrary.a; sourceTree = "<group>"; };
+		F836AB0C1C2262C400A1A5D2 /* RCDTestMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RCDTestMessage.h; path = RCloudMessage/RCDTestMessage.h; sourceTree = SOURCE_ROOT; };
+		F836AB0D1C2262C400A1A5D2 /* RCDTestMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RCDTestMessage.m; path = RCloudMessage/RCDTestMessage.m; sourceTree = SOURCE_ROOT; };
+		F836AB131C226A7F00A1A5D2 /* RCDTestMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RCDTestMessageCell.h; path = RCloudMessage/RCDTestMessageCell.h; sourceTree = SOURCE_ROOT; };
+		F836AB141C226A7F00A1A5D2 /* RCDTestMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RCDTestMessageCell.m; path = RCloudMessage/RCDTestMessageCell.m; sourceTree = SOURCE_ROOT; };
 		F8B7DBD11BAC189700E9F9BD /* libopencore-amrnb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libopencore-amrnb.a"; path = "framework/libopencore-amrnb.a"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
@@ -993,6 +999,8 @@
 				E4E939931AD65BF4001E0AC6 /* RCDUserInfo.m */,
 				E4E939951AD65C15001E0AC6 /* RCDGroupInfo.h */,
 				E4E939961AD65C15001E0AC6 /* RCDGroupInfo.m */,
+				F836AB0C1C2262C400A1A5D2 /* RCDTestMessage.h */,
+				F836AB0D1C2262C400A1A5D2 /* RCDTestMessage.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -1000,6 +1008,7 @@
 		E4C4E7C81A09F87C00140067 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				F836AB0F1C226A3500A1A5D2 /* Cell */,
 				A677D6851B81EBB9007D5D90 /* RealTimeLocation */,
 				E4BFAE6F1A121A5E007165B1 /* RCDRCIMDataSource.h */,
 				E4BFAE701A121A5E007165B1 /* RCDRCIMDataSource.m */,
@@ -1460,6 +1469,15 @@
 			name = UMAnalytics;
 			sourceTree = "<group>";
 		};
+		F836AB0F1C226A3500A1A5D2 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				F836AB131C226A7F00A1A5D2 /* RCDTestMessageCell.h */,
+				F836AB141C226A7F00A1A5D2 /* RCDTestMessageCell.m */,
+			);
+			name = Cell;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1744,6 +1762,7 @@
 				E4E9394C1AD65A95001E0AC6 /* UIActivityIndicatorView+AFNetworking.m in Sources */,
 				E4E939811AD65B27001E0AC6 /* RCDDiscussSettingCell.m in Sources */,
 				E4E939BB1AD65D18001E0AC6 /* RCDChatRoomTableViewCell.m in Sources */,
+				F836AB0E1C2262C400A1A5D2 /* RCDTestMessage.m in Sources */,
 				E4E939471AD65A95001E0AC6 /* AFURLConnectionOperation.m in Sources */,
 				E4E939561AD65A95001E0AC6 /* JSONModelError.m in Sources */,
 				E4E9396C1AD65A95001E0AC6 /* UIButton+WebCache.m in Sources */,
@@ -1758,6 +1777,7 @@
 				E4BFAE6E1A121A22007165B1 /* RCDChatRoomViewController.m in Sources */,
 				E4E939621AD65A95001E0AC6 /* RCUnderlineTextField.m in Sources */,
 				E4E939681AD65A95001E0AC6 /* SDWebImageDownloader.m in Sources */,
+				F836AB151C226A7F00A1A5D2 /* RCDTestMessageCell.m in Sources */,
 				E4E939AC1AD65CC2001E0AC6 /* RCDSearchResultTableViewCell.m in Sources */,
 				E4E939511AD65A95001E0AC6 /* UIRefreshControl+AFNetworking.m in Sources */,
 				E4E939CB1AD65E1E001E0AC6 /* UIImage+RCImage.m in Sources */,

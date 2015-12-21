@@ -22,6 +22,9 @@
 #import "RCDPersonDetailViewController.h"
 #import "RCDAddFriendViewController.h"
 #import "RCDataBaseManager.h"
+#import "RCDTestMessage.h"
+#import "RCDTestMessageCell.h"
+
 
 @interface RCDChatViewController () <UIActionSheetDelegate, RCRealTimeLocationObserver, RealTimeLocationStatusViewDelegate, UIAlertViewDelegate, RCMessageCellDelegate>
 @property (nonatomic, weak)id<RCRealTimeLocationProxy> realTimeLocation;
@@ -81,6 +84,8 @@
 
 /******************实时地理位置共享**************/
     
+    ///注册自定义测试消息Cell
+    [self registerClass:[RCDTestMessageCell class] forCellWithReuseIdentifier:RCDTestMessageTypeIdentifier];
     
     [self notifyUpdateUnreadMessageCount];
     
@@ -159,7 +164,6 @@
         }];
         
     }
-    
 }
 
 - (void)leftBarButtonItemPressed:(id)sender {
@@ -306,6 +310,17 @@
       }
     };
     [self.navigationController pushViewController:settingVC animated:YES];
+  }else if (ConversationType_APPSERVICE == self.conversationType ||
+            ConversationType_PUBLICSERVICE == self.conversationType) {
+      RCPublicServiceProfile *serviceProfile = [[RCIMClient sharedRCIMClient]
+                                                getPublicServiceProfile:(RCPublicServiceType)self.conversationType
+                                                publicServiceId:self.targetId];
+      
+      RCPublicServiceProfileViewController *infoVC =
+      [[RCPublicServiceProfileViewController alloc] init];
+      infoVC.serviceProfile = serviceProfile;
+      infoVC.fromConversation = YES;
+      [self.navigationController pushViewController:infoVC animated:YES];
   }
 
 }
@@ -460,7 +475,14 @@
         [__cell setDataModel:model];
         cell = __cell;
         return cell;
-    } else  {
+    } else if ([messageContent isMemberOfClass:[RCDTestMessage class]]) {
+        RCDTestMessageCell *cell = [collectionView
+                                    dequeueReusableCellWithReuseIdentifier:RCDTestMessageTypeIdentifier
+                                    forIndexPath:indexPath];
+        [cell setDataModel:model];
+        [cell setDelegate:self];
+        return cell;
+    } else {
         return [super rcConversationCollectionView:collectionView cellForItemAtIndexPath:indexPath];
     }
 }
@@ -524,6 +546,8 @@
             return CGSizeMake(collectionView.frame.size.width, 66);
         }
         return CGSizeMake(collectionView.frame.size.width, 66);
+    } else if ([messageContent isMemberOfClass:[RCDTestMessage class]]) {
+        return CGSizeMake(collectionView.frame.size.width, [RCDTestMessageCell getBubbleBackgroundViewSize:(RCDTestMessage *)messageContent].height + 40);
     } else {
         return [super rcConversationCollectionView:collectionView layout:collectionViewLayout sizeForItemAtIndexPath:indexPath];
     }

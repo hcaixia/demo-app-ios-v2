@@ -14,10 +14,10 @@
 #import "RCChatSessionInputBarControl.h"
 #import "RCEmojiBoardView.h"
 #import "RCThemeDefine.h"
+#import "RCMessageBaseCell.h"
+#import "RCMessageModel.h"
 
-@class RCMessageBaseCell;
-@class RCMessageModel;
-
+///输入栏扩展输入的唯一标示
 #define PLUGIN_BOARD_ITEM_ALBUM_TAG    1001
 #define PLUGIN_BOARD_ITEM_CAMERA_TAG   1002
 #define PLUGIN_BOARD_ITEM_LOCATION_TAG 1003
@@ -25,415 +25,558 @@
 #define PLUGIN_BOARD_ITEM_VOIP_TAG     1004
 #endif
 
-/**
- *  RCConversationViewController
+/*!
+ 聊天界面类
  */
-@interface RCConversationViewController : RCBaseViewController
-/**
- *  targetId
+@interface RCConversationViewController: RCBaseViewController
+<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIGestureRecognizerDelegate, UIScrollViewDelegate>
+
+#pragma mark - 初始化
+
+/*!
+ 初始化聊天界面
+ 
+ @param conversationType 会话类型
+ @param targetId         目标会话ID
+ 
+ @return 聊天界面对象
  */
-@property(nonatomic, strong) NSString *targetId;
-/**
- *  targetName
- */
-@property(nonatomic, strong) NSString *userName;
-/**
- *  unReadMessage
- */
-@property(nonatomic, assign) NSInteger unReadMessage;
-/**
- *  新消息提示条，未读消息上限150条
- */
-@property(nonatomic, strong) UIButton *unReadButton;
-/**
- *  未读消息label，开发者可以按照需求修改未读消息数的显示
- */
-@property(nonatomic,strong) UILabel *unReadMessageLabel;
-/**
- *  会话类型
+- (id)initWithConversationType:(RCConversationType)conversationType
+                      targetId:(NSString *)targetId;
+
+#pragma mark - 会话属性
+
+/*!
+ 当前会话的会话类型
  */
 @property(nonatomic) RCConversationType conversationType;
-/**
- *  展示会话的CollectionView控件，可以修改这个控件的属性比如背景
+
+/*!
+ 目标会话ID
  */
-@property(nonatomic, strong) UICollectionView *conversationMessageCollectionView;
-/**
- *  会话数据存储数组
+@property(nonatomic, strong) NSString *targetId;
+
+/*!
+ 当前的用户名称（已废弃，请勿使用）
+ 
+ @warning **已废弃，请勿使用。**
+ */
+@property(nonatomic, strong) NSString *userName
+__deprecated_msg("已废弃，请勿使用。");
+
+#pragma mark - 聊天界面属性
+
+/*!
+ 聊天内容的消息Cell数据模型的数据源
+ 
+ @discussion 数据源中存放的元素为消息Cell的数据模型，即RCMessageModel对象。
  */
 @property(nonatomic, strong) NSMutableArray *conversationDataRepository;
-/**
- *  UICollectionViewFlowLayout
+
+/*!
+ 聊天界面的CollectionView
+ */
+@property(nonatomic, strong) UICollectionView *conversationMessageCollectionView;
+
+/*!
+ 聊天界面的CollectionView Layout
  */
 @property(nonatomic, strong) UICollectionViewFlowLayout *customFlowLayout;
-/**
- *  输入工具栏
- */
-@property(nonatomic, strong) RCChatSessionInputBarControl *chatSessionInputBarControl;
-/**
- *  功能板
- */
-@property(nonatomic, strong) RCPluginBoardView *pluginBoardView;
-/**
- *  emoji
- */
-@property(nonatomic, strong) RCEmojiBoardView *emojiBoardView;
 
-/**
- *  new msg label
- */
-@property(nonatomic, strong) UILabel *unReadNewMessageLabel;
+#pragma mark - 未读消息数
 
-/**
- *  默认No，如果Yes，开启右上角和右下角未读个数icon。
- */
-@property(nonatomic, assign) BOOL enableUnreadMessageIcon;
-
-/**
- *  默认No,如果Yes, 当消息不在最下方时显示 右下角新消息数图标
- */
-@property(nonatomic, assign) BOOL enableNewComingMessageIcon;
-
-/**
- *  是否开启语音消息连读，设置为Yes，播放语音消息时 会连续播放下面所有收到的未读语音消息
- */
-@property(nonatomic, assign) BOOL enableContinuousReadUnreadVoice;
-
-/**
- * 是否允许保存新拍照片到本地系统
- */
-@property(nonatomic, assign) BOOL enableSaveNewPhotoToLocalSystem;
-
-/**
- * 用于查询会话列表未读消息数目显示在返回按钮之上。调用notifyUpdateUnreadMessageCount更新返回图标和设置Target
- * 设置了此值需要在继承会话VC，并重写leftBarButtonItemPressed函数，参考demo中RCDChatViewController
- * 值为想要统计未读数的会话类型Array。
+#pragma mark 导航栏返回按钮中的未读消息数提示
+/*!
+ 需要统计未读数的会话类型数组（在导航栏的返回按钮中显示）
+ 
+ @discussion 此属性表明在导航栏的返回按钮中需要统计显示哪部分的会话类型的未读数。
+ (需要将RCConversationType转为NSNumber构建Array)
  */
 @property(nonatomic, strong) NSArray *displayConversationTypeArray;
 
-/**
- * 是否显示发送者的名字，YES显示，NO不显示，默认是YES。
- * 有些场景可能用得到，比如单聊时，不需要显示发送者的名字。
+/*!
+ 更新导航栏返回按钮中显示的未读消息数
+ 
+ @discussion 如果您重写此方法，需要注意调用super。
  */
-@property(nonatomic) BOOL displayUserNameInCell;
+- (void)notifyUpdateUnreadMessageCount;
 
-/**
- * 默认输入框类型，值为文本或者语言，默认为文本。
+#pragma mark 右上角的未读消息数提示
+/*!
+ 当收到的消息超过一个屏幕时，进入会话之后，是否在右上角提示上方存在的未读消息数
+ 
+ @discussion 默认值为NO。
+ 开启该提示功能之后，当一个会话收到大量消息时（操作一个屏幕能显示的内容），
+ 进入该会话后，会在右上角提示用户上方存在的未读消息数，用户点击该提醒按钮，会跳转到最开始的未读消息。
+ */
+@property(nonatomic, assign) BOOL enableUnreadMessageIcon;
+
+/*!
+ 右上角提示的未读消息数
+ 
+ @discussion 右上角未读消息数支持的最大值是150。
+ */
+@property(nonatomic, assign) NSInteger unReadMessage;
+
+/*!
+ 右上角未读消息数提示的Label
+ */
+@property(nonatomic,strong) UILabel *unReadMessageLabel;
+
+/*!
+ 右上角未读消息数提示的按钮
+ */
+@property(nonatomic, strong) UIButton *unReadButton;
+
+#pragma mark 右下角的未读消息数提示
+/*!
+ 当前阅读区域的下方收到消息时，是否在聊天界面的右下角提示下方存在未读消息
+ 
+ @discussion 默认值为NO。
+ 开启该提示功能之后，当聊天界面滑动到最下方时，此会话中收到消息会自动更新；
+ 当用户停留在上方某个区域阅读时，此会话收到消息时，会在右下角显示未读消息提示，而不会自动滚动到最下方，
+ 用户点击该提醒按钮，会滚动到最下方。
+ */
+@property(nonatomic, assign) BOOL enableNewComingMessageIcon;
+
+/*!
+ 右下角未读消息数提示的Label
+ */
+@property(nonatomic, strong) UILabel *unReadNewMessageLabel;
+
+
+#pragma mark - 输入工具栏
+
+/*!
+ 聊天界面下方的输入工具栏
+ */
+@property(nonatomic, strong) RCChatSessionInputBarControl *chatSessionInputBarControl;
+
+/*!
+ 输入框的默认输入模式
+ 
+ @discussion 默认值为RCChatSessionInputBarInputText，即文本输入模式。
  */
 @property(nonatomic) RCChatSessionInputBarInputType defaultInputType;
 
 /*!
- 如果当前会话类型为聊天室时，进入聊天室所获取的历史消息数量，默认值为10。
+ 输入扩展功能板View
+ */
+@property(nonatomic, strong) RCPluginBoardView *pluginBoardView;
+
+/*!
+ 表情View
+ */
+@property(nonatomic, strong) RCEmojiBoardView *emojiBoardView;
+
+/*!
+ 扩展功能板的点击回调
  
- @discussion 需要在viewDidLoad之前进行设置。
- -1表示不获取任何历史消息，0表示不特殊设置而使用SDK默认的设置（默认为获取10条）。
- 1<=messageCount<=50时为具体获取的消息数量，最大值为50。
+ @param pluginBoardView 输入扩展功能板View
+ @param tag             输入扩展功能(Item)的唯一标示
  */
-@property(nonatomic, assign) int defaultHistoryMessageCountOfChatRoom;
+-(void)pluginBoardView:(RCPluginBoardView*)pluginBoardView
+    clickedItemWithTag:(NSInteger)tag;
 
-/**
- *  init method
- *
- *  @param conversationType conversationType
- *  @param targetId         targetId
- *
- *  @return converation
+/*!
+ 输入框中内容发生变化的回调
+ 
+ @param inputTextView 文本输入框
+ @param range         当前操作的范围
+ @param text          插入的文本
  */
-- (id)initWithConversationType:(RCConversationType)conversationType targetId:(NSString *)targetId;
+- (void)inputTextView:(UITextView *)inputTextView shouldChangeTextInRange:(NSRange)range
+      replacementText:(NSString *)text;
 
-/**
- *  设置头像样式,请在viewDidLoad之前调用
- *
- *  @param avatarStyle avatarStyle
+#pragma mark - 显示设置
+
+/*!
+ 设置在聊天界面中显示的头像形状，矩形或者圆形（全局有效）
+ 
+ @param avatarStyle 显示的头像形状
+ 
+ @discussion 默认值为矩形，即RC_USER_AVATAR_RECTANGLE。
+ 请在viewDidLoad之前设置，此设置在SDK中全局有效。
  */
 - (void)setMessageAvatarStyle:(RCUserAvatarStyle)avatarStyle;
-/**
- *  设置头像大小,请在viewDidLoad之前调用
- *
- *  @param size size
+
+/*!
+ 设置聊天界面中显示的头像大小（全局有效），高度必须大于或者等于36
+ 
+ @param size 显示的头像形状
+ 
+ @discussion 默认值为46*46。
+ 请在viewDidLoad之前设置，此设置在SDK中全局有效。
  */
 - (void)setMessagePortraitSize:(CGSize)size;
 
-/**
- *  注册消息Cell
- *
- *  @param cellClass  cellClass
- *  @param identifier identifier
+/*!
+ 收到的消息是否显示发送者的名字
+ 
+ @discussion 默认值为YES。
+ 您可以针对群聊、聊天室、单聊等不同场景，自己定制是否显示发送方的名字。
  */
-- (void)registerClass:(Class)cellClass forCellWithReuseIdentifier:(NSString *)identifier;
-/**
- *  在会话界面删除消息并更新会话界面
- *
- *  @param model  被删除消息的model
+@property(nonatomic) BOOL displayUserNameInCell;
+
+/*!
+ 设置进入聊天室需要获取的历史消息数量（仅在当前会话为聊天室时生效）
+ 
+ @discussion 此属性需要在viewDidLoad之前进行设置。
+ -1表示不获取任何历史消息，0表示不特殊设置而使用SDK默认的设置（默认为获取10条），0<messageCount<=50为具体获取的消息数量,最大值为50。
  */
-- (void)deleteMessage:(RCMessageModel *)model;
-/**
-*  append消息到datasource中，并显示。可以用在插入提醒消息的场景。
-*
-*  @param message 消息
-*/
-- (void)appendAndDisplayMessage:(RCMessage *)message;
-/**
- *  滚动到list的最底部
- *
- *  @param animated 是否动画
+@property(nonatomic, assign) int defaultHistoryMessageCountOfChatRoom;
+
+#pragma mark - 界面操作
+
+/*!
+ 滚动到列表最下方
+ 
+ @param animated 是否开启动画效果
  */
 - (void)scrollToBottomAnimated:(BOOL)animated;
-#pragma mark override
-/**
- *  返回方法，如果继承，请重写该方法，并且优先调用父类方法;
- *
- *  @param sender 发送者
+
+/*!
+ 返回前一个页面的方法
+ 
+ @param sender 事件发起者
+ 
+ @discussion 如果您重写此方法，请注意调用super。
  */
 - (void)leftBarButtonItemPressed:(id)sender;
 
-#pragma mark override
-/**
- *  将要显示会话消息，可以修改RCMessageBaseCell的头像形状，添加自定定义的UI修饰，建议不要修改里面label 文字的大小，cell 大小是根据文字来计算的，如果修改大小可能造成cell 显示出现问题
- *
- *  @param cell      cell
- *  @param indexPath indexPath
- */
-- (void)willDisplayConversationTableCell:(RCMessageBaseCell *)cell atIndexPath:(NSIndexPath *)indexPath;
+#pragma mark - 消息操作
 
-#pragma mark override
-/**
- *  重写方法实现自定义消息的显示
- *
- *  @param collectionView collectionView
- *  @param indexPath      indexPath
- *
- *  @return RCMessageTemplateCell
+#pragma mark 发送消息
+/*!
+ 发送消息(除图片消息外的所有消息)
+ 
+ @param messageContent 消息的内容
+ @param pushContent    接收方离线时需要显示的远程推送内容
+ 
+ @discussion 当接收方离线并允许远程推送时，会收到远程推送。
+ 远程推送中包含两部分内容，一是pushContent，用于显示；二是pushData，用于携带不显示的数据。
+ 
+ SDK内置的消息类型，如果您将pushContent置为nil，会使用默认的推送格式进行远程推送。
+ 自定义类型的消息，需要您自己设置pushContent来定义推送内容，否则将不会进行远程推送。
+ 
+ 如果您需要设置发送的pushData，可以使用RCIM的发送消息接口。
+ */
+- (void)sendMessage:(RCMessageContent *)messageContent
+        pushContent:(NSString *)pushContent;
+
+/*!
+ 发送图片消息
+ 
+ @param imageMessage 消息的内容
+ @param pushContent  接收方离线时需要显示的远程推送内容
+ 
+ @discussion 当接收方离线并允许远程推送时，会收到远程推送。
+ 远程推送中包含两部分内容，一是pushContent，用于显示；二是pushData，用于携带不显示的数据。
+ 
+ SDK内置的消息类型，如果您将pushContent置为nil，会使用默认的推送格式进行远程推送。
+ 自定义类型的消息，需要您自己设置pushContent来定义推送内容，否则将不会进行远程推送。
+ 
+ 如果您需要设置发送的pushData，可以使用RCIM的发送图片消息接口。
+ */
+- (void)sendImageMessage:(RCImageMessage *)imageMessage
+             pushContent:(NSString *)pushContent;
+
+/*!
+ 重新发送消息
+ 
+ @param messageContent 消息的内容
+ 
+ @discussion 发送消息失败，点击小红点时，会将本地存储的原消息实体删除，会回调此接口将消息内容重新发送。
+ 如果您需要重写此接口，请注意调用super。
+ */
+- (void)resendMessage:(RCMessageContent *)messageContent;
+
+/*!
+ 发送图片消息(上传图片到App指定的服务器)
+ 
+ @param imageMessage 消息的内容
+ @param pushContent  接收方离线时需要显示的远程推送内容
+ @param appUpload    是否上传到App指定的服务器
+ 
+ @discussion 此方法用于上传图片到您自己的服务器，此时需要将appUpload设置为YES，并实现uploadImage:uploadListener:回调。
+ 需要您在该回调中上传图片，并通过uploadListener监听通知SDK同步显示上传进度。
+ 
+ 如果appUpload设置为NO，将会和普通图片消息的发送一致，上传到融云默认的服务器并发送。
+ */
+- (void)sendImageMessage:(RCImageMessage *)imageMessage
+             pushContent:(NSString *)pushContent
+               appUpload:(BOOL)appUpload;
+
+/*!
+ 上传图片到App指定的服务器的回调
+ 
+ @param message        图片消息的实体
+ @param uploadListener SDK图片上传进度监听
+ 
+ @discussion 如果您通过sendImageMessage:pushContent:appUpload:接口发送图片消息，则必须实现此回调。
+ 您需要在此回调中通过uploadListener将上传图片的进度和结果通知SDK，SDK会根据这些信息，自动更新UI。
+ */
+- (void)uploadImage:(RCMessage *)message
+     uploadListener:(RCUploadImageStatusListener *)uploadListener;
+
+#pragma mark 插入消息
+/*!
+ 在聊天界面中插入一条消息
+ 
+ @param message 消息实体
+ 
+ @discussion 通过此方法插入一条消息，会将消息实体对应的内容Model插入数据源中，并更新UI。
+ 但是不会将消息保存到数据库，下次进入聊天界面将不会再显示。
+ */
+- (void)appendAndDisplayMessage:(RCMessage *)message;
+
+#pragma mark 删除消息
+/*!
+ 删除消息并更新UI
+ 
+ @param model 消息Cell的数据模型
+ */
+- (void)deleteMessage:(RCMessageModel *)model;
+
+#pragma mark - 消息操作的回调
+
+/*!
+ 准备发送消息的回调
+ 
+ @param messageCotent 消息内容
+ 
+ @return 修改后的消息内容
+ 
+ @discussion 此回调在消息准备向外发送时会回调，您可以在此回调中对消息内容进行过滤和修改等操作。
+ 如果此回调的返回值不为nil，SDK会对外发送返回的消息内容。
+ */
+- (RCMessageContent *)willSendMessage:(RCMessageContent *)messageCotent;
+
+/*!
+ 发送消息完成的回调
+ 
+ @param stauts          发送状态，0表示成功，非0表示失败
+ @param messageCotent   消息内容
+ */
+- (void)didSendMessage:(NSInteger)stauts
+               content:(RCMessageContent *)messageCotent;
+
+/*!
+ 即将在聊天界面插入消息的回调
+ 
+ @param message 消息实体
+ @return        修改后的消息实体
+ 
+ @discussion 此回调在消息准备插入数据源的时候会回调，您可以在此回调中对消息进行过滤和修改操作。
+ 如果此回调的返回值不为nil，SDK会将返回消息实体对应的消息Cell数据模型插入数据源，并在聊天界面中显示。
+ */
+- (RCMessage *)willAppendAndDisplayMessage:(RCMessage *)message;
+
+/*!
+ 即将显示消息Cell的回调
+ 
+ @param cell        消息Cell
+ @param indexPath   该Cell对应的消息Cell数据模型在数据源中的索引值
+ 
+ @discussion 您可以在此回调中修改Cell的显示和某些属性。
+ */
+- (void)willDisplayMessageCell:(RCMessageBaseCell *)cell
+                   atIndexPath:(NSIndexPath *)indexPath;
+
+/*!
+ 即将显示消息Cell的回调（已废弃，请勿使用）
+ 
+ @param cell        消息Cell
+ @param indexPath   该Cell对应的消息Cell数据模型在数据源中的索引值
+ 
+ @discussion 您可以在此回调中修改Cell的显示和某些属性。
+ 此接口已废弃，您可以无缝使用willDisplayMessageCell:atIndexPath:代替，功能和使用完全一致。
+ 
+ @warning **已废弃，请勿使用。**
+ */
+- (void)willDisplayConversationTableCell:(RCMessageBaseCell *)cell
+                             atIndexPath:(NSIndexPath *)indexPath
+__deprecated_msg("已废弃，请勿使用。");
+
+#pragma mark - 自定义消息
+
+/*!
+ 注册自定义消息的Cell
+ 
+ @param cellClass   自定义消息的类，该自定义消息需要继承于RCMessageContent
+ @param identifier  自定义消息Cell的唯一标示符
+ 
+ @discussion 聊天界面在显示时需要通过identifier唯一标示来进行Cell重用，以提高性能。
+ 我们建议您在identifier中添加前缀，请勿使用"rc"前缀的字符串，以免与融云内置消息的Cell冲突。
+ */
+- (void)registerClass:(Class)cellClass forCellWithReuseIdentifier:(NSString *)identifier;
+
+/*!
+ 自定义消息Cell显示的回调
+ 
+ @param collectionView  当前CollectionView
+ @param indexPath       该Cell对应的消息Cell数据模型在数据源中的索引值
+ @return                自定义消息需要显示的Cell
+ 
+ @discussion 自定义消息如果需要显示，则必须先通过RCIM的registerMessageType:注册该自定义消息类型，
+ 并在聊天界面中通过registerClass:forCellWithReuseIdentifier:注册该自定义消息的Cell，否则将此回调将不会被调用。
  */
 - (RCMessageBaseCell *)rcConversationCollectionView:(UICollectionView *)collectionView
                              cellForItemAtIndexPath:(NSIndexPath *)indexPath;
 
-#pragma mark override
-/**
- *  重写方法实现自定义消息的显示的高度
- *
- *  @param collectionView       collectionView
- *  @param collectionViewLayout collectionViewLayout
- *  @param indexPath            indexPath
- *
- *  @return 显示的高度
+/*!
+ 自定义消息Cell显示的回调
+ 
+ @param collectionView          当前CollectionView
+ @param collectionViewLayout    当前CollectionView Layout
+ @param indexPath               该Cell对应的消息Cell数据模型在数据源中的索引值
+ @return                        自定义消息Cell需要显示的高度
+ 
+ @discussion 自定义消息如果需要显示，则必须先通过RCIM的registerMessageType:注册该自定义消息类型，
+ 并在聊天界面中通过registerClass:forCellWithReuseIdentifier:注册该自定义消息的Cell，否则将此回调将不会被调用。
  */
 - (CGSize)rcConversationCollectionView:(UICollectionView *)collectionView
                                 layout:(UICollectionViewLayout *)collectionViewLayout
                 sizeForItemAtIndexPath:(NSIndexPath *)indexPath;
 
-
-#pragma mark override
-/**
- *  重写方法实现未注册的消息的显示
- *  如：新版本增加了某种自定义消息，但是老版本不能识别，开发者可以在旧版本中预先自定义这种未识别的消息的显示
- *  需要设置RCIM showUnkownMessage属性
- *
- *  @param collectionView collectionView
- *  @param indexPath      indexPath
- *
- *  @return RCMessageTemplateCell
+/*!
+ 未注册消息Cell显示的回调
+ 
+ @param collectionView  当前CollectionView
+ @param indexPath       该Cell对应的消息Cell数据模型在数据源中的索引值
+ @return                未注册消息需要显示的Cell
+ 
+ @discussion 未注册消息的显示主要用于App未雨绸缪的新旧版本兼容，在使用此回调之前，需要将RCIM的showUnkownMessage设置为YES。
+ 比如，您App在新版本迭代中增加了某种自定义消息，当已经发布的旧版本不能识别，开发者可以在旧版本中预先定义好这些不能识别的消息的显示，
+ 如提示当前版本不支持，引导用户升级等。
  */
 - (RCMessageBaseCell *)rcUnkownConversationCollectionView:(UICollectionView *)collectionView
-                             cellForItemAtIndexPath:(NSIndexPath *)indexPath;
+                                   cellForItemAtIndexPath:(NSIndexPath *)indexPath;
 
-#pragma mark override
-/**
- *  重写方法实现未注册的消息的显示的高度
- *  如：新版本增加了某种自定义消息，但是老版本不能识别，开发者可以在旧版本中预先自定义这种未识别的消息的显示
- *  需要设置RCIM showUnkownMessage属性
- *
- *  @param collectionView       collectionView
- *  @param collectionViewLayout collectionViewLayout
- *  @param indexPath            indexPath
- *
- *  @return 显示的高度
+/*!
+ 未注册消息Cell显示的回调
+ 
+ @param collectionView          当前CollectionView
+ @param collectionViewLayout    当前CollectionView Layout
+ @param indexPath               该Cell对应的消息Cell数据模型在数据源中的索引值
+ @return                        未注册消息Cell需要显示的高度
+ 
+ @discussion 未注册消息的显示主要用于App未雨绸缪的新旧版本兼容，在使用此回调之前，需要将RCIM的showUnkownMessage设置为YES。
+ 比如，您App在新版本迭代中增加了某种自定义消息，当已经发布的旧版本不能识别，开发者可以在旧版本中预先定义好这些不能识别的消息的显示，
+ 如提示当前版本不支持，引导用户升级等。
  */
 - (CGSize)rcUnkownConversationCollectionView:(UICollectionView *)collectionView
-                                layout:(UICollectionViewLayout *)collectionViewLayout
-                sizeForItemAtIndexPath:(NSIndexPath *)indexPath;
+                                      layout:(UICollectionViewLayout *)collectionViewLayout
+                      sizeForItemAtIndexPath:(NSIndexPath *)indexPath;
 
-#pragma mark override
-/**
- *  点击消息内容
- *
- *  @param model 数据
+#pragma mark - 点击事件回调
+
+/*!
+ 点击Cell中的消息内容的回调
+ 
+ @param model 消息Cell的数据模型
+ 
+ @discussion SDK在此点击事件中，针对SDK中自带的图片、语音、位置等消息有默认的处理，如查看、播放等。
+ 您在重写此回调时，如果想保留SDK原有的功能，需要注意调用super。
  */
 - (void)didTapMessageCell:(RCMessageModel *)model;
 
-/**
- *  点击消息内容中的链接，此事件不会再触发didTapMessageCell
- *
- *  @param url   Url String
- *  @param model 数据
+/*!
+ 长按Cell中的消息内容的回调
+ 
+ @param model 消息Cell的数据模型
+ @param view  长按区域的View
+ 
+ @discussion SDK在此长按事件中，会默认展示菜单。
+ 您在重写此回调时，如果想保留SDK原有的功能，需要注意调用super。
  */
-- (void)didTapUrlInMessageCell:(NSString *)url model:(RCMessageModel *)model;
+- (void)didLongTouchMessageCell:(RCMessageModel *)model
+                         inView:(UIView *)view;
 
-/**
- *  点击消息内容中的电话号码，此事件不会再触发didTapMessageCell
- *
- *  @param phoneNumber Phone number
- *  @param model       数据
+/*!
+ 点击Cell中URL的回调
+ 
+ @param url   点击的URL
+ @param model 消息Cell的数据模型
+*/
+- (void)didTapUrlInMessageCell:(NSString *)url
+                         model:(RCMessageModel *)model;
+
+/*!
+ 点击Cell中电话号码的回调
+ 
+ @param phoneNumber 点击的电话号码
+ @param model       消息Cell的数据模型
  */
-- (void)didTapPhoneNumberInMessageCell:(NSString *)phoneNumber model:(RCMessageModel *)model;
-#pragma mark override
-/**
- *  点击头像事件
- *
- *  @param userId 用户的ID
+- (void)didTapPhoneNumberInMessageCell:(NSString *)phoneNumber
+                                 model:(RCMessageModel *)model;
+
+/*!
+ 点击Cell中头像的回调
+ 
+ @param userId  点击头像对应的用户ID
  */
 - (void)didTapCellPortrait:(NSString *)userId;
 
-/**
- *  长按头像事件
- *
- *  @param userId 用户的ID
+/*!
+ 长按Cell中头像的回调
+ 
+ @param userId  头像对应的用户ID
  */
 - (void)didLongPressCellPortrait:(NSString *)userId;
 
-#pragma mark override
-/**
- *  长按消息内容
- *
- *  @param model 数据
- *  @param view 长按视图区域
- */
-- (void)didLongTouchMessageCell:(RCMessageModel *)model inView:(UIView *)view;
+#pragma mark - 语音消息、图片消息、位置消息显示与操作
 
-#pragma mark override
-/**
- *  打开大图。开发者可以重写，自己下载并且展示图片。默认使用内置controller
- *
- *  @param model 图片消息model
- */
-- (void)presentImagePreviewController:(RCMessageModel *)model;
-
-#pragma mark override
-/**
- *  打开地理位置。开发者可以重写，自己根据经纬度打开地图显示位置。默认使用内置地图
- *
- *  @param locationMessageContent 位置消息
- */
-- (void)presentLocationViewController:(RCLocationMessage *)locationMessageContent;
-
-#pragma mark override
-/**
- *  重写方法，过滤消息或者修改消息
- *
- *  @param messageCotent 消息内容
- *
- *  @return 返回消息内容
- */
-- (RCMessageContent *)willSendMessage:(RCMessageContent *)messageCotent;
-
-#pragma mark override
-/**
- *  重写方法，消息发送之后需要append到datasource中，并显示。在这之前调用，可以修改要显示的消息。
- *
- *  @param message 消息
- *
- *  @return 返回消息
- */
-- (RCMessage *)willAppendAndDisplayMessage:(RCMessage *)message;
-
-#pragma mark override
-/**
- *  重写方法，消息发送完成触发
- *
- *  @param stauts        0,成功，非0失败
- *  @param messageCotent 消息内容
- */
-- (void)didSendMessage:(NSInteger)stauts content:(RCMessageContent *)messageCotent;
-
-/**
- *  发送消息
- *
- *  @param messageContent 消息
- *
- *  @param pushContent push显示内容
- */
-- (void)sendMessage:(RCMessageContent *)messageContent pushContent:(NSString *)pushContent;
-
-/**
- *  发送图片消息，此方法会先上传图片到融云指定的图片服务器，再发送消息。
- *
- *  @param imageMessage 消息
- *
- *  @param pushContent push显示内容
- */
-- (void)sendImageMessage:(RCImageMessage *)imageMessage pushContent:(NSString *)pushContent;
-
-/**
- *  重新发送消息。
- *  消息发送失败后，会有小红点，点击小红点进行重发消息。此时已经删除掉数据库信息和列表信息，重写此函数来发送消息，详情请见demo
- *
- *  @param messageContent 消息
- */
-- (void)resendMessage:(RCMessageContent *)messageContent;
-
-/**
- *  上传图片到应用的图片服务器。
- *  当应用使用非融云的图片服务器时，请调用sendImageMessage:pushContent:appUpload:这个接口发送图片消息，appUpload设置为YES。融云会自动调用到本函数进行图片上传。
- *  应用需要overwrite此函数，在这个函数里上传并把进度和结果告诉融云，融云用来更新UI和发送消息。
- *
- *  @param message        保持下来的图片消息
- *
- *  @param uploadListener 上传状态回调。请务必在恰当的时机调用updateBlock和successBlock来通知融云状态
- */
-- (void)uploadImage:(RCMessage *)message uploadListener:(RCUploadImageStatusListener *)uploadListener;
-
-/**
- *  发送图片消息，
- *
- *  @param imageMessage 图片消息
- *
- *  @param pushContent push显示内容
- *
- *  @param appUpload  为NO上传图片到融云指定的图片服务器。为YES时融云会回调uploadImage:uploadListener:函数，请务必实现该方法，并在该方法中上传图片，然后通过uploadListener通知融云上传进度和结果。
- */
-- (void)sendImageMessage:(RCImageMessage *)imageMessage pushContent:(NSString *)pushContent appUpload:(BOOL)appUpload;
-#pragma mark override
-/**
- *  发送新拍照的图片成功之后，如果需要保存到本地系统，则重写该方法
- *
- *  @param newImage 待保存的图片
- */
-- (void)saveNewPhotoToLocalSystemAfterSendingSuccess:(UIImage *)newImage;
-
-#pragma mark override
-/**
- 语音消息开始录音
+/*!
+ 开始录制语音消息
  */
 - (void)onBeginRecordEvent;
 
-#pragma mark override
-/**
- 语音消息录音结束
+/*!
+ 结束录制语音消息
  */
 - (void)onEndRecordEvent;
 
-#pragma mark override
-/**
- *  点击pluginBoardView上item响应事件
- *
- *  @param pluginBoardView 功能模板
- *  @param tag             标记
+/*!
+ 是否开启语音消息连续播放
+ 
+ @discussion 如果设置为YES，在点击播放语音消息时，会将下面所有未播放过的语音消息依次播放。
  */
--(void)pluginBoardView:(RCPluginBoardView*)pluginBoardView clickedItemWithTag:(NSInteger)tag;
-#pragma mark override
-/**
- *  重写方法，通知更新未读消息数目，用于导航显示未读消息，当收到别的会话消息的时候，会触发一次。
+@property(nonatomic, assign) BOOL enableContinuousReadUnreadVoice;
+
+/*!
+ 查看图片消息中的图片
+ 
+ @param model   消息Cell的数据模型
+ 
+ @discussion SDK在此方法中会默认调用RCImagePreviewController下载并展示图片。
  */
-- (void)notifyUpdateUnreadMessageCount;
-#pragma mark override
-/**
- *  重写方法，输入框监控方法
- *
- *  @param inputTextView inputTextView 输入框
- *  @param range         range 范围
- *  @param text          text 文本
+- (void)presentImagePreviewController:(RCMessageModel *)model;
+
+/*!
+ 发送新拍照的图片完成之后，是否将图片在本地另行存储。
+ 
+ @discussion 如果设置为YES，您需要在saveNewPhotoToLocalSystemAfterSendingSuccess:回调中自行保存。
  */
-- (void)inputTextView:(UITextView *)inputTextView
-    shouldChangeTextInRange:(NSRange)range
-            replacementText:(NSString *)text;
+@property(nonatomic, assign) BOOL enableSaveNewPhotoToLocalSystem;
+
+/*!
+ 发送新拍照的图片完成之后，将图片在本地另行存储的回调
+ 
+ @param newImage    图片
+ 
+ @discussion 您可以在此回调中按照您的需求，将图片另行保存或执行其他操作。
+ */
+- (void)saveNewPhotoToLocalSystemAfterSendingSuccess:(UIImage *)newImage;
+
+/*!
+ 查看位置信息的位置详情
+ 
+ @param locationMessageContent  点击的位置消息
+ 
+ @discussion SDK在此方法中会默认调用RCLocationViewController在地图中展示位置。
+ */
+- (void)presentLocationViewController:(RCLocationMessage *)locationMessageContent;
+
 @end
 #endif

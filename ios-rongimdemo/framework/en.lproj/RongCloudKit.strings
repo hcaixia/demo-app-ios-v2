@@ -99,6 +99,9 @@
 "NOT_IN_CHATROOM"="You are not in current chat room";
 "Message rejected"="Your message have sent out, but rejected by the receiver";
 "AccessRightTitle"="no access right";
+"ForbiddenInChatRoom"="You were forbidden to send message in current chatroom.";
+"KickedFromChatRoom"="You were kicked from current chatroom.";
+"JoinChatRoomRejected"="You were forbidden to join current chatroom, please contact customer service.";
 "JoinChatRoomFailed"="Join chat room failed";
 "Connecting..."="Connecting...";
 "FromFriendInvitation"="From %@ friend invitation";

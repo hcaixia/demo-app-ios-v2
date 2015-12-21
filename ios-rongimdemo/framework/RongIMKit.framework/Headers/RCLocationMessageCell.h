@@ -9,18 +9,18 @@
 #import "RCMessageCell.h"
 #import "RCImageMessageProgressView.h"
 
-/**
- *  位置消息Cell
+/*!
+ 位置消息Cell
  */
 @interface RCLocationMessageCell : RCMessageCell
 
-/**
- *  位置图片
+/*!
+ 当前位置在地图中的概览图
  */
 @property(nonatomic, strong) UIImageView *pictureView;
 
-/**
- *  位置内容Label
+/*!
+ 显示位置名称的Label
  */
 @property(nonatomic, strong) UILabel *locationNameLabel;
 

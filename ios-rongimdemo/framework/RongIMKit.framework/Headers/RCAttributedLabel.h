@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-
-
 /**
  *  RCAttributedLabelClickedTextInfo
  */
@@ -24,6 +22,7 @@
 @property(nonatomic, strong) NSString *text;
 
 @end
+
 /**
  *  RCAttributedDataSource
  */
@@ -47,7 +46,6 @@
 
 @end
 
-
 @protocol RCAttributedLabelDelegate;
 
 /**
@@ -59,6 +57,7 @@
  *  text
  */
 @property (nonatomic, copy) id text;
+
 @end
 /**
  *  RCAttributedLabel
@@ -84,8 +83,8 @@
  *
  */
 @property(nonatomic, strong) NSMutableArray *attributedStrings;
-/**
- * 设置点击事件，比如打开超链接等等
+/*!
+ 点击回调
  */
 @property (nonatomic, assign) id <RCAttributedLabelDelegate> delegate;
 /**
@@ -129,38 +128,35 @@
 
 @end
 
-
-/**
- *  RCAttributedLabelDelegate
+/*!
+ RCAttributedLabel点击回调
  */
 @protocol RCAttributedLabelDelegate <NSObject>
-
-///-----------------------------------
-/// @name Responding to Link Selection
-///-----------------------------------
 @optional
 
-/**
- *  打开超链接
- *  @param label The label whose link was selected.
- *  @param url The URL for the selected link.
+/*!
+ 点击URL的回调
+ 
+ @param label 当前Label
+ @param url   点击的URL
  */
 - (void)attributedLabel:(RCAttributedLabel *)label didSelectLinkWithURL:(NSURL *)url;
 
-/**
- *  打开电话类型
- *  @param label The label whose link was selected.
- *  @param phoneNumber The phone number for the selected link.
+/*!
+ 点击电话号码的回调
+ 
+ @param label       当前Label
+ @param phoneNumber 点击的URL
  */
 - (void)attributedLabel:(RCAttributedLabel *)label didSelectLinkWithPhoneNumber:(NSString *)phoneNumber;
 
-/**
- *  响应点击事件
- *  @param label The label whose link was selected.
- *  @param content content.
+/*!
+ 点击Label的回调
+ 
+ @param label   当前Label
+ @param content 点击的内容
  */
 - (void)attributedLabel:(RCAttributedLabel *)label didTapLabel:(NSString *)content;
-
 
 @end
 

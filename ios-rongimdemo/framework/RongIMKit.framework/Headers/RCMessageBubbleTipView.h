@@ -8,112 +8,128 @@
 
 #import <UIKit/UIKit.h>
 
-/**
- *  Bubble tip 位置
+/*!
+ 角标的位置
  */
 typedef NS_ENUM(NSInteger, RCMessageBubbleTipViewAlignment) {
-    /**
-     *  左上
+    /*!
+     左上
      */
     RC_MESSAGE_BUBBLE_TIP_VIEW_ALIGNMENT_TOP_LEFT,
-    /**
-     *  右上
+    /*!
+     右上
      */
     RC_MESSAGE_BUBBLE_TIP_VIEW_ALIGNMENT_TOP_RIGHT,
-    /**
-     *  中上
+    /*!
+     中上
      */
     RC_MESSAGE_BUBBLE_TIP_VIEW_ALIGNMENT_TOP_CENTER,
-    /**
-     *  左中
+    /*!
+     左中
      */
     RC_MESSAGE_BUBBLE_TIP_VIEW_ALIGNMENT_CENTER_LEFT,
-    /**
-     *  右中
+    /*!
+     右中
      */
     RC_MESSAGE_BUBBLE_TIP_VIEW_ALIGNMENT_CENTER_RIGHT,
-    /**
-     *  左下
+    /*!
+     左下
      */
     RC_MESSAGE_BUBBLE_TIP_VIEW_ALIGNMENT_BOTTOM_LEFT,
-    /**
-     *  右下
+    /*!
+     右下
      */
     RC_MESSAGE_BUBBLE_TIP_VIEW_ALIGNMENT_BOTTOM_RIGHT,
-    /**
-     *  中下
+    /*!
+     中下
      */
     RC_MESSAGE_BUBBLE_TIP_VIEW_ALIGNMENT_BOTTOM_CENTER,
-    /**
-     *  正中
+    /*!
+     正中
      */
     RC_MESSAGE_BUBBLE_TIP_VIEW_ALIGNMENT_CENTER
 };
 
-/**
- *  RCMessageBubbleTipView
+/*!
+ 消息未读提示角标的View
  */
 @interface RCMessageBubbleTipView : UIView
-/**
- *  bubbleTipText
+
+/*!
+ 角标显示的文本
  */
 @property(nonatomic, copy) NSString *bubbleTipText;
 
-#pragma mark - Customization
-/**
- *  RCMessageBubbleTipViewAlignment
+/*!
+ 角标的位置
+ 
+ @discussion 默认值为RC_MESSAGE_BUBBLE_TIP_VIEW_ALIGNMENT_TOP_RIGHT，即右上。
  */
 @property(nonatomic, assign) RCMessageBubbleTipViewAlignment bubbleTipAlignment;
-/**
- *  bubbleTipTextColor
+
+/*!
+ 角标文本的颜色
  */
 @property(nonatomic, strong) UIColor *bubbleTipTextColor;
-/**
- *  bubbleTipTextShadowOffset
+
+/*!
+ 角标文本的阴影值
  */
 @property(nonatomic, assign) CGSize bubbleTipTextShadowOffset;
-/**
- *  bubbleTipTextShadowColor
+
+/*!
+ 角标文本的阴影颜色
  */
 @property(nonatomic, strong) UIColor *bubbleTipTextShadowColor;
-/**
- *  bubbleTipTextFont
+
+/*!
+ 角标文本的字体
  */
 @property(nonatomic, strong) UIFont *bubbleTipTextFont;
-/**
- *  bubbleTipBackgroundColor
+
+/*!
+ 角标的背景颜色
  */
 @property(nonatomic, strong) UIColor *bubbleTipBackgroundColor;
-/**
- *  bubbleTipBackgroundColor
+
+/*!
+ 角标的覆盖颜色（已废弃，请勿使用）
+ 
+ @warning **已废弃，请勿使用。**
  */
-@property(nonatomic, strong) UIColor *bubbleTipOverlayColor;
-/**
- *  bubbleTipPositionAdjustment
+@property(nonatomic, strong) UIColor *bubbleTipOverlayColor
+__deprecated_msg("已废弃，请勿使用。");
+
+/*!
+ 角标View偏移的Rect
  */
 @property(nonatomic, assign) CGPoint bubbleTipPositionAdjustment;
-/**
- *  frameToPositionInRelationWith
+
+/*!
+ 角标依附于的View Rect
  */
 @property(nonatomic, assign) CGRect frameToPositionInRelationWith;
 
-/**
- *  是否新消息数字
+/*!
+ 角标是否显示数字
+ 
+ @discussion 如果为NO，会显示红点，不显示具体数字。
  */
 @property(nonatomic) BOOL isShowNotificationNumber;
-/**
- *  initWithParentView
- *
- *  @param parentView parentView
- *  @param alignment  alignment
- *
- *  @return return RCMessageBubbleTipView
+
+/*!
+ 初始化角标View
+ 
+ @param parentView  角标依附于的View
+ @param alignment   角标的位置
+ @return            角标View对象
  */
 - (instancetype)initWithParentView:(UIView *)parentView alignment:(RCMessageBubbleTipViewAlignment)alignment;
-/**
- *  setBubbleTipNumber
- *
- *  @param msgCount msgCount
+
+/*!
+ 设置角标的值
+ 
+ @param msgCount 角标值
  */
 - (void)setBubbleTipNumber:(int)msgCount;
 

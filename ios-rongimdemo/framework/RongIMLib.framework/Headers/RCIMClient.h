@@ -478,7 +478,6 @@ __deprecated_msg("已废弃，请勿使用。");
  并将RCImageMessage中的imageUrl字段设置为上传成功的URL地址，然后使用RCIMClient的
  sendMessage:targetId:content:pushContent:pushData:success:error:方法
  或sendMessage:targetId:content:pushContent:success:error:方法进行发送，不要使用此方法。
- 
  */
 - (RCMessage *)sendImageMessage:(RCConversationType)conversationType
                        targetId:(NSString *)targetId
@@ -667,10 +666,10 @@ __deprecated_msg("已废弃，请勿使用。");
                            error:(void (^)(RCErrorCode status))errorBlock;
 
 /*!
- 获取消息的发送时间
+ 获取消息的发送时间（Unix时间戳、毫秒）
  
  @param messageId   消息ID
- @return            消息的发送时间
+ @return            消息的发送时间（Unix时间戳、毫秒）
  */
 -(long long)getMessageSendTime:(long)messageId;
 

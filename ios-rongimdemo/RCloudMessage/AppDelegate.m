@@ -21,6 +21,7 @@
 #import "RCDHttpTool.h"
 #import "AFHttpTool.h"
 #import "RCDataBaseManager.h"
+#import "RCDTestMessage.h"
 #import "MobClick.h"
 
 //#define RONGCLOUD_IM_APPKEY @"e0x9wycfx7flq" //offline key
@@ -73,6 +74,9 @@
     [[RCIM sharedRCIM] initWithAppKey:RONGCLOUD_IM_APPKEY];
   }
   
+  // 注册自定义测试消息
+  [[RCIM sharedRCIM] registerMessageType:[RCDTestMessage class]];
+    
   //设置会话列表头像和会话界面头像
 
   [[RCIM sharedRCIM] setConnectionStatusDelegate:self];

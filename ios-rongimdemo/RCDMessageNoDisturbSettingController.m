@@ -22,6 +22,7 @@
     [super viewWillAppear:animated];
     [self getNoDisturbStaus];
     [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:1] animated:YES scrollPosition:UITableViewScrollPositionTop];
+    _indexPath = [NSIndexPath indexPathForRow:0 inSection:1];
 }
 
 - (void)getNoDisturbStaus{

@@ -61,12 +61,12 @@
 @property(nonatomic, assign) RCSentStatus sentStatus;
 
 /*!
- 消息的接收时间
+ 消息的接收时间（Unix时间戳、毫秒）
  */
 @property(nonatomic, assign) long long receivedTime;
 
 /*!
- 消息的发送时间
+ 消息的发送时间（Unix时间戳、毫秒）
  */
 @property(nonatomic, assign) long long sentTime;
 

@@ -7,42 +7,43 @@
 //
 
 #import "RCMessageCell.h"
+
 #define kAudioBubbleMinWidth 60
 #define kAudioBubbleMaxWidth 180
 #define kBubbleBackgroundViewHeight 36
 
-/**
- *  停止播放通知Key
+/*!
+ 语音消息播放停止的Notification
  */
 UIKIT_EXTERN NSString *const kNotificationStopVoicePlayer;
 
-/**
- *  语音消息Cell
+/*!
+ 语音消息Cell
  */
 @interface RCVoiceMessageCell : RCMessageCell
 
-/**
- *  消息背景
+/*!
+ 消息的背景View
  */
 @property(nonatomic, strong) UIImageView *bubbleBackgroundView;
 
-/**
- *  播放声音视图
+/*!
+ 语音播放的View
  */
 @property(nonatomic, strong) UIImageView *playVoiceView;
 
-/**
- *  语音未读标记视图
+/*!
+ 显示是否已播放的View
  */
 @property(nonatomic, strong) UIImageView *voiceUnreadTagView;
 
-/**
- *  语音时长视图
+/*!
+ 显示语音时长的Label
  */
 @property(nonatomic, strong) UILabel *voiceDurationLabel;
 
-/**
- *  播放语音
+/*!
+ 播放语音
  */
 - (void)playVoice;
 

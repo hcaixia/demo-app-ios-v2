@@ -77,18 +77,18 @@
 /*!
  消息内容摘要的协议
  
- @discussion 用于在会话列表中显示消息的摘要。
+ @discussion 用于在会话列表和本地通知中显示消息的摘要。
  */
 @protocol RCMessageContentView
 @optional
 
 /*!
- 返回在会话列表中显示的消息内容摘要
+ 返回在会话列表和本地通知中显示的消息内容摘要
  
- @return 会话列表中显示的消息内容摘要
+ @return 会话列表和本地通知中显示的消息内容摘要
  
- @discussion 当会话的最后一条消息为自定义消息时，需要在会话列表展现消息内容的摘要。
- 如果您使用IMKit，实现了此接口，RCConversationListViewController会在会话列表中显示该内容摘要。
+ @discussion 如果您使用IMKit，当会话的最后一条消息为自定义消息时，需要通过此方法获取在会话列表展现的内容摘要；
+ 当App在后台收到消息时，需要通过此方法获取在本地通知中展现的内容摘要。
  */
 - (NSString *)conversationDigest;
 

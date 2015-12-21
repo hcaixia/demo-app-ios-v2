@@ -55,3 +55,4 @@ FOUNDATION_EXPORT const unsigned char RongIMKitVersionString[];
 #import <RongIMKit/RCMessageBubbleTipView.h>
 #import <RongIMKit/RCSettingViewController.h>
 #import <RongIMKit/RCConversationSettingTableViewHeader.h>
+#import <RongIMKit/RCPublicServiceProfileViewController.h>

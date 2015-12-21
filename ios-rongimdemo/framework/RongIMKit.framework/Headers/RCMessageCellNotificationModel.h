@@ -10,7 +10,7 @@
 #define __RCMessageCellNotificationModel
 #import <UIKit/UIKit.h>
 
-// Status for sending message.
+// 消息Cell需要更新的状态名
 UIKIT_EXTERN NSString *const CONVERSATION_CELL_STATUS_SEND_BEGIN;
 UIKIT_EXTERN NSString *const CONVERSATION_CELL_STATUS_SEND_FAILED;
 UIKIT_EXTERN NSString *const CONVERSATION_CELL_STATUS_SEND_SUCCESS;
@@ -20,20 +20,23 @@ UIKIT_EXTERN NSString *const CONVERSATION_CELL_STATUS_SEND_HASREAD;
 
 #import <Foundation/Foundation.h>
 
-/**
- *  用于向cell发送通知的数据模型
+/*!
+ 消息Cell状态更新通知的数据模型
  */
 @interface RCMessageCellNotificationModel : NSObject
-/**
- *  messageId
+
+/*!
+ 消息ID
  */
 @property(nonatomic) long messageId;
-/**
- *  actionName
+
+/*!
+ 更新的状态名
  */
 @property(strong, nonatomic) NSString *actionName;
-/**
- *  progress
+
+/*!
+ 进度
  */
 @property(nonatomic) NSInteger progress;
 

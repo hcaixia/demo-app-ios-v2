@@ -9,63 +9,69 @@
 #import <UIKit/UIKit.h>
 #import "RCConversationSettingTableViewController.h"
 
-/**
- *  定义block
- *
- *  @param isSuccess isSuccess description
+/*!
+ 清空会话中所有消息的回调
+ 
+ @param isSuccess 是否删除会话中的所有消息
  */
 typedef void (^clearHistory)(BOOL isSuccess);
 
-/**
- *  RCSettingViewController
+/*!
+ 会话设置的ViewController
  */
 @interface RCSettingViewController : RCConversationSettingTableViewController
 
-/**
- *  targetId
- */
+/*!
+当前会话的目标会话ID
+*/
 @property(nonatomic, copy) NSString *targetId;
 
-/**
- *  conversationType
+/*!
+ 当前会话的会话类型
  */
 @property(nonatomic, assign) RCConversationType conversationType;
 
-/**
- *  清除历史消息后，会话界面调用roload data
+/*!
+ 清空会话中所有消息的回调
+ 
+ @discussion 在清空消息的的回调中,您需要调用聊天界面的reloadData进行刷新。
  */
 @property(nonatomic, copy) clearHistory clearHistoryCompletion;
 
-/**
- *  默认实现的三个cell
+/*!
+ 默认的Cell
+ 
+ @discussion 内置置顶聊天、新消息通、清除消息记录三个cell
  */
 @property(nonatomic, readonly, strong) NSArray *defaultCells;
 
-/**
- *  UIActionSheet
+/*!
+ 清空会话中所有消息的ActionSheet
  */
 @property(nonatomic, readonly, strong) UIActionSheet *clearMsgHistoryActionSheet;
 
-/**
- *  clearHistoryMessage
+/*!
+ 清空会话中所有消息
  */
 - (void)clearHistoryMessage;
 
-/**
- *  override 如果显示headerView时，最后一个+号点击事件
- *
- *  @param settingTableViewHeader  settingTableViewHeader description
- *  @param indexPathOfSelectedItem indexPathOfSelectedItem description
- *  @param users                   所有在headerView中的user
+/*!
+ 点击Item（用户头像或加减号）的回调
+ 
+ @param settingTableViewHeader  当前会话设置界面
+ @param indexPathOfSelectedItem 点击的Item索引值
+ @param users                   当前的用户信息RCUserInfo列表
  */
 - (void)settingTableViewHeader:(RCConversationSettingTableViewHeader *)settingTableViewHeader
        indexPathOfSelectedItem:(NSIndexPath *)indexPathOfSelectedItem
             allTheSeletedUsers:(NSArray *)users;
 
-/**
- *  override 如果显示headerView时，所点击的-号事件
- *
- *  @param indexPath 所点击左上角-号的索引
+/*!
+ 点击删除用户的回调
+ 
+ @param indexPath 当前删除的用户的头像索引值
+ 
+ @discussion 点击头像左上角的删除按钮时的回调。
  */
 - (void)deleteTipButtonClicked:(NSIndexPath *)indexPath;
 

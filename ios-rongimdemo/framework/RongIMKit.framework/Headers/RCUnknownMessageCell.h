@@ -7,26 +7,26 @@
 //
 
 #ifndef __RCUnknownMessageCell
-
 #define __RCUnknownMessageCell
 
 #import <RongIMKit/RongIMKit.h>
 
-/**
- *  未知消息Cell
+/*!
+ 未知消息Cell
  */
 @interface RCUnknownMessageCell : RCMessageBaseCell
 
-/**
- *  消息TipLabel
+/*!
+ 提示的Label
  */
 @property(strong, nonatomic) RCTipLabel *messageLabel;
 
-/**
- *  设置消息数据模型
- *
- *  @param model 消息数据模型
+/*!
+ 设置当前消息Cell的数据模型
+ 
+ @param model 消息Cell的数据模型
  */
 - (void)setDataModel:(RCMessageModel *)model;
+
 @end
 #endif

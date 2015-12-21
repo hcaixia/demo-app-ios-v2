@@ -8,13 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
-/**
- *  此类为解决UIMenuController的显示问题
+/*!
+ 文本输入框的View
  */
 @interface RCTextView : UITextView
 
-/**
- *  disableActionMenu为No时只显示当前响应对象的动作菜单，为YES时，则不显示任何菜单
+/*!
+ 是否关闭菜单
+ 
+ @discussion 默认值为NO。
  */
 @property(nonatomic, assign) BOOL disableActionMenu;
 

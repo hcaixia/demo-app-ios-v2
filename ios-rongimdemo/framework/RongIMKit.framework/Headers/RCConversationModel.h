@@ -11,127 +11,148 @@
 
 #import <Foundation/Foundation.h>
 #import <RongIMLib/RongIMLib.h>
-/**
- *  RCConversationModelType
+
+/*!
+ 会话Cell数据模型的显示类型
  */
 typedef NS_ENUM(NSUInteger, RCConversationModelType) {
-    /**
-     *  RC_CONVERSATION_MODEL_TYPE_NORMAL
+    /*!
+     默认显示
      */
     RC_CONVERSATION_MODEL_TYPE_NORMAL = 1,
-    /**
-     *  RC_CONVERSATION_MODEL_TYPE_COLLECTION
+    /*!
+     聚合显示
      */
     RC_CONVERSATION_MODEL_TYPE_COLLECTION = 2,
-    /**
-     *  RC_CONVERSATION_MODEL_TYPE_CUSTOMIZATION
+    /*!
+     用户自定义的会话显示
      */
     RC_CONVERSATION_MODEL_TYPE_CUSTOMIZATION = 3,
-    /**
-     *  RC_CONVERSATION_MODEL_TYPE_PUBLIC_SERVICE
+    /*!
+     公众服务的会话显示
      */
-    RC_CONVERSATION_MODEL_TYPE_PUBLIC_SERVICE = 4,
-
+    RC_CONVERSATION_MODEL_TYPE_PUBLIC_SERVICE = 4
 };
 
-/**
- *  RCConversationModel
+/*!
+ 会话Cell的数据模型类
  */
 @interface RCConversationModel : NSObject
 
-/**
- *  conversationModelType
+/*!
+ 会话Cell数据模型的显示类型
  */
 @property(nonatomic) RCConversationModelType conversationModelType;
 
-/**
- *  用户自定义数据
+/*!
+ 用户自定义的扩展数据
  */
 @property(nonatomic, strong) id extend;
 
 /*!
- 会话类型 @see RCConversationType
+ 会话类型
  */
 @property(nonatomic, assign) RCConversationType conversationType;
+
 /*!
- 会话 Id
+ 目标会话ID
  */
 @property(nonatomic, strong) NSString *targetId;
+
 /*!
- 会话名称
+ 会话的标题
  */
 @property(nonatomic, strong) NSString *conversationTitle;
+
 /*!
- 会话中未读消息数
+ 会话中的未读消息数
  */
 @property(nonatomic, assign) NSInteger unreadMessageCount;
+
 /*!
  当前会话是否置顶
  */
 @property(nonatomic, assign) BOOL isTop;
+
 /*!
- 消息阅读状态 @see RCReceivedStatus
+ 会话中最后一条消息的接收状态
  */
 @property(nonatomic, assign) RCReceivedStatus receivedStatus;
+
 /*!
- 消息发送状态 @see RCSentStatus
+ 会话中最后一条消息的发送状态
  */
 @property(nonatomic, assign) RCSentStatus sentStatus;
+
 /*!
- 消息接收时间
+ 会话中最后一条消息的接收时间（Unix时间戳、毫秒）
  */
 @property(nonatomic, assign) long long receivedTime;
+
 /*!
- 消息发送时间
+ 会话中最后一条消息的发送时间（Unix时间戳、毫秒）
  */
 @property(nonatomic, assign) long long sentTime;
+
 /*!
- 消息草稿，尚未发送的消息内容
+ 会话中存在的草稿
  */
 @property(nonatomic, strong) NSString *draft;
+
 /*!
- 会话实体名
+ 会话中最后一条消息的类型名
  */
 @property(nonatomic, strong) NSString *objectName;
+
 /*!
- 发送消息用户Id
+ 会话中最后一条消息的发送者用户ID
  */
 @property(nonatomic, strong) NSString *senderUserId;
+
 /*!
- 发送消息用户名
+ 会话中最后一条消息的发送者的用户名（已废弃，请勿使用）
+ 
+ @warning **已废弃，请勿使用。**
  */
-@property(nonatomic, strong) NSString *senderUserName;
+@property(nonatomic, strong) NSString *senderUserName
+__deprecated_msg("已废弃，请勿使用。");
+
 /*!
- 当前会话最近一条消息Id
+ 会话中最后一条消息的消息ID
  */
 @property(nonatomic, assign) long lastestMessageId;
+
 /*!
- 当前会话最近一条消息实体
+ 会话中最后一条消息的内容
  */
 @property(nonatomic, strong) RCMessageContent *lastestMessage;
-/**
- *  会话的json数据
+
+/*!
+ 会话中最后一条消息的json Dictionary
  */
 @property(nonatomic, strong) NSDictionary *jsonDict;
 
-/**
- *  用户使用的初始化方法
- *
- *  @param conversationModelType conversationModelType
- *  @param extend                extend
- *
- *  @return model
+/*!
+ 初始化会话Cell的数据模型（已废弃，请勿使用）
+ 
+ @param conversationModelType 会话Cell数据模型的显示类型
+ @param extend                用户自定义的扩展数据
+ 
+ @return 会话Cell的数据模型对象
+ 
+ @warning **已废弃，请勿使用。**
  */
-- (id)init:(RCConversationModelType)conversationModelType exntend:(id)extend;
+- (id)init:(RCConversationModelType)conversationModelType exntend:(id)extend
+__deprecated_msg("已废弃，请勿使用。");
 
-/**
- *  SDK本身使用的初始化方法
- *
- *  @param conversationModelType conversationModelType
- *  @param conversation          conversation
- *  @param extend                extend
- *
- *  @return model
+/*!
+ 初始化会话显示数据模型
+ 
+ @param conversationModelType 会话Cell数据模型的显示类型
+ @param conversation          会话
+ @param extend                用户自定义的扩展数据
+ 
+ @return 会话Cell的数据模型对象
  */
 - (id)init:(RCConversationModelType)conversationModelType conversation:(RCConversation *)conversation extend:(id)extend;
 

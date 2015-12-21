@@ -12,50 +12,87 @@
 #import "RCConversationModel.h"
 #import "RCBaseViewController.h"
 #import "RCThemeDefine.h"
+#import "RCConversationBaseCell.h"
 
-@class RCConversationBaseCell;
 @class RCNetworkIndicatorView;
-/**
- *  RCConversationListViewController
- */
-@interface RCConversationListViewController : RCBaseViewController
-/**
- *  conversationListDataSource
- */
-@property(nonatomic, strong) NSMutableArray *conversationListDataSource;
 
-/**
- *  conversationListTableView
+/*!
+ 会话列表界面类
  */
-@property(nonatomic, strong) UITableView *conversationListTableView;
-/**
- *  show network status view
+@interface RCConversationListViewController: RCBaseViewController <UITableViewDataSource, UITableViewDelegate>
+
+#pragma mark - 初始化
+
+/*!
+ 初始化会话列表
+ 
+ @param displayConversationTypeArray        列表中需要显示的会话类型数组(需要将RCConversationType转为NSNumber构建Array)
+ @param collectionConversationTypeArray     列表中需要聚合为一条显示的会话类型数组(需要将RCConversationType转为NSNumber构建Array)
+ @return                                    会话列表对象
+ 
+ @discussion 聚合为一条显示指的是，将指定会话类型的所有会话在会话列表中聚合显示成一条，点击进入会显示该会话类型的所有会话列表。
  */
-@property(nonatomic, strong) RCNetworkIndicatorView *networkIndicatorView;
-/**
- *  displayConversationTypeArray
+- (id)initWithDisplayConversationTypes:(NSArray *)displayConversationTypeArray
+            collectionConversationType:(NSArray *)collectionConversationTypeArray;
+
+#pragma mark - 设置需要显示和聚合显示的会话类型
+
+/*!
+ 列表中需要显示的会话类型数组
+ 
+ @discussion 数组中的元素为RCConversationType转换的NSNumber
  */
 @property(nonatomic, strong) NSArray *displayConversationTypeArray;
-/**
- *  collectionConversationTypeArray
+
+/*!
+ 列表中需要聚合为一条显示的会话类型数组
+ 
+ @discussion 数组中的元素为RCConversationType转换的NSNumber
  */
 @property(nonatomic, strong) NSArray *collectionConversationTypeArray;
 
-/**
- *  标记是否进入聚合类型的viewcontroller
+/*!
+ 设置在列表中需要显示的会话类型
+ 
+ @param conversationTypeArray   列表中需要显示的会话类型数组(需要将RCConversationType转为NSNumber构建Array)
+ */
+- (void)setDisplayConversationTypes:(NSArray *)conversationTypeArray;
+
+/*!
+ 设置在列表中需要聚合为一条显示的会话类型
+ 
+ @param conversationTypeArray   列表中需要聚合为一条显示的会话类型数组(需要将RCConversationType转为NSNumber构建Array)
+ */
+- (void)setCollectionConversationType:(NSArray *)conversationTypeArray;
+
+/*!
+ 当前会话列表是否为从聚合Cell点击进入的子会话列表
+ 
+ @discussion 您在点击会话列表中的聚合Cell跳转到到子会话列表时，需要将此属性设置为YES。
  */
 @property(nonatomic, assign) BOOL isEnteredToCollectionViewController;
 
-/**
- *  是否显示网络断开时提示
+#pragma mark - 列表属性
+/*!
+ 列表中会话数据模型的数据源
+ 
+ @discussion 数据源中存放的元素为会话Cell的数据模型，即RCConversationModel对象。
+ */
+@property(nonatomic, strong) NSMutableArray *conversationListDataSource;
+
+/*!
+ 列表的TableView
+ */
+@property(nonatomic, strong) UITableView *conversationListTableView;
+
+#pragma mark - 网络连接变化状态提醒
+
+/*!
+ 当网络断开时，是否在Tabel View Header中显示网络连接不可用的提示。
+ 
+ @discussion 默认值为YES。
  */
 @property(nonatomic, assign) BOOL isShowNetworkIndicatorView;
-
-
-/**
- *  会话列表为空时的背景视图
- */
-@property(nonatomic, strong) UIView *emptyConversationView;
 
 /**
  *  是否在navigatorBar上显示连接中的状态。默认是关闭。
@@ -64,180 +101,211 @@
 @property(nonatomic) BOOL showConnectingStatusOnNavigatorBar;
 
 /**
- *  cell 背景颜色
- */
-@property(nonatomic) UIColor *cellBackgroundColor;
-
-/**
- *  置顶cell 背景颜色
- */
-@property(nonatomic) UIColor *topCellBackgroundColor;
-
-/**
- *  在navigationbar上更新连接状态
- */
-- (void)updateConnectionStatusOnNavigatorBar;
-
-/**
  *  在navigationbar上更标题View。如果showConnectingStatusOnNavigatorBar为YES，请实现该方法来设置title
  */
 - (void)setNavigationItemTitleView;
-/**
- *  init
- *
- *  @param conversationTypeArray1 需要显示的会话类型，NSNumber类型。
- *  @param conversationTypeArray2 需要聚合显示的会话类型，NSNumber类型。
- *
- *  @return conversationList
- */
-- (id)initWithDisplayConversationTypes:(NSArray *)conversationTypeArray1
-            collectionConversationType:(NSArray *)conversationTypeArray2;
 
-/**
- *  设置需要显示的会话类型
- *
- *  @param conversationTypeArray 会话类型，NSNumber类型。
+/*!
+ 提示网络连接不可用的View
  */
-- (void)setDisplayConversationTypes:(NSArray *)conversationTypeArray;
-/**
- *  设置需要聚合显示的会话类型
- *
- *  @param conversationTypeArray 会话类型，NSNumber类型。
- */
-- (void)setCollectionConversationType:(NSArray *)conversationTypeArray;
+@property(nonatomic, strong) RCNetworkIndicatorView *networkIndicatorView;
 
-/**
- *  设置头像样式,请在viewDidLoad之前调用
- *
- *  @param avatarStyle avatarStyle
+/*!
+ 当showConnectingStatusOnNavigatorBar设置为YES时，连接状态变化时更新NavigationBar的回调
+ 
+ @discussion SDK在此方法中有默认的处理，如果您在子类中需要重写此方法，请注意调用super。
+ */
+- (void)updateConnectionStatusOnNavigatorBar;
+
+#pragma mark - 显示相关
+
+/*!
+ 列表为空时显示的View
+ */
+@property(nonatomic, strong) UIView *emptyConversationView;
+
+/*!
+ Cell的背景颜色
+ */
+@property(nonatomic) UIColor *cellBackgroundColor;
+
+/*!
+ 置顶会话的Cell背景颜色
+ */
+@property(nonatomic) UIColor *topCellBackgroundColor;
+
+/*!
+ 设置在会话列表中显示的头像形状，矩形或者圆形（全局有效）
+ 
+ @param avatarStyle 显示的头像形状
+ 
+ @discussion 默认值为矩形，即RC_USER_AVATAR_RECTANGLE。
+ 请在viewDidLoad之前设置，此设置在SDK中全局有效。
  */
 - (void)setConversationAvatarStyle:(RCUserAvatarStyle)avatarStyle;
-/**
- *  设置头像大小,请在viewDidLoad之前调用
- *
- *  @param size size
+
+/*!
+ 设置会话列表界面中显示的头像大小（全局有效），高度必须大于或者等于36
+ 
+ @param size 显示的头像大小
+ 
+ @discussion  默认值为46*46。
+ 请在viewDidLoad之前设置，此设置在SDK中全局有效。
  */
 - (void)setConversationPortraitSize:(CGSize)size;
 
-/**
- *  刷新会话列表
- */
-- (void)refreshConversationTableViewIfNeeded;
+#pragma mark - UI操作回调
 
-/**
- *  移除默认的空会话列表背景图
- *
- *  该接口已经废弃，在会话为空时 SDK 会自动显示emptyConversationView，app不需要进行处理
- */
-- (void)resetConversationListBackgroundViewIfNeeded;
-
-/**
- *  插入自定义会话数据模型到数据源，并且更新tableview
- *
- *  @param conversationModel 会话数据对象
- */
-- (void)refreshConversationTableViewWithConversationModel:(RCConversationModel *)conversationModel;
-
-#pragma mark override
-/**
- *  表格选中事件
- *
- *  @param conversationModelType 数据模型类型
- *  @param model                 数据模型
- *  @param indexPath             索引
+#pragma mark 点击事件的回调
+/*!
+ 点击会话列表中Cell的回调
+ 
+ @param conversationModelType   当前点击的会话的Model类型
+ @param model                   当前点击的会话的Model
+ @param indexPath               当前会话在列表数据源中的索引值
+ 
+ @discussion 您需要重写此点击事件，跳转到指定会话的聊天界面。
+ 如果点击聚合Cell进入具体的子会话列表，在跳转时，需要将isEnteredToCollectionViewController设置为YES。
  */
 - (void)onSelectedTableRow:(RCConversationModelType)conversationModelType
          conversationModel:(RCConversationModel *)model
                atIndexPath:(NSIndexPath *)indexPath;
 
-#pragma mark override
-/**
- *  将要加载table数据
- *
- *  @param dataSource 数据源数组
- *
- *  @return 数据源数组，可以添加自己定义的数据源item
+/*!
+ 点击Cell头像的回调
+ 
+ @param model   会话Cell的数据模型
+ */
+- (void)didTapCellPortrait:(RCConversationModel *)model;
+
+/*!
+ 长按Cell头像的回调
+ 
+ @param model   会话Cell的数据模型
+ */
+- (void)didLongPressCellPortrait:(RCConversationModel *)model;
+
+#pragma mark 删除会话的回调
+
+/*!
+ 删除会话的回调
+ 
+ @param model   会话Cell的数据模型
+ */
+- (void)didDeleteConversationCell:(RCConversationModel *)model;
+
+#pragma mark - Cell加载显示的回调
+
+/*!
+ 即将加载列表数据源的回调
+ 
+ @param dataSource      即将加载的列表数据源（元素为RCConversationModel对象）
+ @return                修改后的数据源（元素为RCConversationModel对象）
+ 
+ @discussion 您可以在回调中修改、添加、删除数据源的元素来定制显示的内容，会话列表会根据您返回的修改后的数据源进行显示。
+ 数据源中存放的元素为会话Cell的数据模型，即RCConversationModel对象。
  */
 - (NSMutableArray *)willReloadTableData:(NSMutableArray *)dataSource;
 
-#pragma mark override
-/**
- *  将要显示会话列表单元，可以有限的设置cell的属性或者修改cell,例如：setHeaderImagePortraitStyle
- *
- *  @param cell      cell
- *  @param indexPath 索引
+/*!
+ 即将显示Cell的回调
+ 
+ @param cell        即将显示的Cell
+ @param indexPath   该Cell对应的会话Cell数据模型在数据源中的索引值
+ 
+ @discussion 您可以在此回调中修改Cell的一些显示属性。
  */
-- (void)willDisplayConversationTableCell:(RCConversationBaseCell *)cell atIndexPath:(NSIndexPath *)indexPath;
-#pragma mark override
-/**
- *  重写方法，可以实现开发者自己添加数据model后，返回对应的显示的cell
- *
- *  @param tableView 表格
- *  @param indexPath 索引
- *
- *  @return RCConversationBaseTableCell
+- (void)willDisplayConversationTableCell:(RCConversationBaseCell *)cell
+                             atIndexPath:(NSIndexPath *)indexPath;
+
+#pragma mark - 自定义会话列表Cell
+
+/*!
+ 自定义会话Cell显示时的回调
+ 
+ @param tableView       当前TabelView
+ @param indexPath       该Cell对应的会话Cell数据模型在数据源中的索引值
+ @return                自定义会话需要显示的Cell
  */
 - (RCConversationBaseCell *)rcConversationListTableView:(UITableView *)tableView
                                   cellForRowAtIndexPath:(NSIndexPath *)indexPath;
 
-#pragma mark override
-/**
- *  重写方法，可以实现开发者自己添加数据model后，返回对应的显示的cell的高度
- *
- *  @param tableView 表格
- *  @param indexPath 索引
- *
- *  @return 高度
+/*!
+ 自定义会话Cell显示时的回调
+ 
+ @param tableView       当前TabelView
+ @param indexPath       该Cell对应的会话Cell数据模型在数据源中的索引值
+ @return                自定义会话需要显示的Cell的高度
  */
-- (CGFloat)rcConversationListTableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath;
+- (CGFloat)rcConversationListTableView:(UITableView *)tableView
+               heightForRowAtIndexPath:(NSIndexPath *)indexPath;
 
-#pragma mark override
-/**
- *  重写方法，会话删除后的触发事件
- *
- *  @param model 会话model
- */
-- (void)didDeleteConversationCell:(RCConversationModel *)model;
+/*!
+ 左滑删除自定义会话时的回调
+ 
+ @param tableView       当前TabelView
+ @param editingStyle    当前的Cell操作，默认为UITableViewCellEditingStyleDelete
+ @param indexPath       该Cell对应的会话Cell数据模型在数据源中的索引值
 
-/**
- *  重写方法，自定义会话(RC_CONVERSATION_MODEL_TYPE_CUSTOMIZATION)删除按钮触发事件
- *
- *  @param tableView    表格
- *  @param editingStyle 编辑样式
- *  @param indexPath    索引
+ @discussion 自定义会话Cell在删除时会回调此方法，您可以在此回调中，定制删除的提示UI、是否删除。
+ 如果确定删除该会话，您需要在调用RCIMClient中的接口删除会话或其中的消息，
+ 并从conversationListDataSource和conversationListTableView中删除该会话。
  */
 - (void)rcConversationListTableView:(UITableView *)tableView
                  commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
                   forRowAtIndexPath:(NSIndexPath *)indexPath;
 
-#pragma mark override
-/**
- *  点击头像事件
- *
- *  @param model 会话model
- */
-- (void)didTapCellPortrait:(RCConversationModel *)model;
+#pragma mark - 界面刷新操作
 
-/**
- *  长按头像事件
- *
- *  @param model 会话model
+/*!
+ 从数据库中重新读取会话列表数据，并刷新会话列表
+ 
+ @warning 从数据库中重新读取并刷新，会比较耗时，请谨慎使用。
  */
-- (void)didLongPressCellPortrait:(RCConversationModel *)model;
+- (void)refreshConversationTableViewIfNeeded;
 
-/**
- *  收到新消息,用于刷新会话列表，如果派生类调用了父类方法，请不要再次调用refreshConversationTableViewIfNeeded，避免多次刷新
- *  当收到多条消息时，会在最后一条消息时在内部调用refreshConversationTableViewIfNeeded
- *
- *  @param notification notification
+/*!
+ 向列表中插入或更新一条会话，并刷新会话列表界面
+ 
+ @param conversationModel   会话Cell的数据模型
+ 
+ @discussion 如果该会话Cell数据模型在数据源中已经存在，则会更新数据源中的数据并更新UI；
+ 如果数据源没有该会话Cell的数据模型，则插入数据源再更新UI。
+ */
+- (void)refreshConversationTableViewWithConversationModel:(RCConversationModel *)conversationModel;
+
+#pragma mark - 其他
+
+/*!
+ 在会话列表中，收到新消息的回调
+ 
+ @param notification    收到新消息的notification
+ 
+ @discussion SDK在此方法中有针对消息接收有默认的处理（如刷新等），如果您重写此方法，请注意调用super。
+ 
+ notification的object为RCMessage消息对象，userInfo为NSDictionary对象，其中key值为@"left"，value为还剩余未接收的消息数的NSNumber对象。
  */
 - (void)didReceiveMessageNotification:(NSNotification *)notification;
 
-#pragma mark override
-/**
- *  重写方法，通知更新未读消息数目，用于显示未读消息，当收到会话消息的时候，会触发一次。
+/*!
+ 即将更新未读消息数的回调
+ 
+ @discussion 当收到消息或删除会话时，会调用此回调，您可以在此回调中执行未读消息数相关的操作。
  */
 - (void)notifyUpdateUnreadMessageCount;
+
+
+#pragma mark - 已废弃方法
+
+/*!
+ 移除SDK中会话列表为空时显示的默认View（已废弃，请勿使用）
+ 
+ @discussion 此方法已废弃，您可以直接通过emptyConversationView设置列表为空时需要显示的View。.
+ 
+ @warning **已废弃，请勿使用。**
+ */
+- (void)resetConversationListBackgroundViewIfNeeded
+__deprecated_msg("已废弃，请勿使用。");
 
 @end
 #endif

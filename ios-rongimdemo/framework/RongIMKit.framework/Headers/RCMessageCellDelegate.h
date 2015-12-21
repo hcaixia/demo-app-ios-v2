@@ -10,109 +10,117 @@
 #define RongIMKit_RCMessageCellDelegate_h
 #import "RCMessageModel.h"
 
-/**
- *  消息Cell事件回调
+/*!
+ 消息Cell点击的回调
  */
 @protocol RCMessageCellDelegate <NSObject>
-
 @optional
-;
-/**
- *  点击消息内容
- *
- *  @param model 数据
+
+/*!
+ 点击Cell内容的回调
+ 
+ @param model 消息Cell的数据模型
  */
 - (void)didTapMessageCell:(RCMessageModel *)model;
 
-/**
- *  点击消息内容中的链接，此事件不会再触发didTapMessageCell
- *
- *  @param url   Url String
- *  @param model 数据
+/*!
+ 点击Cell中URL的回调
+ 
+ @param url   点击的URL
+ @param model 消息Cell的数据模型
+ 
+ @discussion 点击Cell中的URL，会调用此回调，不会再触发didTapMessageCell:。
  */
 - (void)didTapUrlInMessageCell:(NSString *)url model:(RCMessageModel *)model;
 
-/**
- *  点击消息内容中的电话号码，此事件不会再触发didTapMessageCell
- *
- *  @param phoneNumber Phone number
- *  @param model       数据
+/*!
+ 点击Cell中电话号码的回调
+ 
+ @param phoneNumber 点击的电话号码
+ @param model       消息Cell的数据模型
+ 
+ @discussion 点击Cell中的电话号码，会调用此回调，不会再触发didTapMessageCell:。
  */
 - (void)didTapPhoneNumberInMessageCell:(NSString *) phoneNumber model:(RCMessageModel *)model;
 
-/**
- *  点击头像事件
- *
- *  @param userId 用户的ID
+/*!
+ 点击Cell中用户头像的回调
+ 
+ @param userId 头像对应的用户ID
  */
 - (void)didTapCellPortrait:(NSString *)userId;
 
-/**
- *  长按头像事件
- *
- *  @param userId 用户的ID
+/*!
+ 长按Cell中用户头像的回调
+ 
+ @param userId 头像对应的用户ID
  */
 - (void)didLongPressCellPortrait:(NSString *)userId;
 
-/**
- *  长按消息内容
- *
- *  @param model 数据
- *  @param view 视图
+/*!
+ 长按Cell内容的回调
+ 
+ @param model 消息Cell的数据模型
+ @param view  长按区域的View
  */
 - (void)didLongTouchMessageCell:(RCMessageModel *)model inView:(UIView *)view;
 
-/**
- * 点击消息发送失败视图事件
- *
- *  @param model 消息数据模型
+/*!
+ 点击消息发送失败红点的回调
+ 
+ @param model 消息Cell的数据模型
  */
 - (void)didTapmessageFailedStatusViewForResend:(RCMessageModel *)model;
+
 @end
 
-/**
- *  公众账号消息Cell事件回调
+/*!
+ 公众服务会话中消息Cell点击的回调
  */
 @protocol RCPublicServiceMessageCellDelegate <NSObject>
-
 @optional
-;
-/**
- *  点击公众账号消息内容
- *
- *  @param model 数据
+
+/*!
+ 公众服务会话中，点击Cell内容的回调
+ 
+ @param model 消息Cell的数据模型
  */
 - (void)didTapPublicServiceMessageCell:(RCMessageModel *)model;
 
-/**
- *  点击公众账号消息内容中的链接，此事件不会再触发didTapPublicServiceMessageCell
- *
- *  @param url   Url String
- *  @param model 数据
+/*!
+ 公众服务会话中，点击Cell中URL的回调
+ 
+ @param url   点击的URL
+ @param model 消息Cell的数据模型
+ 
+ @discussion 点击Cell中的URL，会调用此回调，不会再触发didTapMessageCell:。
  */
 - (void)didTapUrlInPublicServiceMessageCell:(NSString *)url model:(RCMessageModel *)model;
 
-/**
- *  点击公众账号消息内容中的电话号码，此事件不会再触发didTapPublicServiceMessageCell
- *
- *  @param phoneNumber Phone number
- *  @param model       数据
+/*!
+ 公众服务会话中，点击Cell中电话号码的回调
+ 
+ @param phoneNumber 点击的电话号码
+ @param model       消息Cell的数据模型
+ 
+ @discussion 点击Cell中的电话号码，会调用此回调，不会再触发didTapMessageCell:。
  */
 - (void)didTapPhoneNumberInPublicServiceMessageCell:(NSString *) phoneNumber model:(RCMessageModel *)model;
 
-/**
- *  长按公众账号消息内容
- *
- *  @param model 数据
- *  @param view  视图
+/*!
+ 公众服务会话中，长按Cell内容的回调
+ 
+ @param model 消息Cell的数据模型
+ @param view  长按区域的View
  */
 - (void)didLongTouchPublicServiceMessageCell:(RCMessageModel *)model inView:(UIView *)view;
 
-/**
- * 点击公众账号消息发送失败视图事件
- *
- *  @param model 消息数据模型
+/*!
+ 公众服务会话中，点击消息发送失败红点的回调
+ 
+ @param model 消息Cell的数据模型
  */
 - (void)didTapPublicServiceMessageFailedStatusViewForResend:(RCMessageModel *)model;
+
 @end
 #endif

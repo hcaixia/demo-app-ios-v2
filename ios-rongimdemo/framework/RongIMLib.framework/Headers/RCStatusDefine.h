@@ -210,9 +210,24 @@ typedef NS_ENUM(NSInteger, RCErrorCode) {
     NOT_IN_CHATROOM = 23406,
     
     /*!
+     在该聊天室中已被禁言
+     */
+    FORBIDDEN_IN_CHATROOM = 23408,
+    
+    /*!
+     已被踢出聊天室
+     */
+    KICKED_FROM_CHATROOM = 23409,
+    
+    /*!
      消息漫游业务未开通
      */
     MSG_ROAMING_SERVICE_UNAVAILABLE = 33007,
+    
+    /*!
+     发送消息频率超限，1秒钟最多只允许发送5条消息。
+     */
+    SEND_MSG_FREQUENCY_OVERRUN = 20604,
 };
 
 #pragma mark - 连接状态

@@ -58,12 +58,12 @@
 @property(nonatomic, assign) RCSentStatus sentStatus;
 
 /*!
- 会话中最后一条消息的接收时间
+ 会话中最后一条消息的接收时间（Unix时间戳、毫秒）
  */
 @property(nonatomic, assign) long long receivedTime;
 
 /*!
- 会话中最后一条消息的发送时间
+ 会话中最后一条消息的发送时间（Unix时间戳、毫秒）
  */
 @property(nonatomic, assign) long long sentTime;
 
@@ -83,9 +83,12 @@
 @property(nonatomic, strong) NSString *senderUserId;
 
 /*!
- 会话中最后一条消息的发送者的用户名
+ 会话中最后一条消息的发送者的用户名（已废弃，请勿使用）
+ 
+ @warning **已废弃，请勿使用。**
  */
-@property(nonatomic, strong) NSString *senderUserName;
+@property(nonatomic, strong) NSString *senderUserName
+__deprecated_msg("已废弃，请勿使用。");
 
 /*!
  会话中最后一条消息的消息ID

@@ -8,52 +8,99 @@
 
 #import <Foundation/Foundation.h>
 #import <RongIMLib/RongIMLib.h>
-/**
- *  RCMessageModel
+
+/*!
+ 消息Cell的数据模型类
  */
 @interface RCMessageModel : NSObject
-/**
- *  isDisplayMessageTime
+
+/*!
+ 是否显示时间
  */
 @property(nonatomic, assign) BOOL isDisplayMessageTime;
-/**
- *  isDisplayNickname
+
+/*!
+ 是否显示用户名
  */
 @property(nonatomic, assign) BOOL isDisplayNickname;
-/** 用户信息 */
+
+/*!
+ 用户信息
+ */
 @property(nonatomic, strong) RCUserInfo *userInfo;
-/** 会话类型 */
+
+/*!
+ 会话类型
+ */
 @property(nonatomic, assign) RCConversationType conversationType;
-/** 目标ID，如讨论组ID, 群ID, 聊天室ID */
+
+/*!
+ 目标会话ID
+ */
 @property(nonatomic, strong) NSString *targetId;
-/** 消息ID */
+
+/*!
+ 消息ID
+ */
 @property(nonatomic, assign) long messageId;
-/** 消息方向 */
+
+/*!
+ 消息方向
+ */
 @property(nonatomic, assign) RCMessageDirection messageDirection;
-/** 发送者ID */
+
+/*!
+ 发送者的用户ID
+ */
 @property(nonatomic, strong) NSString *senderUserId;
-/** 接受状态 */
+
+/*!
+ 消息的接收状态
+ */
 @property(nonatomic, assign) RCReceivedStatus receivedStatus;
-/**发送状态 */
+
+/*!
+ 消息的发送状态
+ */
 @property(nonatomic, assign) RCSentStatus sentStatus;
-/** 接收时间 */
+
+/*!
+ 消息的接收时间（Unix时间戳、毫秒）
+ */
 @property(nonatomic, assign) long long receivedTime;
-/**发送时间 */
+
+/*!
+ 消息的发送时间（Unix时间戳、毫秒）
+ */
 @property(nonatomic, assign) long long sentTime;
-/** 消息体名称 */
+
+/*!
+ 消息的类型名
+ */
 @property(nonatomic, strong) NSString *objectName;
-/** 消息内容 */
+
+/*!
+ 消息的内容
+ */
 @property(nonatomic, strong) RCMessageContent *content;
-/** 附加字段 */
+
+/*!
+ 消息的附加字段
+ */
 @property(nonatomic, strong) NSString *extra;
-/** 保存的cell高度值，避免重复计算 */
+
+/*!
+ 消息展示时的Cell高度
+ 
+ @discussion 用于大量消息的显示优化
+ */
 @property(nonatomic) CGSize cellSize;
-/**
- *  initWithMessage
- *
- *  @param rcMessage rcMessage
- *
- *  @return return model
+
+/*!
+ 初始化消息Cell的数据模型
+ 
+ @param rcMessage   消息实体
+ @return            消息Cell的数据模型对象
  */
 - (instancetype)initWithMessage:(RCMessage *)rcMessage;
 

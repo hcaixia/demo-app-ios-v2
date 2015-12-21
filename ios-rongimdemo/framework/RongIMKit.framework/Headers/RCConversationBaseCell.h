@@ -11,22 +11,22 @@
 #import <UIKit/UIKit.h>
 #import "RCConversationModel.h"
 
-/**
- *  会话Cell基类
+/*!
+ 会话Cell基类
  */
 @interface RCConversationBaseCell : UITableViewCell
 
-/**
- *  会话数据模型
+/*!
+ 会话Cell的数据模型
  */
 @property(nonatomic, strong) RCConversationModel *model;
 
-/**
- *  设置会话数据模型
- *
- *  @param model 会话数据模型
+/*!
+ 设置会话Cell的数据模型
+ 
+ @param model 会话Cell的数据模型
  */
 - (void)setDataModel:(RCConversationModel *)model;
-@end
 
+@end
 #endif

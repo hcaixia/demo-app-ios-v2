@@ -8,8 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-/**
- *  已关注公众服务账号列表
+/*!
+ 已关注公众服务账号列表的展示ViewController
  */
 @interface RCPublicServiceListViewController : UITableViewController
 

@@ -9,22 +9,29 @@
 #import "RCBaseViewController.h"
 #import <CoreLocation/CoreLocation.h>
 #import <MapKit/MapKit.h>
-/**
- *  RCLocationViewController
+
+/*!
+ 在地图中展示位置消息的ViewController
  */
 @interface RCLocationViewController : RCBaseViewController <MKMapViewDelegate>
 
-/** @name 属性 */
-
-/** 需要显示的位置坐标 */
+/*!
+ 位置信息中的地理位置的二维坐标
+ */
 @property(nonatomic, assign) CLLocationCoordinate2D location;
-/** 需要显示的位置名称 */
+
+/*!
+ 位置消息中的地理位置的名称
+ */
 @property(nonatomic, strong) NSString *locationName;
 
-/**
- *  返回按钮按下   如果自定义导航按钮或者自定义按钮，请自定义该方法
- *
- *  @param sender sender
+/*!
+ 返回按钮的点击事件
+ 
+ @param sender 返回按钮
+ 
+ @discussion SDK在此方法中，会针对默认的NavigationBa退出当前界面；
+ 如果您使用自定义导航按钮或者自定义按钮，可以重写此方法退出当前界面。
  */
 - (void)leftBarButtonItemPressed:(id)sender;
 

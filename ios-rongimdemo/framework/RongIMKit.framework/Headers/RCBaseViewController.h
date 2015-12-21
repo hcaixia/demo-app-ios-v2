@@ -10,8 +10,11 @@
 #define __RCBaseViewController
 #import <UIKit/UIKit.h>
 #import <RongIMLib/RongIMLib.h>
-/**
- *  RCBaseViewController
+
+/*!
+ IMKit ViewController基类
+ 
+ @discussion 主要定义了View的默认大小。
  */
 @interface RCBaseViewController : UIViewController
 @end

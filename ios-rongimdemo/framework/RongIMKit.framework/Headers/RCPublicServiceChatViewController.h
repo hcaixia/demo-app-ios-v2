@@ -9,25 +9,19 @@
 #import <UIKit/UIKit.h>
 #import "RCConversationViewController.h"
 
-
-/**
- * 公众服务号会话VC
- *
- * 当初始化此类时，需要正确初始化基类，比如服务号ID，服务号类型，例如：
- * RCPublicServiceChatViewController *conversationVC = [[RCPublicServiceChatViewController alloc] init];
- * conversationVC.conversationType = conversationType;
- * conversationVC.targetId = targetId;
- * conversationVC.userName = conversationTitle;
- * conversationVC.title = conversationTitle;
- * [self.navigationController pushViewController:conversationVC animated:YES];
+/*!
+ 公众服务聊天界面的ViewController
  */
 @interface RCPublicServiceChatViewController : RCConversationViewController
-#pragma mark override
-/**
- *  用户点击公众号富文本消息; App可以自己覆写此函数，建议使用rcWebViewController来打开链接；
- *
- *  @param tapedUrl            点击对象的Url
- *  @param rcWebViewController 融云JS VC。公众号需要JS SDK才能运行，该ViewController具备JS SDK的能力，建议展现这个VC
+
+/*!
+ 点击富文本（图文）消息中URL的回调
+ 
+ @param tapedUrl            点击的URL
+ @param rcWebViewController 已包含融云JS鉴权的WebViewController
+ 
+ @discussion SDK在回调中默认会使用WebView打开URL，您可以重写此回调。
+ 此回调中的rcWebViewController，已经包含了融云公众账号的JS鉴权，您在重写时可以直接使用此WebView来显示URL。
  */
 - (void)didTapImageTxtMsgCell:(NSString *)tapedUrl webViewController:(UIViewController *)rcWebViewController;
 @end
