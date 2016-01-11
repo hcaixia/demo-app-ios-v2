@@ -228,6 +228,16 @@ typedef NS_ENUM(NSInteger, RCErrorCode) {
      发送消息频率超限，1秒钟最多只允许发送5条消息。
      */
     SEND_MSG_FREQUENCY_OVERRUN = 20604,
+    
+    /*!
+     聊天室不存在。
+     */
+    RC_CHATROOM_NOT_EXIST = 23410,
+    
+    /*!
+     聊天室成员超限。
+     */
+    RC_CHATROOM_IS_FULL = 23411,
 };
 
 #pragma mark - 连接状态
@@ -451,6 +461,33 @@ typedef NS_ENUM(NSUInteger, RCConversationNotificationStatus) {
     NOTIFY = 1,
 };
 
+#pragma mark RCReadReceiptMessageType - 消息回执
+/*!
+ 已读状态消息类型
+ */
+typedef NS_ENUM(NSUInteger, RCReadReceiptMessageType) {
+    /*!
+     根据会话来更新未读消息状态
+     */
+    RC_ReadReceipt_Conversation = 1,
+};
+
+#pragma mark RCChatRoomMemberOrder - 聊天室成员排列顺序
+/*!
+ 聊天室成员的排列顺序
+ */
+typedef NS_ENUM(NSUInteger, RCChatRoomMemberOrder) {
+    /*!
+     升序，返回最早加入的成员列表
+     */
+    RC_ChatRoom_Member_Asc = 1,
+    
+    /*!
+     降序，返回最晚加入的成员列表
+     */
+    RC_ChatRoom_Member_Desc = 2,
+};
+
 #pragma mark - 消息相关
 
 #pragma mark RCMessagePersistent - 消息的存储策略
@@ -462,10 +499,12 @@ typedef NS_OPTIONS(NSUInteger, RCMessagePersistent) {
      本地不做存储
      */
     MessagePersistent_NONE = 0,
+    
     /*!
      本地进行消息存储
      */
     MessagePersistent_ISPERSISTED = 1 << 0,
+    
     /*!
      计入未读数
      */

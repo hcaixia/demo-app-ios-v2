@@ -94,28 +94,12 @@
  */
 @property(nonatomic, assign) BOOL isShowNetworkIndicatorView;
 
-/**
- *  是否在navigatorBar上显示连接中的状态。默认是关闭。
- *  如果开启，请实现setNavigationItemTitleView，当已连接时，用来更新标题.
+/*!
+ 当连接状态变化SDK自动重连时，是否在NavigationBar中显示连接中的提示。
+ 
+ @discussion 默认是是NO。
  */
 @property(nonatomic) BOOL showConnectingStatusOnNavigatorBar;
-
-/**
- *  在navigationbar上更标题View。如果showConnectingStatusOnNavigatorBar为YES，请实现该方法来设置title
- */
-- (void)setNavigationItemTitleView;
-
-/*!
- 提示网络连接不可用的View
- */
-@property(nonatomic, strong) RCNetworkIndicatorView *networkIndicatorView;
-
-/*!
- 当showConnectingStatusOnNavigatorBar设置为YES时，连接状态变化时更新NavigationBar的回调
- 
- @discussion SDK在此方法中有默认的处理，如果您在子类中需要重写此方法，请注意调用super。
- */
-- (void)updateConnectionStatusOnNavigatorBar;
 
 #pragma mark - 显示相关
 
@@ -305,6 +289,34 @@
  @warning **已废弃，请勿使用。**
  */
 - (void)resetConversationListBackgroundViewIfNeeded
+__deprecated_msg("已废弃，请勿使用。");
+
+/*!
+ 提示网络连接不可用的View（已废弃，请勿使用）
+ 
+ @warning **已废弃，请勿使用。**
+ */
+@property(nonatomic, strong) RCNetworkIndicatorView *networkIndicatorView
+__deprecated_msg("已废弃，请勿使用。");
+
+/*!
+ 当showConnectingStatusOnNavigatorBar设置为YES时，连接状态变化时更新NavigationBar的回调（已废弃，请勿使用）
+ 
+ @discussion SDK在此方法中有默认的处理，如果您在子类中需要重写此方法，请注意调用super。
+ 
+ @warning **已废弃，请勿使用。**
+ */
+- (void)updateConnectionStatusOnNavigatorBar
+__deprecated_msg("已废弃，请勿使用。");
+
+/*!
+ 当showConnectingStatusOnNavigatorBar设置为YES时，连接恢复后的回调（已废弃，请勿使用）
+ 
+ @discussion 您需要在此回调中更新NavigationBar的标题显示。
+ 
+ @warning **已废弃，请勿使用。**
+ */
+- (void)setNavigationItemTitleView
 __deprecated_msg("已废弃，请勿使用。");
 
 @end

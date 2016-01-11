@@ -531,7 +531,7 @@ MBProgressHUD* hud ;
         hud.labelText = @"登录中...";
         [hud show:YES];
         [[NSUserDefaults standardUserDefaults] removeObjectForKey :@"UserCookies"];
-        [AFHttpTool loginWithEmail:userName password:password env:0
+        [AFHttpTool loginWithEmail:userName password:password env:(self.currentModel == nil ? 1 : self.currentModel.env)
             success:^(id response) {
                if ([response[@"code"] intValue] == 200) {
                    NSString *token = response[@"result"][@"token"];

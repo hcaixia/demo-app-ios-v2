@@ -34,7 +34,7 @@
 @property(nonatomic, strong) NSString *targetId;
 
 /*!
- 消息的ID
+ 消息的ID(本地数据库中消息id)
  
  @discussion 本地存放的消息的唯一值
  */
@@ -84,6 +84,11 @@
  消息的附加字段
  */
 @property(nonatomic, strong) NSString *extra;
+
+/*!
+ 全局消息ID(融云服务器消息唯一Id)
+ */
+@property(nonatomic, strong) NSString *messageUId;
 
 /*!
  RCMessage初始化方法

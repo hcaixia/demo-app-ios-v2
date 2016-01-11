@@ -43,7 +43,7 @@
  初始化语音消息
  
  @param audioData   wav格式的音频数据
- @param duration    语音消息的时长
+ @param duration    语音消息的时长（单位：秒）
  @return            语音消息对象
  
  @discussion 如果您不是使用IMKit中的录音功能，则在初始化语音消息的时候，需要确保以下几点。

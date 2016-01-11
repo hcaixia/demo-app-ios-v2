@@ -84,7 +84,15 @@
 {
     [super viewWillAppear:animated];
     _isClick = YES;
-    [self setNavigationItemTitleView];
+    if (!self.isEnteredToCollectionViewController) {
+        UILabel *titleView = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 200, 44)];
+        titleView.backgroundColor = [UIColor clearColor];
+        titleView.font = [UIFont boldSystemFontOfSize:19];
+        titleView.textColor = [UIColor whiteColor];
+        titleView.textAlignment = NSTextAlignmentCenter;
+        titleView.text = @"会话";
+        self.tabBarController.navigationItem.titleView = titleView;
+    }
     //自定义rightBarButtonItem
     UIButton *rightBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 17, 17)];
     [rightBtn setImage:[UIImage imageNamed:@"add"] forState:UIControlStateNormal];
@@ -102,9 +110,8 @@
 }
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    //showConnectingStatusOnNavigatorBar设置为YES时，需要重写setNavigationItemTitleView函数来显示已连接时的标题。
+    // 设置在NavigatorBar中显示连接中的提示
     self.showConnectingStatusOnNavigatorBar = YES;
-    [super updateConnectionStatusOnNavigatorBar];
 }
 //由于demo使用了tabbarcontroller，当切换到其它tab时，不能更改tabbarcontroller的标题。
 - (void)viewWillDisappear:(BOOL)animated {
@@ -114,19 +121,6 @@
                                                     name:@"kRCNeedReloadDiscussionListNotification"
                                                   object:nil];
     
-}
-
-- (void)setNavigationItemTitleView {
-    if (self.isEnteredToCollectionViewController) {
-        return;
-    }
-    UILabel *titleView = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 200, 44)];
-    titleView.backgroundColor = [UIColor clearColor];
-    titleView.font = [UIFont boldSystemFontOfSize:19];
-    titleView.textColor = [UIColor whiteColor];
-    titleView.textAlignment = NSTextAlignmentCenter;
-    titleView.text = @"会话";
-    self.tabBarController.navigationItem.titleView = titleView;
 }
 
 - (void)updateBadgeValueForTabBarItem
@@ -471,6 +465,7 @@
     cell.lblDetail.text =[NSString stringWithFormat:@"来自%@的好友请求",userName];
     [cell.ivAva sd_setImageWithURL:[NSURL URLWithString:portraitUri] placeholderImage:[UIImage imageNamed:@"system_notice"]];
     cell.labelTime.text = [self ConvertMessageTime:model.sentTime / 1000];
+    cell.model = model;
     return cell;
 }
 

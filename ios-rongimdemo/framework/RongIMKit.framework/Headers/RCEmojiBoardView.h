@@ -60,8 +60,7 @@
  
  @warning **已废弃，请勿使用。**
  */
-@property(nonatomic, strong) UILabel *emojiLabel
-__deprecated_msg("已废弃，请勿使用。");
+@property(nonatomic, strong) __deprecated_msg("已废弃，请勿使用。") UILabel *emojiLabel;
 
 /*!
  表情输入的回调

@@ -87,7 +87,7 @@
                 success:(void (^)(id response))success
                 failure:(void (^)(NSError* err))failure
 {
-    NSDictionary *params = @{@"email":email,@"password":password};
+    NSDictionary *params = @{@"email":email,@"password":password,@"env":[NSString stringWithFormat:@"%d", env]};
 //    [[NSUserDefaults standardUserDefaults] removeObjectForKey :@"UserCookies"];
     [AFHttpTool requestWihtMethod:RequestMethodTypePost
                               url:@"email_login_token"

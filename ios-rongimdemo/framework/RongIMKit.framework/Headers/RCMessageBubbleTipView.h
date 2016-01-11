@@ -97,8 +97,7 @@ typedef NS_ENUM(NSInteger, RCMessageBubbleTipViewAlignment) {
  
  @warning **已废弃，请勿使用。**
  */
-@property(nonatomic, strong) UIColor *bubbleTipOverlayColor
-__deprecated_msg("已废弃，请勿使用。");
+@property(nonatomic, strong) __deprecated_msg("已废弃，请勿使用。") UIColor *bubbleTipOverlayColor;
 
 /*!
  角标View偏移的Rect

@@ -114,8 +114,7 @@ typedef NS_ENUM(NSUInteger, RCConversationModelType) {
  
  @warning **已废弃，请勿使用。**
  */
-@property(nonatomic, strong) NSString *senderUserName
-__deprecated_msg("已废弃，请勿使用。");
+@property(nonatomic, strong) __deprecated_msg("已废弃，请勿使用。") NSString *senderUserName;
 
 /*!
  会话中最后一条消息的消息ID

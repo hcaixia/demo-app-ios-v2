@@ -54,7 +54,7 @@
             [userInfoDic setObject:self.senderUserInfo.name forKeyedSubscript:@"name"];
         }
         if (self.senderUserInfo.portraitUri) {
-            [userInfoDic setObject:self.senderUserInfo.portraitUri forKeyedSubscript:@"portrait"];
+            [userInfoDic setObject:self.senderUserInfo.portraitUri forKeyedSubscript:@"icon"];
         }
         if (self.senderUserInfo.userId) {
             [userInfoDic setObject:self.senderUserInfo.userId forKeyedSubscript:@"id"];

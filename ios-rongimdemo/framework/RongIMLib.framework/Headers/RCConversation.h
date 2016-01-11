@@ -87,8 +87,7 @@
  
  @warning **已废弃，请勿使用。**
  */
-@property(nonatomic, strong) NSString *senderUserName
-__deprecated_msg("已废弃，请勿使用。");
+@property(nonatomic, strong) __deprecated_msg("已废弃，请勿使用。") NSString *senderUserName;
 
 /*!
  会话中最后一条消息的消息ID
@@ -104,6 +103,11 @@ __deprecated_msg("已废弃，请勿使用。");
  会话中最后一条消息的json Dictionary
  */
 @property(nonatomic, strong) NSDictionary *jsonDict;
+
+/*!
+ 全局消息ID(融云服务器消息唯一Id)
+ */
+@property(nonatomic, strong) NSString *lastestMessageUId;
 
 /*!
  RCConversation初始化方法（已废弃，请勿使用）

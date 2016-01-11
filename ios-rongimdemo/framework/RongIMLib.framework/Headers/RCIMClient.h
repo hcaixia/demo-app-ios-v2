@@ -23,6 +23,7 @@
 #import "RCUploadImageStatusListener.h"
 #import "RCConversation.h"
 #import "RCDiscussion.h"
+#import "RCChatRoomInfo.h"
 
 #pragma mark - 消息接收监听器
 
@@ -674,6 +675,14 @@ __deprecated_msg("已废弃，请勿使用。");
 -(long long)getMessageSendTime:(long)messageId;
 
 /*!
+ 通过messageId获取消息实体
+ 
+ @param messageId   消息ID
+ @return            通过消息ID获取到的消息实体，当获取失败的时候，会返回nil。
+ */
+-(RCMessage *)getMessage:(long)messageId;
+
+/*!
  删除消息
  
  @param messageIds  消息ID的列表
@@ -753,7 +762,7 @@ __deprecated_msg("已废弃，请勿使用。");
  
  @discussion -1表示获取消息数量出错。
  */
-- (int)GetMessageCount:(RCConversationType)conversationType
+- (int)getMessageCount:(RCConversationType)conversationType
               targetId:(NSString *)targetId;
 
 /*!
@@ -893,8 +902,8 @@ __deprecated_msg("已废弃，请勿使用。");
 /*!
  屏蔽会话在某个时间段的消息提醒
  
- @param startTime       开始屏蔽消息提醒的时间，格式为HH:MM:SS s
- @param spanMins         需要屏蔽消息提醒的分钟数，0 < spanMins < 1440
+ @param startTime       开始屏蔽消息提醒的时间，格式为HH:MM:SS
+ @param spanMins        需要屏蔽消息提醒的分钟数，0 < spanMins < 1440
  @param successBlock    屏蔽成功的回调
  @param errorBlock      屏蔽失败的回调 [status:屏蔽失败的错误码]
  
@@ -1072,7 +1081,7 @@ __deprecated_msg("已废弃，请勿使用。");
 #pragma mark - 群组操作（已废弃，请勿使用）
 
 /*!
- 同步当前用户所在的群组列表信息(已废弃，请勿使用)
+ 同步当前用户所在的群组列表信息(已废弃，建议您通过您的App Server进行群组操作)
  
  @param groupList               群组信息RCGroup的列表
  @param successBlock            同步成功的回调
@@ -1089,7 +1098,7 @@ __deprecated_msg("已废弃，请勿使用。");
 __deprecated_msg("已废弃，请勿使用。");
 
 /*!
- 加入群组(已废弃，请勿使用)
+ 加入群组(已废弃，建议您通过您的App Server进行群组操作)
  
  @param groupId                 要加入的群组ID
  @param groupName               群组的名称
@@ -1108,7 +1117,7 @@ __deprecated_msg("已废弃，请勿使用。");
 __deprecated_msg("已废弃，请勿使用。");
 
 /*!
- 退出群组(已废弃，请勿使用)
+ 退出群组(已废弃，建议您通过您的App Server进行群组操作)
  
  @param groupId                 要退出的群组ID
  @param successBlock            退出成功的回调
@@ -1127,7 +1136,7 @@ __deprecated_msg("已废弃，请勿使用。");
 #pragma mark - 聊天室操作
 
 /*!
- 加入聊天室
+ 加入聊天室（如果聊天室不存在则会创建）
  
  @param targetId                聊天室ID
  @param messageCount            进入聊天室时获取历史消息的数量，-1<=messageCount<=50
@@ -1142,6 +1151,23 @@ __deprecated_msg("已废弃，请勿使用。");
              success:(void (^)())successBlock
                error:(void (^)(RCErrorCode status))errorBlock;
 
+
+/*!
+ 加入已经存在的聊天室（如果不存在或超限会返回聊天室不存在错误23410 或 人数超限 23411）
+ 
+ @param targetId                聊天室ID
+ @param messageCount            进入聊天室时获取历史消息的数量，-1<=messageCount<=50
+ @param successBlock            加入聊天室成功的回调
+ @param errorBlock              加入聊天室失败的回调 [status:加入聊天室失败的错误码]
+ 
+ @discussion 可以通过传入的messageCount设置加入聊天室成功之后，需要获取的历史消息数量。
+ -1表示不获取任何历史消息，0表示不特殊设置而使用SDK默认的设置（默认为获取10条），0<messageCount<=50为具体获取的消息数量,最大值为50。
+ */
+- (void)joinExistChatRoom:(NSString *)targetId
+             messageCount:(int)messageCount
+                  success:(void (^)())successBlock
+                    error:(void (^)(RCErrorCode status))errorBlock;
+
 /*!
  退出聊天室
  
@@ -1152,6 +1178,25 @@ __deprecated_msg("已废弃，请勿使用。");
 - (void)quitChatRoom:(NSString *)targetId
              success:(void (^)())successBlock
                error:(void (^)(RCErrorCode status))errorBlock;
+
+/*!
+ 获取聊天室的信息
+ 
+ @param targetId     聊天室ID
+ @param count        需要获取的数量，0 <= count <= 20（0表示只查询聊天室总人数，不查询具体成员信息）
+ @param order        返回的成员列表的排列顺序
+ @param successBlock 获取成功的回调 [chatRoomInfo:聊天室信息]
+ @param errorBlock   获取失败的回调 [status:获取失败的错误码]
+ 
+ @discussion 通过此接口，可以查询指定count数量的成员信息，若当前聊天室内人数少于count值，则返回所有的成员信息。
+ 如果您使用顺序方式查询，将返回最早加入的成员信息列表，按加入时间从旧到新排列；
+ 如果您使用逆序方式查询，将返回最晚加入的成员信息列表，按加入时间从新到旧排列。
+ */
+- (void)getChatRoomInfo:(NSString *)targetId
+                  count:(int)count
+                  order:(RCChatRoomMemberOrder)order
+                success:(void (^)(RCChatRoomInfo *chatRoomInfo))successBlock
+                  error:(void (^)(RCErrorCode status))errorBlock;
 
 #pragma mark 客服
 
@@ -1356,7 +1401,7 @@ __deprecated_msg("已废弃，请勿使用。");
  @param data    AMR格式的音频数据，必须是AMR-NB的格式
  @return        WAV格式的音频数据
  */
-- (NSData *)dcodeAMRToWAVE:(NSData *)data;
+- (NSData *)decodeAMRToWAVE:(NSData *)data;
 
 /*!
  将WAV格式的音频数据转化为AMR格式的音频数据
@@ -1371,7 +1416,7 @@ __deprecated_msg("已废弃，请勿使用。");
  @warning 如果您想和SDK自带的语音消息保持一致和互通，考虑到跨平台和传输的原因，SDK对于WAV音频有所限制.
  具体可以参考RCVoiceMessage中的音频参数说明。
  */
-- (NSData *)ecodeWAVEToAMR:(NSData *)data
+- (NSData *)encodeWAVEToAMR:(NSData *)data
                    channel:(int)nChannels
             nBitsPerSample:(int)nBitsPerSample;
 

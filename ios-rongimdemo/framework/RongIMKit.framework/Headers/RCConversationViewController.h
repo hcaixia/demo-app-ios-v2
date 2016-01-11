@@ -61,8 +61,7 @@
  
  @warning **已废弃，请勿使用。**
  */
-@property(nonatomic, strong) NSString *userName
-__deprecated_msg("已废弃，请勿使用。");
+@property(nonatomic, strong) __deprecated_msg("已废弃，请勿使用。") NSString *userName;
 
 #pragma mark - 聊天界面属性
 
@@ -240,7 +239,8 @@ __deprecated_msg("已废弃，请勿使用。");
  
  @param sender 事件发起者
  
- @discussion 如果您重写此方法，请注意调用super。
+ @discussion 其中包含了一些聊天界面退出的清理工作，如退出讨论组等。
+ 如果您重写此方法，请注意调用super。
  */
 - (void)leftBarButtonItemPressed:(id)sender;
 
@@ -326,7 +326,6 @@ __deprecated_msg("已废弃，请勿使用。");
  @param message 消息实体
  
  @discussion 通过此方法插入一条消息，会将消息实体对应的内容Model插入数据源中，并更新UI。
- 但是不会将消息保存到数据库，下次进入聊天界面将不会再显示。
  */
 - (void)appendAndDisplayMessage:(RCMessage *)message;
 
