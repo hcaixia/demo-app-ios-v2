@@ -34,9 +34,9 @@
 @property(nonatomic, strong) NSString *targetId;
 
 /*!
- 消息的ID(本地数据库中消息id)
+ 消息的ID
  
- @discussion 本地存放的消息的唯一值
+ @discussion 本地存储的消息的唯一值（数据库索引唯一值）
  */
 @property(nonatomic, assign) long messageId;
 
@@ -86,7 +86,9 @@
 @property(nonatomic, strong) NSString *extra;
 
 /*!
- 全局消息ID(融云服务器消息唯一Id)
+ 全局唯一ID
+ 
+ @discussion 服务器消息唯一ID（在同一个Appkey下全局唯一）
  */
 @property(nonatomic, strong) NSString *messageUId;
 

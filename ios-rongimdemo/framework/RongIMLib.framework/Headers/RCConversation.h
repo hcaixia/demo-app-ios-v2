@@ -105,7 +105,9 @@
 @property(nonatomic, strong) NSDictionary *jsonDict;
 
 /*!
- 全局消息ID(融云服务器消息唯一Id)
+ 最后一条消息的全局唯一ID
+ 
+ @discussion 服务器消息唯一ID（在同一个Appkey下全局唯一）
  */
 @property(nonatomic, strong) NSString *lastestMessageUId;
 

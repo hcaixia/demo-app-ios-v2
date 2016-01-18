@@ -392,8 +392,12 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
 }
 
 - (void)didReceiveMessageNotification:(NSNotification *)notification {
-  [UIApplication sharedApplication].applicationIconBadgeNumber =
-      [UIApplication sharedApplication].applicationIconBadgeNumber + 1;
+    RCMessage *message = notification.object;
+    if (message.messageDirection == MessageDirection_RECEIVE) {
+        [UIApplication sharedApplication].applicationIconBadgeNumber =
+        [UIApplication sharedApplication].applicationIconBadgeNumber + 1;
+    }
+
 }
 
 - (void)application:(UIApplication *)application

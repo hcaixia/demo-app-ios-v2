@@ -22,6 +22,7 @@
 
 - (IBAction)acService:(UIButton *)sender {
 
+    //测试环境客服Id "rongcloud.net.kefu.service112"
 #define SERVICE_ID @"KEFU144542424649464"
     RCPublicServiceChatViewController *chatService = [[RCPublicServiceChatViewController alloc] init];
     chatService.userName = @"客服";

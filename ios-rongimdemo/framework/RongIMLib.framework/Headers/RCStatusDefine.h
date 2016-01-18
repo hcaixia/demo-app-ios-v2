@@ -180,14 +180,19 @@ typedef NS_ENUM(NSInteger, RCErrorCode) {
     ERRORCODE_UNKNOWN = -1,
     
     /*!
+     已被对方加入黑名单
+     */
+    REJECTED_BY_BLACKLIST = 405,
+    
+    /*!
      超时
      */
     ERRORCODE_TIMEOUT = 5004,
     
     /*!
-     已被对方加入黑名单
+     发送消息频率超限，1秒钟最多只允许发送5条消息。
      */
-    REJECTED_BY_BLACKLIST = 405,
+    SEND_MSG_FREQUENCY_OVERRUN = 20604,
     
     /*!
      不在该讨论组中
@@ -220,16 +225,6 @@ typedef NS_ENUM(NSInteger, RCErrorCode) {
     KICKED_FROM_CHATROOM = 23409,
     
     /*!
-     消息漫游业务未开通
-     */
-    MSG_ROAMING_SERVICE_UNAVAILABLE = 33007,
-    
-    /*!
-     发送消息频率超限，1秒钟最多只允许发送5条消息。
-     */
-    SEND_MSG_FREQUENCY_OVERRUN = 20604,
-    
-    /*!
      聊天室不存在。
      */
     RC_CHATROOM_NOT_EXIST = 23410,
@@ -238,6 +233,28 @@ typedef NS_ENUM(NSInteger, RCErrorCode) {
      聊天室成员超限。
      */
     RC_CHATROOM_IS_FULL = 23411,
+    
+    /*!
+     SDK没有初始化
+     
+     @discussion 在使用SDK任何功能之前，必须先Init。
+     */
+    CLIENT_NOT_INIT = 33001,
+    
+    /*!
+     数据库错误
+     */
+    DATABASE_ERROR = 33002,
+    
+    /*!
+     传入的参数错误
+     */
+    INVALID_PARAMETER = 33003,
+    
+    /*!
+     消息漫游业务未开通
+     */
+    MSG_ROAMING_SERVICE_UNAVAILABLE = 33007,
 };
 
 #pragma mark - 连接状态
