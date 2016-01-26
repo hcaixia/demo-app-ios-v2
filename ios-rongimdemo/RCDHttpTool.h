@@ -42,6 +42,7 @@
 
 //加入群组
 -(void) joinGroup:(int) groupID
+    withGroupName:(NSString *)groupName
         complete:(void (^)(BOOL result))joinResult;
 
 //退出群组

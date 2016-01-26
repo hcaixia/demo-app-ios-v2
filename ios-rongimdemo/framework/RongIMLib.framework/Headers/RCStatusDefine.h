@@ -511,21 +511,28 @@ typedef NS_ENUM(NSUInteger, RCChatRoomMemberOrder) {
 /*!
  消息的存储策略
  */
-typedef NS_OPTIONS(NSUInteger, RCMessagePersistent) {
+typedef NS_ENUM(NSUInteger, RCMessagePersistent) {
     /*!
-     本地不做存储
+     在本地不存储，不计入未读数
      */
     MessagePersistent_NONE = 0,
     
     /*!
-     本地进行消息存储
+     在本地只存储，但不计入未读数
      */
-    MessagePersistent_ISPERSISTED = 1 << 0,
+    MessagePersistent_ISPERSISTED = 1,
     
     /*!
-     计入未读数
+     在本地进行存储并计入未读数
      */
-    MessagePersistent_ISCOUNTED = 1 << 1
+    MessagePersistent_ISCOUNTED = 3,
+    
+    /*!
+     在本地不存储，不计入未读数，并且如果对方不在线，服务器会直接丢弃该消息，对方如果之后再上线也不会再收到此消息。
+     
+     @discussion 一般用于发送输入状态之类的消息，该类型消息的messageUId为nil。
+     */
+    MessagePersistent_STATUS = 16
 };
 
 #pragma mark RCMessageDirection - 消息的方向

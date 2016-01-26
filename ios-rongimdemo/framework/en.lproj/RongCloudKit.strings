@@ -64,11 +64,11 @@
 "NoPhotoTitle"="No Photos or Videos";
 "NoPhotoDesc"="You can sync photos and videos onto your iPhone using iTunes.";
 "Send"="Send";
-"SetToTop"="sticky to top";
+"SetToTop"="Sticky to Top";
 "NewMsgNotification"="New Message Notification";
 "ClearRecord"="Clear Chat History";
 "CanNotRemoveSelf"="Can't remove youself";
-"MemberNumber"="Members";
+"MemberNumber"="members";
 "Invite"="invite";
 "JoinDiscussion"="joined discussion";
 "QuitDiscussion"="quite discussion";
@@ -133,3 +133,5 @@
 "MessageHasRead"="Read";
 "MessageHasSend"="Sent";
 "Full_Image"="Full Image";
+"typing"="typing...";
+"Speaking"="Speaking...";

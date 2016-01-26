@@ -46,7 +46,7 @@
 /*!
  显示发送状态的View
  
- @discussion 其中包含messageFailedStatusView或messageSendSuccessStatusView、messageHasReadStatusView等子View。
+ @discussion 其中包含messageFailedStatusView子View。
  */
 @property(nonatomic, strong) UIView *statusContentView;
 

@@ -48,7 +48,8 @@
    if(!self.isJoin)
    {
        int groupId=[self.groupID intValue];
-       [RCDHTTPTOOL joinGroup:groupId complete:^(BOOL isOk)
+       NSString *groupName = self.lblGroupName.text;
+       [RCDHTTPTOOL joinGroup:groupId withGroupName:groupName  complete:^(BOOL isOk)
        {
            if (_delegate) {
                if ([self.delegate respondsToSelector:@selector(joinGroupCallback:withGroupId:)]) {

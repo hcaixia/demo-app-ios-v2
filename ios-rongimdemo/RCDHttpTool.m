@@ -314,13 +314,13 @@
     }];
 }
 
-- (void)joinGroup:(int)groupID complete:(void (^)(BOOL))joinResult
+- (void)joinGroup:(int)groupID  withGroupName:(NSString *)groupName complete:(void (^)(BOOL))joinResult
 {
     [AFHttpTool joinGroupByID:groupID success:^(id response) {
         NSString *code = [NSString stringWithFormat:@"%@",response[@"code"]];
         if (joinResult) {
             if ([code isEqualToString:@"200"]) {
-                [[RCIMClient sharedRCIMClient]joinGroup:[NSString stringWithFormat:@"%d",groupID] groupName:@"" success:^{
+                [[RCIMClient sharedRCIMClient]joinGroup:[NSString stringWithFormat:@"%d",groupID] groupName:groupName success:^{
                     for (RCDGroupInfo *group in _allGroups) {
                         if ([group.groupId isEqualToString:[NSString stringWithFormat:@"%d",groupID]]) {
                             group.isJoin=YES;

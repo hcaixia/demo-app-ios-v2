@@ -432,6 +432,16 @@ FOUNDATION_EXPORT NSString *const RCKitDispatchConnectionStatusChangedNotificati
 @property(nonatomic, assign) BOOL disableMessageAlertSound;
 
 /*!
+ 是否开启发送输入状态，默认值是NO，开启之后在输入消息的时候对方可以看到正在输入的提示(目前只支持单聊)
+ */
+@property(nonatomic, assign) BOOL enableTypingStatus;
+
+/*!
+ 是否开启发送已读回执，默认值是NO，开启之后在会话页面展示对方的消息之后会发送回执给对方(目前只支持单聊)
+ */
+@property(nonatomic, assign) BOOL enableReadReceipt;
+
+/*!
  是否在聊天界面和会话列表界面显示未注册的消息类型，默认值是NO
  
  @discussion App不断迭代开发，可能会在以后的新版本中不断增加某些自定义类型的消息，但是已经发布的老版本无法识别此类消息。
@@ -490,6 +500,12 @@ FOUNDATION_EXPORT NSString *const RCKitDispatchConnectionStatusChangedNotificati
  */
 @property(nonatomic, assign) BOOL enableMessageAttachUserInfo;
 
+/*!
+  语音消息的最大长度
+ 
+ @discussion 默认值是60s，有效值为不小于5秒，不大于60秒
+ */
+@property(nonatomic, assign) NSUInteger maxVoiceDuration;
 #pragma mark 用户信息、群组信息缓存
 /*!
  更新SDK中的用户信息缓存

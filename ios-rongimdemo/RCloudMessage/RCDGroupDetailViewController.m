@@ -89,10 +89,12 @@
 
 - (IBAction)joinOrQuitGroup:(id)sender {
   int groupId = [_groupInfo.groupId intValue];
+    NSString *groupName = self.lbGroupName.text;
   if (!_groupInfo.isJoin) {
 
     [RCDHTTPTOOL
         joinGroup:groupId
+     withGroupName:groupName
          complete:^(BOOL isOk) {
            dispatch_async(dispatch_get_main_queue(), ^{
              if (isOk) {

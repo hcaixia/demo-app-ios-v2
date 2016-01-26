@@ -95,9 +95,9 @@
 @property(nonatomic) UIColor *topCellBackgroundColor;
 
 /*!
- 显示最后一台消息发送状态的Label
+ 显示最后一台消息发送状态
  */
-@property(strong, nonatomic) UILabel *lastSendMessageStatusLabel;
+@property(strong, nonatomic) UIImageView *lastSendMessageStatusView;
 
 /*!
  设置Cell中显示的头像形状

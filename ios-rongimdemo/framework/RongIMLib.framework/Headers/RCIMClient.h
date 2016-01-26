@@ -25,6 +25,7 @@
 #import "RCDiscussion.h"
 #import "RCChatRoomInfo.h"
 
+
 #pragma mark - 消息接收监听器
 
 /*!
@@ -75,6 +76,35 @@
  @discussion 如果您设置了IMLib消息监听之后，当SDK与融云服务器的连接状态发生变化时，会回调此方法。
  */
 - (void)onConnectionStatusChanged:(RCConnectionStatus)status;
+
+@end
+
+#pragma mark - 输入状态监听器
+
+/*!
+ IMLib输入状态的的监听器
+ 
+ @discussion 设置IMLib的输入状态监听器，请参考RCIMClient的setRCTypingStatusDelegate:方法。
+ 
+ @warning 如果您使用IMLib，可以设置并实现此Delegate监听消息接收；
+ 如果您使用IMKit，请直接设置RCIM中的enableSendComposingStatus，而不要使用此监听器，否则会导致IMKit中无法自动更新UI！
+ */
+@protocol RCTypingStatusDelegate <NSObject>
+
+/*!
+ 用户输入状态变化的回调
+ 
+ @param conversationType        会话类型
+ @param targetId                会话目标ID
+ @param userTypingStatusList    正在输入的RCUserTypingStatus列表（nil标示当前没有用户正在输入）
+ 
+ @discussion 当客户端收到用户输入状态的变化时，会回调此接口，通知发生变化的会话以及当前正在输入的RCUserTypingStatus列表。
+ 
+ @warning 目前仅支持单聊。
+ */
+- (void)onTypingStatusChanged:(RCConversationType)conversationType
+                     targetId:(NSString *)targetId
+                       status:(NSArray *)userTypingStatusList;
 
 @end
 
@@ -566,16 +596,24 @@ __deprecated_msg("已废弃，请勿使用。");
                            object:(id)userData;
 
 #pragma mark 消息阅读回执
-
 /*!
- 查询某类型会话的消息回执功能是否开通
+ @const 收到已读回执的Notification
  
- @param conversationType    会话类型
- @return                    该会话类型是否开通了消息回执功能
+ @discussion 收到消息已读回执之后，IMLib会分发此通知。
  
- @discussion 消息回执功能目前只支持单聊。
+ Notification的object为nil，userInfo为NSDictionary对象，
+ 其中key值分别为@"cType"、@"tId"、@"messageTime",
+ 对应的value为会话类型的NSNumber对象、会话的targetId、已阅读的最后一条消息的sendTime。
+ 如：
+ NSNumber *ctype = [notification.userInfo objectForKey:@"cType"];
+ NSNumber *time = [notification.userInfo objectForKey:@"messageTime"];
+ NSString *targetId = [notification.userInfo objectForKey:@"tId"];
+ 
+ 收到这个消息之后可以更新这个会话中messageTime以前的消息UI为已读（底层数据库消息状态已经改为已读）。
+ 
+ @warning 目前仅支持单聊。
  */
--(BOOL)getConversationMessageReceiptStatus:(RCConversationType)conversationType;
+FOUNDATION_EXPORT NSString *const RCLibDispatchReadReceiptNotification;
 
 /*!
  发送某个会话中消息阅读的回执
@@ -584,12 +622,13 @@ __deprecated_msg("已废弃，请勿使用。");
  @param targetId            目标会话ID
  @param timestamp           该会话中已阅读的最后一条消息的发送时间戳
  
- @discussion 消息回执功能目前只支持单聊。
+ @discussion 消息回执功能目前只支持单聊, 如果使用Lib 可以注册监听 RCLibDispatchReadReceiptNotification 通知,使用kit 直接开启RCIM.h 中enableReadReceipt。
+ 
+ @warning 目前仅支持单聊。
  */
--(void)sendReceiptMessage:(RCConversationType)conversationType
-                 targetId:(NSString *)targetId
-                     time:(long long)timestamp;
-
+-(void)sendReadReceiptMessage:(RCConversationType)conversationType
+                     targetId:(NSString *)targetId
+                         time:(long long)timestamp;
 #pragma mark - 消息操作
 
 /*!
@@ -933,6 +972,33 @@ __deprecated_msg("已废弃，请勿使用。");
 - (void)getNotificationQuietHours:(void (^)(NSString *startTime, int spansMin))successBlock
                             error:(void (^)(RCErrorCode status))errorBlock;
 
+#pragma mark - 输入状态提醒
+
+/*!
+ 设置输入状态的监听器
+ 
+ @param delegate IMLib输入状态的的监听器
+ 
+ @warning 目前仅支持单聊。
+ */
+- (void)setRCTypingStatusDelegate:(id<RCTypingStatusDelegate>)delegate;
+
+/*!
+ 向会话中发送正在输入的状态
+ 
+ @param conversationType    会话类型
+ @param targetId            会话目标ID
+ @param objectName         正在输入的消息的类型名
+ 
+ @discussion contentType为用户当前正在编辑的消息类型名，即RCMessageContent中getObjectName的返回值。
+ 如文本消息，应该传类型名"RC:TxtMsg"。
+ 
+ @warning 目前仅支持单聊。
+ */
+- (void)sendTypingStatus:(RCConversationType)conversationType
+                targetId:(NSString *)targetId
+             contentType:(NSString *)objectName;
+
 #pragma mark - 黑名单
 
 /*!
@@ -1159,6 +1225,9 @@ __deprecated_msg("已废弃，请勿使用。");
  @param messageCount            进入聊天室时获取历史消息的数量，-1<=messageCount<=50
  @param successBlock            加入聊天室成功的回调
  @param errorBlock              加入聊天室失败的回调 [status:加入聊天室失败的错误码]
+ 
+ @warning 注意：使用Kit库的会话页面viewDidLoad会自动调用joinChatRoom加入聊天室（聊天室不存在会自动创建），
+ 如果您只想加入已存在的聊天室，需要在push到会话页面之前调用这个方法并且messageCount 传-1，成功之后push到会话页面，失败需要您做相应提示处理
  
  @discussion 可以通过传入的messageCount设置加入聊天室成功之后，需要获取的历史消息数量。
  -1表示不获取任何历史消息，0表示不特殊设置而使用SDK默认的设置（默认为获取10条），0<messageCount<=50为具体获取的消息数量,最大值为50。

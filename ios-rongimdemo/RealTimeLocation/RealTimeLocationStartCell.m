@@ -60,6 +60,7 @@
     // CGFloat top, CGFloat left, CGFloat bottom, CGFloat right
     if (MessageDirection_RECEIVE == self.messageDirection) {
         messageContentViewRect.size.width = __bubbleSize.width;
+        messageContentViewRect.size.height = __bubbleSize.height;
         self.messageContentView.frame = messageContentViewRect;
         
         self.bubbleBackgroundView.frame = CGRectMake(0, 0, __bubbleSize.width, __bubbleSize.height);
@@ -73,9 +74,10 @@
                                                                                         image.size.height * 0.2, image.size.width * 0.2)];
     } else {
         messageContentViewRect.size.width = __bubbleSize.width;
+        messageContentViewRect.size.height = __bubbleSize.height;
         messageContentViewRect.origin.x =
         self.baseContentView.bounds.size.width -
-        (messageContentViewRect.size.width + 10 + [RCIM sharedRCIM].globalMessagePortraitSize.width + 10);
+        (messageContentViewRect.size.width + 10 + [RCIM sharedRCIM].globalMessagePortraitSize.width + 10)+6;
         self.messageContentView.frame = messageContentViewRect;
         
         self.bubbleBackgroundView.frame = CGRectMake(0, 0, __bubbleSize.width, __bubbleSize.height);

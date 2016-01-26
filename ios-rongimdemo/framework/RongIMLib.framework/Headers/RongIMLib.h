@@ -25,6 +25,7 @@ FOUNDATION_EXPORT const unsigned char RongIMLibVersionString[];
 #import <RongIMLib/RCConversation.h>
 #import <RongIMLib/RCDiscussion.h>
 #import <RongIMLib/RCGroup.h>
+#import <RongIMLib/RCUserTypingStatus.h>
 #import <RongIMLib/RCChatRoomInfo.h>
 /// 消息相关类
 #import <RongIMLib/RCMessage.h>
@@ -63,3 +64,4 @@ FOUNDATION_EXPORT const unsigned char RongIMLibVersionString[];
 #import <RongIMLib/RCRealTimeLocationManager.h>
 #import <RongIMLib/RCUploadImageStatusListener.h>
 #import <RongIMLib/RCWatchKitStatusDelegate.h>
+#import <RongIMLib/RCStatusMessage.h>

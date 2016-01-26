@@ -133,3 +133,5 @@
 "MessageHasRead"="已读";
 "MessageHasSend"="已发";
 "Full_Image"="原图";
+"typing"="对方正在输入...";
+"Speaking"="对方正在讲话...";

@@ -8,7 +8,7 @@
 
 #import "RCMessageCell.h"
 
-#define kAudioBubbleMinWidth 60
+#define kAudioBubbleMinWidth 70
 #define kAudioBubbleMaxWidth 180
 #define kBubbleBackgroundViewHeight 36
 

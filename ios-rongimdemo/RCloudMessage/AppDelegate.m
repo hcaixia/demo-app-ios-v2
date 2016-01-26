@@ -92,11 +92,14 @@
   [RCIM sharedRCIM].groupInfoDataSource = RCDDataSource;
   //设置群组内用户信息源。如果不使用群名片功能，可以不设置
   [RCIM sharedRCIM].groupUserInfoDataSource = RCDDataSource;
-  [RCIM sharedRCIM].enableMessageAttachUserInfo = YES;
+//  [RCIM sharedRCIM].enableMessageAttachUserInfo = YES;
   //设置接收消息代理
   [RCIM sharedRCIM].receiveMessageDelegate=self;
   //    [RCIM sharedRCIM].globalMessagePortraitSize = CGSizeMake(46, 46);
-
+  //开启输入状态监听
+  [RCIM sharedRCIM].enableTypingStatus=YES;
+    //开启发送已读回执（只支持单聊）
+  [RCIM sharedRCIM].enableReadReceipt=YES;
   //设置显示未注册的消息
   //如：新版本增加了某种自定义消息，但是老版本不能识别，开发者可以在旧版本中预先自定义这种未识别的消息的显示
   [RCIM sharedRCIM].showUnkownMessage = YES;
