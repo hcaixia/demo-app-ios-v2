@@ -938,8 +938,10 @@ FOUNDATION_EXPORT NSString *const RCLibDispatchReadReceiptNotification;
                                   success:(void (^)(RCConversationNotificationStatus nStatus))successBlock
                                     error:(void (^)(RCErrorCode status))errorBlock;
 
+#pragma mark 全局消息提醒
+
 /*!
- 屏蔽会话在某个时间段的消息提醒
+ 全局屏蔽某个时间段的消息提醒
  
  @param startTime       开始屏蔽消息提醒的时间，格式为HH:MM:SS
  @param spanMins        需要屏蔽消息提醒的分钟数，0 < spanMins < 1440
@@ -949,28 +951,61 @@ FOUNDATION_EXPORT NSString *const RCLibDispatchReadReceiptNotification;
  @discussion 此方法设置的屏蔽时间会在每天该时间段时生效。
  如果您使用IMLib，此方法会屏蔽该会话在该时间段的远程推送；如果您使用IMKit，此方法会屏蔽该会话在该时间段的所有提醒（远程推送、本地通知、前台提示音）。
  */
-- (void)setConversationNotificationQuietHours:(NSString *)startTime
-                                     spanMins:(int)spanMins
-                                      success:(void (^)())successBlock
-                                        error:(void (^)(RCErrorCode status))errorBlock;
+- (void)setNotificationQuietHours:(NSString *)startTime
+                         spanMins:(int)spanMins
+                          success:(void (^)())successBlock
+                            error:(void (^)(RCErrorCode status))errorBlock;
 
 /*!
- 删除会话的时间段消息提醒的屏蔽设置
+ 删除已设置的全局时间段消息提醒屏蔽
  
  @param successBlock    删除屏蔽成功的回调
  @param errorBlock      删除屏蔽失败的回调 [status:失败的错误码]
  */
-- (void)removeConversationNotificationQuietHours:(void (^)())successBlock
-                                           error:(void (^)(RCErrorCode status))errorBlock;
+- (void)removeNotificationQuietHours:(void (^)())successBlock
+                               error:(void (^)(RCErrorCode status))errorBlock;
 
 /*!
- 查询会话消息提醒的屏蔽时间段设置
+ 查询已设置的全局时间段消息提醒屏蔽
  
  @param successBlock    屏蔽成功的回调 [startTime:已设置的屏蔽开始时间, spansMin:已设置的屏蔽时间分钟数，0 < spansMin < 1440]
  @param errorBlock      查询失败的回调 [status:查询失败的错误码]
  */
 - (void)getNotificationQuietHours:(void (^)(NSString *startTime, int spansMin))successBlock
                             error:(void (^)(RCErrorCode status))errorBlock;
+
+/*!
+ 全局屏蔽某个时间段的消息提醒
+ 
+ @param startTime       开始屏蔽消息提醒的时间，格式为HH:MM:SS
+ @param spanMins        需要屏蔽消息提醒的分钟数，0 < spanMins < 1440
+ @param successBlock    屏蔽成功的回调
+ @param errorBlock      屏蔽失败的回调 [status:屏蔽失败的错误码]
+ 
+ @discussion 此方法设置的屏蔽时间会在每天该时间段时生效。
+ 如果您使用IMLib，此方法会屏蔽该会话在该时间段的远程推送；如果您使用IMKit，此方法会屏蔽该会话在该时间段的所有提醒（远程推送、本地通知、前台提示音）。
+ 
+ @warning **已废弃，请勿使用。**
+ 升级说明：如果您之前使用了此接口，可以直接替换为setNotificationQuietHours:spanMins:success:error:接口，行为和实现完全一致。
+ */
+- (void)setConversationNotificationQuietHours:(NSString *)startTime
+                                     spanMins:(int)spanMins
+                                      success:(void (^)())successBlock
+                                        error:(void (^)(RCErrorCode status))errorBlock
+__deprecated_msg("已废弃，请勿使用。");
+
+/*!
+ 删除已设置的全局时间段消息提醒屏蔽
+ 
+ @param successBlock    删除屏蔽成功的回调
+ @param errorBlock      删除屏蔽失败的回调 [status:失败的错误码]
+ 
+ @warning **已废弃，请勿使用。**
+ 升级说明：如果您之前使用了此接口，可以直接替换为removeNotificationQuietHours:error:接口，行为和实现完全一致。
+ */
+- (void)removeConversationNotificationQuietHours:(void (^)())successBlock
+                                           error:(void (^)(RCErrorCode status))errorBlock
+__deprecated_msg("已废弃，请勿使用。");
 
 #pragma mark - 输入状态提醒
 
@@ -1249,17 +1284,17 @@ __deprecated_msg("已废弃，请勿使用。");
                error:(void (^)(RCErrorCode status))errorBlock;
 
 /*!
- 获取聊天室的信息
+ 获取聊天室的信息（包含部分成员信息和当前聊天室中的成员总数）
  
  @param targetId     聊天室ID
- @param count        需要获取的数量，0 <= count <= 20（0表示只查询聊天室总人数，不查询具体成员信息）
- @param order        返回的成员列表的排列顺序
+ @param count        需要获取的成员信息的数量（目前获取到的聊天室信息中仅包含不多于20人的成员信息，即0 <= count <= 20，传入0获取到的聊天室信息将或仅包含成员总数，不包含具体的成员列表）
+ @param order        需要获取的成员列表的顺序（最早加入或是最晚加入的部分成员）
  @param successBlock 获取成功的回调 [chatRoomInfo:聊天室信息]
  @param errorBlock   获取失败的回调 [status:获取失败的错误码]
  
- @discussion 通过此接口，可以查询指定count数量的成员信息，若当前聊天室内人数少于count值，则返回所有的成员信息。
- 如果您使用顺序方式查询，将返回最早加入的成员信息列表，按加入时间从旧到新排列；
- 如果您使用逆序方式查询，将返回最晚加入的成员信息列表，按加入时间从新到旧排列。
+ @discussion 因为聊天室一般成员数量巨大，权衡效率和用户体验，目前返回的聊天室信息仅包含不多于20人的成员信息和当前成员总数。
+ 如果您使用RC_ChatRoom_Member_Asc升序方式查询，将返回最早加入的成员信息列表，按加入时间从旧到新排列；
+ 如果您使用RC_ChatRoom_Member_Desc降序方式查询，将返回最晚加入的成员信息列表，按加入时间从新到旧排列。
  */
 - (void)getChatRoomInfo:(NSString *)targetId
                   count:(int)count
@@ -1473,17 +1508,17 @@ __deprecated_msg("已废弃，请勿使用。");
 - (NSData *)decodeAMRToWAVE:(NSData *)data;
 
 /*!
- 将WAV格式的音频数据转化为AMR格式的音频数据
+ 将WAV格式的音频数据转化为AMR格式的音频数据（8KHz采样）
  
  @param data            WAV格式的音频数据
  @param nChannels       声道数
- @param nBitsPerSample  采样率
- @return                AMR-NB格式的音频数据‘
+ @param nBitsPerSample  采样位数（精度）
+ @return                AMR-NB格式的音频数据
  
  @discussion 此方法为工具类方法，您可以使用此方法将任意WAV音频转换为AMR-NB格式的音频。
  
  @warning 如果您想和SDK自带的语音消息保持一致和互通，考虑到跨平台和传输的原因，SDK对于WAV音频有所限制.
- 具体可以参考RCVoiceMessage中的音频参数说明。
+ 具体可以参考RCVoiceMessage中的音频参数说明(nChannels为1，nBitsPerSample为16)。
  */
 - (NSData *)encodeWAVEToAMR:(NSData *)data
                    channel:(int)nChannels

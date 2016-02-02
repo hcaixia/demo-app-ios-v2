@@ -48,7 +48,7 @@
  
  @discussion 如果您不是使用IMKit中的录音功能，则在初始化语音消息的时候，需要确保以下几点。
  1. audioData必须是单声道的wav格式音频数据；
- 2. audioData的采样率必须是8000Hz，位宽必须为16位。
+ 2. audioData的采样率必须是8000Hz，采样位数（精度）必须为16位。
  
  您可以参考IMKit中的录音参数：
  NSDictionary *settings = @{AVFormatIDKey: @(kAudioFormatLinearPCM),
@@ -57,7 +57,7 @@
                             AVLinearPCMBitDepthKey: @16,
                             AVLinearPCMIsNonInterleaved: @NO,
                             AVLinearPCMIsFloatKey: @NO,
-                            AVLinearPCMIsBigEndianKey: @NO};
+                            AVLinearPC'MIsBigEndianKey: @NO};
  */
 + (instancetype)messageWithAudio:(NSData *)audioData
                         duration:(long)duration;

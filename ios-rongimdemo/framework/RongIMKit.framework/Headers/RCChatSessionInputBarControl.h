@@ -89,6 +89,32 @@ typedef NS_ENUM(NSInteger, RCChatSessionInputBarInputType) {
 };
 
 /*!
+ 输入工具栏的输入模式
+ */
+typedef NS_ENUM(NSInteger, KBottomBarStatus) {
+    /*!
+     初始状态
+     */
+    KBottomBarDefaultStatus = 0,
+    /*!
+     文本输入状态
+     */
+    KBottomBarKeyboardStatus,
+    /*!
+     功能板输入模式
+     */
+    KBottomBarPluginStatus,
+    /*!
+     表情输入模式
+     */
+    KBottomBarEmojiStatus,
+    /*!
+     语音消息输入模式
+     */
+    KBottomBarRecordStatus
+};
+
+/*!
  输入工具栏的点击监听器
  */
 @protocol RCChatSessionInputBarControlDelegate;

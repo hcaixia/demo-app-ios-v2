@@ -187,6 +187,14 @@
 - (void)inputTextView:(UITextView *)inputTextView shouldChangeTextInRange:(NSRange)range
       replacementText:(NSString *)text;
 
+/*!
+ 设置输入框的输入状态
+ 
+ @param inputBarStatus  输入框状态
+ @param animated        是否使用动画效果
+ */
+-(void)setChatSessionInputBarStatus:(KBottomBarStatus)inputBarStatus animated:(BOOL)animated;
+
 #pragma mark - 显示设置
 
 /*!

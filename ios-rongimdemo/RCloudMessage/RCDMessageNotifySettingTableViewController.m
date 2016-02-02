@@ -58,8 +58,8 @@
     MBProgressHUD* hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     hud.labelText = @"设置中...";
     if (!self.notifySwitch.on) {
-        [[RCIMClient sharedRCIMClient] setConversationNotificationQuietHours:@"00:00:00" spanMins:1439 success:^{
-            NSLog(@"setConversationNotificationQuietHours succeed");
+        [[RCIMClient sharedRCIMClient] setNotificationQuietHours:@"00:00:00" spanMins:1439 success:^{
+            NSLog(@"setNotificationQuietHours succeed");
             [[RCIM sharedRCIM] setDisableMessageNotificaiton:YES];
             
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -76,7 +76,7 @@
             });
         }];
     } else {
-        [[RCIMClient sharedRCIMClient] removeConversationNotificationQuietHours:^{
+        [[RCIMClient sharedRCIMClient] removeNotificationQuietHours:^{
             [[RCIM sharedRCIM] setDisableMessageNotificaiton:NO];
             dispatch_async(dispatch_get_main_queue(), ^{
                 [hud hide:YES];

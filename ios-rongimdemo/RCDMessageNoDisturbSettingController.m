@@ -106,7 +106,7 @@
         NSDate *endDate = [formatterE dateFromString:endTime];
         double timeDiff = [endDate timeIntervalSinceDate:startDate];
         int timeDif = timeDiff/60;
-        [[RCIMClient sharedRCIMClient] setConversationNotificationQuietHours:startTime spanMins:timeDif success:^{
+        [[RCIMClient sharedRCIMClient] setNotificationQuietHours:startTime spanMins:timeDif success:^{
             [RCIM sharedRCIM].disableMessageNotificaiton = YES;
             [UserDefaults setObject:startTime forKey:@"startTime"];
             [UserDefaults setObject:endTime forKey:@"endTime"];
@@ -232,7 +232,7 @@
         double timeDiff = [endDate timeIntervalSinceDate:startDate];
         int timeDif = timeDiff/60;
         __weak typeof(&*self) blockSelf = self;
-        [[RCIMClient sharedRCIMClient] setConversationNotificationQuietHours:startTime spanMins:timeDif success:^{
+        [[RCIMClient sharedRCIMClient] setNotificationQuietHours:startTime spanMins:timeDif success:^{
             [RCIM sharedRCIM].disableMessageNotificaiton = YES;
         } error:^(RCErrorCode status) {
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -243,7 +243,7 @@
         }];
     }else{
         __weak typeof(&*self) blockSelf = self;
-        [[RCIMClient sharedRCIMClient] removeConversationNotificationQuietHours:^{
+        [[RCIMClient sharedRCIMClient] removeNotificationQuietHours:^{
             [RCIM sharedRCIM].disableMessageNotificaiton = NO;
         } error:^(RCErrorCode status) {
             dispatch_async(dispatch_get_main_queue(), ^{
