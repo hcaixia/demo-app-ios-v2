@@ -105,6 +105,16 @@
         NSDate *startDate = [formatterE dateFromString:startTime];
         NSDate *endDate = [formatterE dateFromString:endTime];
         double timeDiff = [endDate timeIntervalSinceDate:startDate];
+        NSDate *laterTime = [startDate laterDate:endDate];
+        //开始时间大于结束时间，跨天设置
+        if ([laterTime isEqualToDate:startDate]) {
+            NSDate *dayEndTime = [formatterE dateFromString:@"23:59:59"];
+            NSDate *dayBeginTime = [formatterE dateFromString:@"00:00:00"];
+            double timeDiff1 = [dayEndTime timeIntervalSinceDate:startDate];
+            double timeDiff2 = [endDate timeIntervalSinceDate:dayBeginTime];
+            timeDiff = timeDiff1 + timeDiff2;
+        }
+
         int timeDif = timeDiff/60;
         [[RCIMClient sharedRCIMClient] setNotificationQuietHours:startTime spanMins:timeDif success:^{
             [RCIM sharedRCIM].disableMessageNotificaiton = YES;
@@ -204,16 +214,16 @@
     if (startTime == nil || endTime == nil) {
         return;
     }
-    NSDate *laterTime = [startTime laterDate:endTime];
-    if ([laterTime isEqualToDate:startTime]) {
-        startCell.detailTextLabel.text = @"00:00:00";
-        [self.tableView selectRowAtIndexPath:startIndexPath animated:YES scrollPosition:UITableViewScrollPositionTop];
-        [self tableView:self.tableView didSelectRowAtIndexPath:startIndexPath];
-        
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:@"开始时间不能大于等于结束时间" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-        [alertView show];
-        return;
-    }
+//    NSDate *laterTime = [startTime laterDate:endTime];
+//    if ([laterTime isEqualToDate:startTime]) {
+//        startCell.detailTextLabel.text = @"00:00:00";
+//        [self.tableView selectRowAtIndexPath:startIndexPath animated:YES scrollPosition:UITableViewScrollPositionTop];
+//        [self tableView:self.tableView didSelectRowAtIndexPath:startIndexPath];
+//        
+//        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:@"开始时间不能大于等于结束时间" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+//        [alertView show];
+//        return;
+//    }
 }
 
 #pragma mark - setSwitchState
@@ -222,17 +232,31 @@
         NSIndexPath *endIndexPath = [NSIndexPath indexPathForRow:1 inSection:1];
         UITableViewCell *startCell = [self.tableView cellForRowAtIndexPath:startIndexPath];
         UITableViewCell *endCell = [self.tableView cellForRowAtIndexPath:endIndexPath];
-        NSString *startTime = startCell.detailTextLabel.text;
-        NSString *endTime = endCell.detailTextLabel.text;
+        NSString *startTimeStr = startCell.detailTextLabel.text;
+        NSString *endTimeStr = endCell.detailTextLabel.text;
     if (swich.on){
         NSDateFormatter *formatterF = [[NSDateFormatter alloc] init];
         [formatterF setDateFormat:@"HH:mm:ss"];
-        NSDate *startDate = [formatterF dateFromString:startTime];
-        NSDate *endDate = [formatterF dateFromString:endTime];
+        NSDate *startDate = [formatterF dateFromString:startTimeStr];
+        NSDate *endDate = [formatterF dateFromString:endTimeStr];
+        
         double timeDiff = [endDate timeIntervalSinceDate:startDate];
+        NSDate *laterTime = [startDate laterDate:endDate];
+        //开始时间大于结束时间，跨天设置
+        if ([laterTime isEqualToDate:startDate]) {
+            NSDate *dayEndTime = [formatterF dateFromString:@"23:59:59"];
+            NSDate *dayBeginTime = [formatterF dateFromString:@"00:00:00"];
+            double timeDiff1 = [dayEndTime timeIntervalSinceDate:startDate];
+            double timeDiff2 = [endDate timeIntervalSinceDate:dayBeginTime];
+            timeDiff = timeDiff1 + timeDiff2;
+        }
+        
         int timeDif = timeDiff/60;
+        
+        
+        
         __weak typeof(&*self) blockSelf = self;
-        [[RCIMClient sharedRCIMClient] setNotificationQuietHours:startTime spanMins:timeDif success:^{
+        [[RCIMClient sharedRCIMClient] setNotificationQuietHours:startTimeStr spanMins:timeDif success:^{
             [RCIM sharedRCIM].disableMessageNotificaiton = YES;
         } error:^(RCErrorCode status) {
             dispatch_async(dispatch_get_main_queue(), ^{

@@ -696,7 +696,7 @@ FOUNDATION_EXPORT NSString *const RCLibDispatchReadReceiptNotification;
  @param successBlock        获取成功的回调 [messages:获取到的历史消息数组]
  @param errorBlock          获取失败的回调 [status:获取失败的错误码]
  
- @discussion 此方法从服务器端获取之前的历史消息，但是必须先开通历史消息漫游功能。
+ @discussion 此方法从服务器端获取之前的历史消息，但是必须先开通历史消息云存储功能。
  */
 - (void)getRemoteHistoryMessages:(RCConversationType)conversationType
                         targetId:(NSString *)targetId
