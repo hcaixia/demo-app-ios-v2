@@ -117,7 +117,7 @@
 #pragma mark-UIActionSheetDelegate
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if ([actionSheet isEqual:self.clearMsgHistoryActionSheet]) {
+    if ([actionSheet isEqual:self.clearMsgHistoryActionSheet] && buttonIndex == 0) {
         [self clearHistoryMessage];
     }else{
         if (0 == buttonIndex) {

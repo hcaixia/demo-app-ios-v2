@@ -20,153 +20,231 @@
 #pragma mark RCConnectErrorCode - 建立连接返回的错误码
 /*!
  建立连接返回的错误码
+ 
+ @discussion 开发者仅需要关注以下几种连接错误码，其余错误码SDK均会进行自动重连，开发者无须处理。
+ RC_CONN_ID_REJECT, RC_CONN_TOKEN_INCORRECT, RC_CONN_NOT_AUTHRORIZED, 
+ RC_CONN_PACKAGE_NAME_INVALID, RC_CONN_APP_BLOCKED_OR_DELETED, RC_CONN_USER_BLOCKED, 
+ RC_DISCONN_KICK, RC_CLIENT_NOT_INIT, RC_INVALID_PARAMETER, RC_INVALID_ARGUMENT
  */
 typedef NS_ENUM(NSInteger, RCConnectErrorCode) {
     /*!
-     连接过程中，获取路由导航数据失败
+     导航路由失败
+     
+     @discussion 建立连接的临时错误码，SDK会做好自动重连，开发者无须处理。
      */
     RC_NET_NAVI_ERROR = 30000,
     
     /*!
-     当前连接已经被释放，可能需要做重连处理
+     连接已被释放
+     
+     @discussion 建立连接的临时错误码，SDK会做好自动重连，开发者无须处理。
      */
     RC_NET_CHANNEL_INVALID = 30001,
     
     /*!
-     当前连接不可用，可能需要做重连处理
+     连接不可用
+     
+     @discussion 建立连接的临时错误码，SDK会做好自动重连，开发者无须处理。
      */
     RC_NET_UNAVAILABLE = 30002,
     
     /*!
-     当前请求响应超时
+     请求响应超时
+     
+     @discussion 建立连接的临时错误码，SDK会做好自动重连，开发者无须处理。
      */
     RC_MSG_RESP_TIMEOUT = 30003,
     
     /*!
-     连接过程中，当前HTTP发送失败
+     导航HTTP发送失败
+     
+     @discussion 建立连接的临时错误码，SDK会做好自动重连，开发者无须处理。
      */
     RC_HTTP_SEND_FAIL = 30004,
     
     /*!
-     连接过程中，当前HTTP请求超时
+     导航HTTP请求超时
+     
+     @discussion 建立连接的临时错误码，SDK会做好自动重连，开发者无须处理。
      */
     RC_HTTP_REQ_TIMEOUT = 30005,
     
     /*!
-     连接过程中，当前HTTP接收失败
+     导航HTTP接收失败
+     
+     @discussion 建立连接的临时错误码，SDK会做好自动重连，开发者无须处理。
      */
     RC_HTTP_RECV_FAIL = 30006,
     
     /*!
-     连接过程中，当前HTTP返回错误码
+     导航HTTP请求失败
+     
+     @discussion 建立连接的临时错误码，SDK会做好自动重连，开发者无须处理。
      */
     RC_NAVI_RESOURCE_ERROR = 30007,
     
     /*!
-     连接过程中，当前HTTP返回错误码
+     导航HTTP返回数据格式错误
+     
+     @discussion 建立连接的临时错误码，SDK会做好自动重连，开发者无须处理。
      */
     RC_NODE_NOT_FOUND = 30008,
     
     /*!
-     连接过程中，当前HTTP返回错误码
+     导航HTTP返回数据不可用
+     
+     @discussion 建立连接的临时错误码，SDK会做好自动重连，开发者无须处理。
      */
     RC_DOMAIN_NOT_RESOLVE = 30009,
     
     /*!
      创建Socket连接失败
+     
+     @discussion 建立连接的临时错误码，SDK会做好自动重连，开发者无须处理。
      */
     RC_SOCKET_NOT_CREATED = 30010,
     
     /*!
-     Socket主动断开，或者被动被服务器断开
+     Socket断开
+     
+     @discussion 建立连接的临时错误码，SDK会做好自动重连，开发者无须处理。
      */
     RC_SOCKET_DISCONNECTED = 30011,
     
     /*!
-     PING操作失败
+     PING失败
+     
+     @discussion 建立连接的临时错误码，SDK会做好自动重连，开发者无须处理。
      */
     RC_PING_SEND_FAIL = 30012,
     
     /*!
-     PING操作没有得到返回响应
+     PING超时
+     
+     @discussion 建立连接的临时错误码，SDK会做好自动重连，开发者无须处理。
      */
     RC_PONG_RECV_FAIL = 30013,
     
     /*!
      信令发送失败
+     
+     @discussion 建立连接的临时错误码，SDK会做好自动重连，开发者无须处理。
      */
     RC_MSG_SEND_FAIL = 30014,
     
     /*!
-     由服务器返回，connect 响应超时
+     连接ACK超时
+     
+     @discussion 建立连接的临时错误码，SDK会做好自动重连，开发者无须处理。
      */
     RC_CONN_ACK_TIMEOUT = 31000,
     
     /*!
-     由服务器返回，信令版本号错误
+     信令版本错误
+     
+     @discussion 建立连接的临时错误码，SDK会做好自动重连，开发者无须处理。
      */
     RC_CONN_PROTO_VERSION_ERROR = 31001,
     
     /*!
-     由服务器返回，App ID被拒绝
+     AppKey错误
+     
+     @discussion 请检查您使用的AppKey是否正确。
      */
     RC_CONN_ID_REJECT = 31002,
     
     /*!
-     由服务器返回，服务不可用
+     服务器当前不可用（预留）
+     
+     @discussion 建立连接的临时错误码，SDK会做好自动重连，开发者无须处理。
      */
     RC_CONN_SERVER_UNAVAILABLE = 31003,
     
     /*!
-     由服务器返回，Token不正确，App需要重新向App服务器请求Token
+     Token无效
+     
+     @discussion Token无效一般有以下两种原因。
+     一是token错误，请您检查客户端初始化使用的AppKey和您服务器获取token使用的AppKey是否一致；
+     二是token过期，是因为您在开发者后台设置了token过期时间，您需要请求您的服务器重新获取token并再次用新的token建立连接。
      */
     RC_CONN_TOKEN_INCORRECT = 31004,
     
     /*!
-     由服务器返回，未授权
+     AppKey与Token不匹配
+     
+     @discussion 请检查您使用的AppKey与Token是否正确，是否匹配。一般有以下两种原因。
+     一是token错误，请您检查客户端初始化使用的AppKey和您服务器获取token使用的AppKey是否一致；
+     二是token过期，是因为您在开发者后台设置了token过期时间，您需要请求您的服务器重新获取token并再次用新的token建立连接。
      */
     RC_CONN_NOT_AUTHRORIZED = 31005,
     
     /*!
-     由服务器返回，重定向
+     连接重定向
+     
+     @discussion 建立连接的临时错误码，SDK会做好自动重连，开发者无须处理。
      */
     RC_CONN_REDIRECTED = 31006,
     
     /*!
-     由服务器返回，包名不正确
+     BundleID不正确
+     
+     @discussion 请检查您App的BundleID是否正确。
      */
     RC_CONN_PACKAGE_NAME_INVALID = 31007,
     
     /*!
-     由服务器返回，应用被封禁
+     AppKey被封禁或已删除
+     
+     @discussion 请检查您使用的AppKey是否正确。
      */
     RC_CONN_APP_BLOCKED_OR_DELETED = 31008,
     
     /*!
-     由服务器返回，用户被封禁
+     用户被封禁
+     
+     @discussion 请检查您使用的Token是否正确，以及对应的UserId是否被封禁。
      */
     RC_CONN_USER_BLOCKED = 31009,
     
     /*!
-     由服务器返回，重复登陆
+     当前用户在其他设备上登陆，此设备被踢下线
      */
     RC_DISCONN_KICK = 31010,
     
     /*!
-     信令返回数据不完整
+     信令数据无效
+     
+     @discussion 建立连接的临时状态，SDK会做好自动重连，开发者无须处理。
      */
     RC_QUERY_ACK_NO_DATA = 32001,
     
     /*!
-     数据传输失败
+     信令数据错误
+     
+     @discussion 建立连接的临时状态，SDK会做好自动重连，开发者无须处理。
      */
     RC_MSG_DATA_INCOMPLETE = 32002,
     
     /*!
-     本地调用传入参数错误
+     SDK没有初始化
+     
+     @discussion 在使用SDK任何功能之前，必须先Init。
+     */
+    RC_CLIENT_NOT_INIT = 33001,
+    
+    /*!
+     开发者接口调用时传入的参数错误
+     
+     @discussion 请检查接口调用时传入的参数类型和值。
+     */
+    RC_INVALID_PARAMETER = 33003,
+    
+    /*!
+     开发者接口调用时传入的参数错误
+     
+     @discussion 请检查接口调用时传入的参数类型和值。
      */
     RC_INVALID_ARGUMENT = -1000
-    
 };
 
 #pragma mark RCErrorCode - 具体业务错误码
@@ -175,7 +253,7 @@ typedef NS_ENUM(NSInteger, RCConnectErrorCode) {
  */
 typedef NS_ENUM(NSInteger, RCErrorCode) {
     /*!
-     未知错误
+     未知错误（预留）
      */
     ERRORCODE_UNKNOWN = -1,
     
@@ -190,7 +268,7 @@ typedef NS_ENUM(NSInteger, RCErrorCode) {
     ERRORCODE_TIMEOUT = 5004,
     
     /*!
-     发送消息频率超限，1秒钟最多只允许发送5条消息。
+     发送消息频率过高，1秒钟最多只允许发送5条消息
      */
     SEND_MSG_FREQUENCY_OVERRUN = 20604,
     
@@ -225,14 +303,24 @@ typedef NS_ENUM(NSInteger, RCErrorCode) {
     KICKED_FROM_CHATROOM = 23409,
     
     /*!
-     聊天室不存在。
+     聊天室不存在
      */
     RC_CHATROOM_NOT_EXIST = 23410,
     
     /*!
-     聊天室成员超限。
+     聊天室成员超限
      */
     RC_CHATROOM_IS_FULL = 23411,
+    
+    /*!
+     当前连接不可用（连接已经被释放）
+     */
+    RC_CHANNEL_INVALID = 30001,
+    
+    /*!
+     当前连接不可用
+     */
+    RC_NETWORK_UNAVAILABLE = 30002,
     
     /*!
      SDK没有初始化
@@ -243,123 +331,133 @@ typedef NS_ENUM(NSInteger, RCErrorCode) {
     
     /*!
      数据库错误
+     
+     @discussion 请检查您使用的Token和userId是否正确。
      */
     DATABASE_ERROR = 33002,
     
     /*!
-     传入的参数错误
+     开发者接口调用时传入的参数错误
+     
+     @discussion 请检查接口调用时传入的参数类型和值。
      */
     INVALID_PARAMETER = 33003,
     
     /*!
-     消息漫游业务未开通
+     历史消息云存储业务未开通
      */
     MSG_ROAMING_SERVICE_UNAVAILABLE = 33007,
 };
 
 #pragma mark - 连接状态
 
-#pragma mark RCCurrentConnectionStatus - 当前连接状态
+#pragma mark RCConnectionStatus - 网络连接状态码
 /*!
- 当前连接状态
+ 网络连接状态码
+ 
+ @discussion 开发者仅需要关注以下几种连接状态，其余状态SDK均会进行自动重连。
+ ConnectionStatus_Connected, ConnectionStatus_Connecting, ConnectionStatus_Unconnected, 
+ ConnectionStatus_SignUp, ConnectionStatus_KICKED_OFFLINE_BY_OTHER_CLIENT, 
+ ConnectionStatus_TOKEN_INCORRECT
  */
-typedef NS_ENUM(NSUInteger, RCCurrentConnectionStatus) {
+typedef NS_ENUM(NSInteger, RCConnectionStatus) {
     /*!
-     已断开连接
+     未知状态
      */
-    RC_DISCONNECTED = 9,
+    ConnectionStatus_UNKNOWN = -1,
     
     /*!
      连接成功
      */
-    RC_CONNECTED = 0,
+    ConnectionStatus_Connected = 0,
+    
+    /*!
+     当前设备网络不可用
+     
+     @discussion 建立连接的临时状态，SDK会做好自动重连，开发者无须处理。
+     */
+    ConnectionStatus_NETWORK_UNAVAILABLE = 1,
+    
+    /*!
+     当前设备切换到飞行模式
+     
+     @discussion 建立连接的临时状态，SDK会做好自动重连，开发者无须处理。
+     */
+    ConnectionStatus_AIRPLANE_MODE = 2,
+    
+    /*!
+     当前设备切换到 2G（GPRS、EDGE）低速网络
+     
+     @discussion 建立连接的临时状态，SDK会做好自动重连，开发者无须处理。
+     */
+    ConnectionStatus_Cellular_2G = 3,
+    
+    /*!
+     当前设备切换到 3G 或 4G 高速网络
+     
+     @discussion 建立连接的临时状态，SDK会做好自动重连，开发者无须处理。
+     */
+    ConnectionStatus_Cellular_3G_4G = 4,
+    
+    /*!
+     当前设备切换到 WIFI 网络
+     
+     @discussion 建立连接的临时状态，SDK会做好自动重连，开发者无须处理。
+     */
+    ConnectionStatus_WIFI = 5,
+    
+    /*!
+     当前用户在其他设备上登陆，此设备被踢下线
+     */
+    ConnectionStatus_KICKED_OFFLINE_BY_OTHER_CLIENT = 6,
+    
+    /*!
+     当前用户在 Web 端登陆
+     
+     @discussion 建立连接的临时状态，SDK会做好自动重连，开发者无须处理。
+     */
+    ConnectionStatus_LOGIN_ON_WEB = 7,
+    
+    /*!
+     服务器异常
+     
+     @discussion 建立连接的临时状态，SDK会做好自动重连，开发者无须处理。
+     */
+    ConnectionStatus_SERVER_INVALID = 8,
+    
+    /*!
+     连接验证异常
+     
+     @discussion 建立连接的临时状态，SDK会做好自动重连，开发者无须处理。
+     */
+    ConnectionStatus_VALIDATE_INVALID = 9,
     
     /*!
      连接中
      */
-    RC_CONNECTING = 2
-};
-
-#pragma mark RCConnectionStatus - 网络连接状态码
-/*!
- 网络连接状态码
- */
-typedef NS_ENUM(NSInteger, RCConnectionStatus) {
-    /**
-     * 未知状态。
-     */
-    ConnectionStatus_UNKNOWN = -1, //"Unknown error."
-
-    /**
-     * 连接成功。
-     */
-    ConnectionStatus_Connected = 0,
-
-    /**
-     * 网络不可用。
-     */
-    ConnectionStatus_NETWORK_UNAVAILABLE = 1, //"Network is unavailable."
-
-    /**
-     * 设备处于飞行模式。
-     */
-    ConnectionStatus_AIRPLANE_MODE = 2, //"Switch to airplane mode."
-
-    /**
-     * 设备处于 2G（GPRS、EDGE）低速网络下。
-     */
-    ConnectionStatus_Cellular_2G = 3, // "Switch to 2G cellular network."
-
-    /**
-     * 设备处于 3G 或 4G（LTE）高速网络下。
-     */
-    ConnectionStatus_Cellular_3G_4G = 4, //"Switch to 3G or 4G cellular network."
-
-    /**
-     * 设备网络切换到 WIFI 网络。
-     */
-    ConnectionStatus_WIFI = 5, //"Switch to WIFI network."
-
-    /**
-     * 用户账户在其他设备登录，本机会被踢掉线。
-     */
-    ConnectionStatus_KICKED_OFFLINE_BY_OTHER_CLIENT = 6, //"Login on the other device, and be kicked offline."
-
-    /**
-     * 用户账户在 Web 端登录。
-     */
-    ConnectionStatus_LOGIN_ON_WEB = 7, //"Login on web client."
-
-    /**
-     * 服务器异常或无法连接。
-     */
-    ConnectionStatus_SERVER_INVALID = 8,
-
-    /**
-     * 验证异常(可能由于user验证、版本验证、auth验证)。
-     */
-    ConnectionStatus_VALIDATE_INVALID = 9,
-    /**
-     *  开始发起连接
-     */
     ConnectionStatus_Connecting = 10,
-    /**
-     *  连接失败和未连接
+    
+    /*!
+     连接失败或未连接
      */
     ConnectionStatus_Unconnected = 11,
-
-    /**
-     *   注销
+    
+    /*!
+     已注销
      */
     ConnectionStatus_SignUp = 12,
     
-    /**
-     *   Token无效，可能是token错误，token过期或者后台刷新了密钥等原因
+    /*!
+     Token无效
+     
+     @discussion Token无效一般有两种原因。一是token错误，请您检查客户端初始化使用的AppKey和您服务器获取token使用的AppKey是否一致；二是token过期，是因为您在开发者后台设置了token过期时间，您需要请求您的服务器重新获取token并再次用新的token建立连接。
      */
     ConnectionStatus_TOKEN_INCORRECT = 31004,
     
-    /**
-     *  服务器断开连接
+    /*!
+     与服务器的连接已断开
+     
+     @discussion 建立连接的临时状态，SDK会做好自动重连，开发者无须处理。
      */
     ConnectionStatus_DISCONN_EXCEPTION = 31011
 };
@@ -373,22 +471,26 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
      当前网络不可用
      */
     RC_NotReachable = 0,
+    
     /*!
      当前处于WiFi网络
      */
-    RC_ReachableViaWiFi,
+    RC_ReachableViaWiFi = 1,
+    
     /*!
      当前处于LTE网络
      */
-    RC_ReachableViaLTE,
+    RC_ReachableViaLTE = 2,
+    
     /*!
      当前处于3G网络
      */
-    RC_ReachableVia3G,
+    RC_ReachableVia3G = 3,
+    
     /*!
      当前处于2G网络
      */
-    RC_ReachableVia2G
+    RC_ReachableVia2G = 4
 };
 
 #pragma mark RCSDKRunningMode - SDK当前所处的状态
@@ -400,6 +502,7 @@ typedef NS_ENUM(NSUInteger, RCSDKRunningMode) {
      前台运行状态
      */
     RCSDKRunningMode_Backgroud = 0,
+    
     /*!
      后台运行状态
      */
@@ -421,17 +524,17 @@ typedef NS_ENUM(NSUInteger, RCConversationType) {
     /*!
      讨论组
      */
-    ConversationType_DISCUSSION,
+    ConversationType_DISCUSSION = 2,
     
     /*!
      群组
      */
-    ConversationType_GROUP,
+    ConversationType_GROUP = 3,
     
     /*!
      聊天室
      */
-    ConversationType_CHATROOM,
+    ConversationType_CHATROOM = 4,
     
     /*!
      客服1.0会话
@@ -439,27 +542,27 @@ typedef NS_ENUM(NSUInteger, RCConversationType) {
      @discussion 客服2.0使用应用内公众服务会话（ConversationType_APPSERVICE）的方式实现。
      即客服2.0会话是其中一个应用内公众服务会话，我们推荐您使用和迁移到客服2.0服务。
      */
-    ConversationType_CUSTOMERSERVICE,
+    ConversationType_CUSTOMERSERVICE = 5,
     
     /*!
      系统会话
      */
-    ConversationType_SYSTEM,
+    ConversationType_SYSTEM = 6,
     
     /*!
      应用内公众服务会话
      */
-    ConversationType_APPSERVICE,
+    ConversationType_APPSERVICE = 7,
     
     /*!
      跨应用公众服务会话
      */
-    ConversationType_PUBLICSERVICE,
+    ConversationType_PUBLICSERVICE = 8,
     
     /*!
      推送服务会话
      */
-    ConversationType_PUSHSERVICE
+    ConversationType_PUSHSERVICE = 9
 };
 
 #pragma mark RCConversationNotificationStatus - 会话提醒状态
@@ -548,7 +651,7 @@ typedef NS_ENUM(NSUInteger, RCMessageDirection) {
     /*!
      接收
      */
-    MessageDirection_RECEIVE
+    MessageDirection_RECEIVE = 2
 };
 
 #pragma mark RCSentStatus - 消息的发送状态
@@ -628,12 +731,12 @@ typedef NS_ENUM(NSUInteger, RCMediaType) {
     /*!
      语音
      */
-    MediaType_AUDIO,
+    MediaType_AUDIO = 2,
     
     /*!
      视频
      */
-    MediaType_VIDEO,
+    MediaType_VIDEO = 3,
     
     /*!
      其他文件

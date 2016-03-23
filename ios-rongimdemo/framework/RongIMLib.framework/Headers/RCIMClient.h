@@ -716,10 +716,18 @@ FOUNDATION_EXPORT NSString *const RCLibDispatchReadReceiptNotification;
 /*!
  通过messageId获取消息实体
  
- @param messageId   消息ID
+ @param messageId   消息ID（数据库索引唯一值）
  @return            通过消息ID获取到的消息实体，当获取失败的时候，会返回nil。
  */
 -(RCMessage *)getMessage:(long)messageId;
+
+/*!
+ 通过全局唯一ID获取消息实体
+ 
+ @param messageUId   全局唯一ID（服务器消息唯一ID）
+ @return             通过全局唯一ID获取到的消息实体，当获取失败的时候，会返回nil。
+ */
+-(RCMessage *)getMessageByUId:(NSString *)messageUId;
 
 /*!
  删除消息

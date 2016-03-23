@@ -15,6 +15,10 @@
 @interface RCLocationMessageCell : RCMessageCell
 
 /*!
+ 消息的背景View
+ */
+@property(nonatomic, strong) UIImageView *bubbleBackgroundView;
+/*!
  当前位置在地图中的概览图
  */
 @property(nonatomic, strong) UIImageView *pictureView;

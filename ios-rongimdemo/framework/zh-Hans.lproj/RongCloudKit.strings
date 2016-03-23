@@ -19,7 +19,7 @@
 "conversation_group_collection_title" = "群助手";
 "conversation_discussion_collection_title" = "讨论组助手";
 "conversation_systemMessage_collection_title" = "系统消息助手";
-"hold_to_talk_title"="按住通话";
+"hold_to_talk_title"="按住说话";
 "release_to_send_title"="松开发送";
 "slide_up_to_cancel_title"="手指上滑 取消发送";
 "release_to_cancel_title"="手指松开 取消发送";
