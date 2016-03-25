@@ -72,6 +72,7 @@
 		A6447AA71B1DC18100EA2CEE /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C3310D1A0C72A000E31B9A /* SystemConfiguration.framework */; };
 		A6447AA81B1DC18700EA2CEE /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C331031A0C726F00E31B9A /* libsqlite3.dylib */; };
 		A6447AA91B1DC19100EA2CEE /* libstdc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C331051A0C727C00E31B9A /* libstdc++.dylib */; };
+		A65C1C8F1C7C13F400EBB601 /* RCDCustomServiceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A65C1C8E1C7C13F400EBB601 /* RCDCustomServiceViewController.m */; };
 		A662A0E11AEE50D400847EEB /* RCDAboutRongCloudTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A662A0E01AEE50D400847EEB /* RCDAboutRongCloudTableViewController.m */; };
 		A677D6991B81EBB9007D5D90 /* HeadCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = A677D6871B81EBB9007D5D90 /* HeadCollectionView.m */; };
 		A677D69A1B81EBB9007D5D90 /* RCAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = A677D68A1B81EBB9007D5D90 /* RCAnnotation.m */; };
@@ -378,6 +379,8 @@
 		A6447A821B1DC14A00EA2CEE /* TextMessageRow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextMessageRow.m; sourceTree = "<group>"; };
 		A6447A831B1DC14A00EA2CEE /* VoiceMessageRow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VoiceMessageRow.h; sourceTree = "<group>"; };
 		A6447A841B1DC14A00EA2CEE /* VoiceMessageRow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VoiceMessageRow.m; sourceTree = "<group>"; };
+		A65C1C8D1C7C13F400EBB601 /* RCDCustomServiceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RCDCustomServiceViewController.h; path = RCloudMessage/RCDCustomServiceViewController.h; sourceTree = SOURCE_ROOT; };
+		A65C1C8E1C7C13F400EBB601 /* RCDCustomServiceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RCDCustomServiceViewController.m; path = RCloudMessage/RCDCustomServiceViewController.m; sourceTree = SOURCE_ROOT; };
 		A662A0DF1AEE50D400847EEB /* RCDAboutRongCloudTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCDAboutRongCloudTableViewController.h; sourceTree = SOURCE_ROOT; };
 		A662A0E01AEE50D400847EEB /* RCDAboutRongCloudTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCDAboutRongCloudTableViewController.m; sourceTree = SOURCE_ROOT; };
 		A677D6861B81EBB9007D5D90 /* HeadCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeadCollectionView.h; sourceTree = "<group>"; };
@@ -1120,6 +1123,8 @@
 			children = (
 				E4E9398C1AD65BC0001E0AC6 /* RCDServiceViewController.h */,
 				E4E9398D1AD65BC0001E0AC6 /* RCDServiceViewController.m */,
+				A65C1C8D1C7C13F400EBB601 /* RCDCustomServiceViewController.h */,
+				A65C1C8E1C7C13F400EBB601 /* RCDCustomServiceViewController.m */,
 			);
 			name = Service;
 			sourceTree = "<group>";
@@ -1546,6 +1551,9 @@
 					A6447A041B1DBE6500EA2CEE = {
 						CreatedOnToolsVersion = 6.3.2;
 						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
 						};
 					};
 					A6447A131B1DBE6500EA2CEE = {
@@ -1554,6 +1562,9 @@
 					E4D40F271A031F460045097C = {
 						CreatedOnToolsVersion = 6.0.1;
 						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
 							com.apple.BackgroundModes = {
 								enabled = 1;
 							};
@@ -1697,6 +1708,7 @@
 				E4E939CC1AD65E1E001E0AC6 /* UITextFiled+Shake.m in Sources */,
 				E4E9399A1AD65C3B001E0AC6 /* RCDFindPswViewController.m in Sources */,
 				E4E9394F1AD65A95001E0AC6 /* UIImageView+AFNetworking.m in Sources */,
+				A65C1C8F1C7C13F400EBB601 /* RCDCustomServiceViewController.m in Sources */,
 				A6827BE41B16AC39000B9862 /* AddAppKeyViewController.m in Sources */,
 				A677D69A1B81EBB9007D5D90 /* RCAnnotation.m in Sources */,
 				E4E939791AD65AEB001E0AC6 /* RCDChatRoomInfo.m in Sources */,
@@ -2120,7 +2132,7 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "${TARGET_NAME}";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "f59ece39-d7ad-4ac2-9bd7-40a37395f080";
 				SKIP_INSTALL = YES;
 			};
 			name = Debug;
@@ -2148,7 +2160,7 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "${TARGET_NAME}";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "2a664bc3-e285-43b5-814d-d49e0dedbcad";
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
@@ -2170,7 +2182,7 @@
 				INFOPLIST_FILE = "融云 Demo WatchKit App/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "615594e5-8042-403b-908c-169b649b4fd8";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 4;
 				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";
@@ -2191,7 +2203,7 @@
 				INFOPLIST_FILE = "融云 Demo WatchKit App/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "60b762f0-d619-41d4-a113-3eac45c3739d";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 4;
 				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";
@@ -2311,7 +2323,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				OTHER_LIBTOOLFLAGS = "$(OTHER_LDFLAGS)";
 				PRODUCT_NAME = RCloudMessage;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "c115b538-dd81-4de5-9539-53f7139a1af1";
 				VALID_ARCHS = "armv7 armv7s arm64";
 			};
 			name = Debug;
@@ -2342,7 +2354,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				OTHER_LIBTOOLFLAGS = "$(OTHER_LDFLAGS)";
 				PRODUCT_NAME = RCloudMessage;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "0fe494c3-55df-46a1-a64c-d96bb22b212f";
 				VALID_ARCHS = "armv7 armv7s arm64";
 			};
 			name = Release;

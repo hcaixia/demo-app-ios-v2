@@ -749,19 +749,19 @@ typedef enum {
     
 //    [borderPath addClip];
     
-    CGPoint start, end;
-    
-    if (_arrowDirection == KxMenuViewArrowDirectionLeft ||
-        _arrowDirection == KxMenuViewArrowDirectionRight) {
-                
-        start = (CGPoint){X0, Y0};
-        end = (CGPoint){X1, Y0};
-        
-    } else {
-        
-        start = (CGPoint){X0, Y0};
-        end = (CGPoint){X0, Y1};
-    }
+//    CGPoint start, end;
+//    
+//    if (_arrowDirection == KxMenuViewArrowDirectionLeft ||
+//        _arrowDirection == KxMenuViewArrowDirectionRight) {
+//                
+//        start = (CGPoint){X0, Y0};
+//        end = (CGPoint){X1, Y0};
+//        
+//    } else {
+//        
+//        start = (CGPoint){X0, Y0};
+//        end = (CGPoint){X0, Y1};
+//    }
     [borderPath fill];
     
 //    CGContextDrawLinearGradient(context, gradient, start, end, 0);

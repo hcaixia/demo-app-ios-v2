@@ -78,12 +78,12 @@
                          views:NSDictionaryOfVariableBindings(_titleLabel, _ivAva)]];
         
         [self.contentView
-         addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_btnImg(20)]"
+         addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_btnImg(25)]"
                                                                 options:kNilOptions
                                                                 metrics:nil
                                                                   views:NSDictionaryOfVariableBindings(_btnImg)]];
         [self.contentView
-         addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_btnImg(20)]"
+         addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_btnImg(25)]"
                                                                 options:kNilOptions
                                                                 metrics:nil
                                                                   views:NSDictionaryOfVariableBindings(_btnImg)]];

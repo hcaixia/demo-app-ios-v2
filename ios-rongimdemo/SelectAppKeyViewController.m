@@ -25,6 +25,7 @@
 }
 - (void)viewDidLoad
 {
+    [super viewDidLoad];
     [self.navigationController setNavigationBarHidden:NO animated:NO];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Add" style:UIBarButtonItemStylePlain target:self action:@selector(onAdd:)];
 }

@@ -385,6 +385,7 @@
     success:^(RCDiscussion *discussion) {
         NSLog(@"踢人成功");
         [self.users removeObject:user];
+        [self.members removeObjectForKey:user.userId];
     } error:^(RCErrorCode status) {
         NSLog(@"踢人失败");
     }];

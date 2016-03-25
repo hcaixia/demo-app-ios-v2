@@ -23,7 +23,7 @@
 
 #pragma mark - Table view data source
 - (instancetype)initWithCoder:(NSCoder *)aDecoder{
-    if(self == [super initWithCoder:aDecoder]){
+    if(self = [super initWithCoder:aDecoder]){
         [self getAllData];
     }
     return self;

@@ -17,6 +17,7 @@
 @implementation AddAppKeyViewController
 -(void)viewDidLoad
 {
+    [super viewDidLoad];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Save" style:UIBarButtonItemStylePlain target:self action:@selector(onSave:)];
     
     self.keyField = [[UITextField alloc] initWithFrame:CGRectMake(5, 80, 220, 40)];

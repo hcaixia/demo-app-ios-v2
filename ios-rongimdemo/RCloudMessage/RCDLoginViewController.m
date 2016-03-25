@@ -535,8 +535,8 @@ MBProgressHUD* hud ;
             success:^(id response) {
                if ([response[@"code"] intValue] == 200) {
                    NSString *token = response[@"result"][@"token"];
-                   RCDLoginInfo *loginInfo = [RCDLoginInfo shareLoginInfo];
-                   loginInfo = [loginInfo initWithDictionary:response[@"result"] error:NULL];
+//                   RCDLoginInfo *loginInfo = [RCDLoginInfo shareLoginInfo];
+//                   loginInfo = [loginInfo initWithDictionary:response[@"result"] error:NULL];
                    [self loginRongCloud:userName token:token password:password];
                }else{
                    //关闭HUD

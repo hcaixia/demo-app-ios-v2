@@ -135,3 +135,6 @@
 "Full_Image"="原图";
 "typing"="对方正在输入...";
 "Speaking"="对方正在讲话...";
+"Robot_Comment_Title"="机器人是否解决了您的问题？";
+"Admin_Comment_Title"="请对我们本次的服务作出评价";
+"NOT_CUSTOM_SERVICE"="暂无客服在线";

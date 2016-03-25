@@ -67,7 +67,17 @@ typedef NS_ENUM(NSInteger, RCChatSessionInputBarControlType) {
     /*!
      公众服务
      */
-    RCChatSessionInputBarControlPubType = 1
+    RCChatSessionInputBarControlPubType = 1,
+    
+    /*!
+     客服机器人
+     */
+    RCChatSessionInputBarControlCSRobotType = 2,
+    
+    /*!
+     客服机器人
+     */
+    RCChatSessionInputBarControlNoAvailableType = 3
 };
 
 /*!
@@ -138,6 +148,11 @@ typedef NS_ENUM(NSInteger, KBottomBarStatus) {
  公众服务菜单切换的按钮
  */
 @property(strong, nonatomic) UIButton *pubSwitchButton;
+
+/*!
+ 客服机器人转人工切换的按钮
+ */
+@property(strong, nonatomic) UIButton *robotSwitchButton;
 
 /*!
  容器View
@@ -291,6 +306,12 @@ typedef NS_ENUM(NSInteger, KBottomBarStatus) {
  */
 - (void)didTouchPubSwitchButton:(BOOL)switched;
 
+/*!
+ 点击客服机器人切换按钮的回调
+ 
+ @param switched 文本输入框最终是否隐藏
+ */
+- (void)didTouchRobotSwitchButton:(BOOL)switched;
 /*!
  点击录音按钮回调
  

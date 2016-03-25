@@ -11,9 +11,11 @@
 #import <RongIMKit/RongIMKit.h>
 //#import "RCHandShakeMessage.h"
 #import "RCDChatViewController.h"
+#import "RCDCustomServiceViewController.h"
 
-@interface RCDServiceViewController ()
+@interface RCDServiceViewController () <UITextFieldDelegate>
 
+@property (nonatomic, strong)UITextField *kefuIdField;
 @end
 
 @implementation RCDServiceViewController
@@ -22,21 +24,26 @@
 
 - (IBAction)acService:(UIButton *)sender {
 
+    
     //测试环境客服Id "rongcloud.net.kefu.service112"
-#define SERVICE_ID @"KEFU144542424649464"
-    RCPublicServiceChatViewController *chatService = [[RCPublicServiceChatViewController alloc] init];
+    RCDCustomServiceViewController *chatService = [[RCDCustomServiceViewController alloc] init];
+#define SERVICE_ID @"KEFU145801184889727"
     chatService.userName = @"客服";
+    chatService.conversationType = ConversationType_CUSTOMERSERVICE;
+#ifdef DEBUG
+    NSString *kefuId = self.kefuIdField.text;
+    [[NSUserDefaults standardUserDefaults] setObject:kefuId forKey:@"KefuId"];
+    chatService.targetId = kefuId;
+#else
     chatService.targetId = SERVICE_ID;
-    chatService.conversationType = ConversationType_APPSERVICE;
+#endif
+
     chatService.title = chatService.userName;
 
 //    RCHandShakeMessage* textMsg = [[RCHandShakeMessage alloc] init];
 //    [[RongUIKit sharedKit] sendMessage:ConversationType_CUSTOMERSERVICE targetId:SERVICE_ID content:textMsg delegate:nil];
 //   
     [self.navigationController pushViewController :chatService animated:YES];
-
-    
-
 }
 
 -(id)initWithCoder:(NSCoder *)aDecoder
@@ -67,15 +74,36 @@
     self.tabBarController.navigationItem.titleView = titleView;
    // self.tabBarController.navigationItem.title = @"客服";
     self.tabBarController.navigationItem.rightBarButtonItem = nil;
-    
+
 
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+#ifdef DEBUG
+    if (!self.kefuIdField) {
+        self.kefuIdField = [[UITextField alloc] initWithFrame:CGRectMake(10, 50, 200, 30)];
+        [self.kefuIdField setBackgroundColor:[UIColor whiteColor]];
+        [self.view addSubview:self.kefuIdField];
+        NSString *kefuId = [[NSUserDefaults standardUserDefaults] objectForKey:@"KefuId"];
+        if (kefuId == nil) {
+            kefuId = @"KEFU145760441681012";
+        }
+        [self.kefuIdField setText:kefuId];
+        [self.kefuIdField setDelegate:self];
+        self.kefuIdField.returnKeyType = UIReturnKeyDone;
+    }
+#endif
 }
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [textField resignFirstResponder];
+    return YES;
+}
+
 -(void)viewDidDisappear:(BOOL)animated
 {
+    [super viewDidDisappear:animated];
     self.tabBarItem.badgeValue = nil;
 }
 -(void)didReceiveMessageNotification:(NSNotification *)notification

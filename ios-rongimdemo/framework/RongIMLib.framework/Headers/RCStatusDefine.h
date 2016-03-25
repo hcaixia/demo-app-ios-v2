@@ -716,6 +716,18 @@ typedef NS_ENUM(NSUInteger, RCReceivedStatus) {
      已下载
      */
     ReceivedStatus_DOWNLOADED = 4,
+    
+    /*!
+     该消息已经被其他登录的多端收取过。（即改消息已经被其他端收取过后。当前端才登录，并重新拉取了这条消息。客户可以通过这个状态更新 UI，比如不再提示）。
+     */
+    ReceivedStatus_RETRIEVED = 8,
+    
+    /*!
+     该消息是被多端同时收取的。（即其他端正同时登录，一条消息被同时发往多端。客户可以通过这个状态值更新自己的某些 UI状态）。
+     */
+    ReceivedStatus_MULTIPLERECEIVE = 16,
+    
+    
 };
 
 #pragma mark RCMediaType - 消息内容中多媒体文件的类型
@@ -797,6 +809,13 @@ typedef NS_ENUM(NSUInteger, RCSearchType) {
      模糊匹配
      */
     RC_SEARCH_TYPE_FUZZY = 1,
+};
+
+typedef NS_ENUM(NSUInteger, RCCSModeType) {
+    RC_CS_NoService = 0,
+    RC_CS_RobotOnly = 1,
+    RC_CS_HumanOnly = 2,
+    RC_CS_RobotFirst= 3,
 };
 
 #endif

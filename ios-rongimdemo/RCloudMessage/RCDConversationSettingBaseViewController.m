@@ -85,6 +85,7 @@
     _headerView.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width,
                                    _header.collectionViewLayout.collectionViewContentSize.height);
     self.tableView.tableHeaderView = _headerView;
+    _header.showDeleteTip = NO;
     [_header reloadSections:[NSIndexSet indexSetWithIndex:0]];
     [_header reloadData];
 }
@@ -166,6 +167,7 @@
     if (self.headerHidden) {
         self.tableView.tableHeaderView = nil;
     }
+    _header.showDeleteTip = NO;
 }
 
 #pragma mark - Table view data source

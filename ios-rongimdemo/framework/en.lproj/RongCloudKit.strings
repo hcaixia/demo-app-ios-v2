@@ -67,7 +67,7 @@
 "SetToTop"="Sticky to Top";
 "NewMsgNotification"="New Message Notification";
 "ClearRecord"="Clear Chat History";
-"CanNotRemoveSelf"="Can't remove youself";
+"CanNotRemoveSelf"="Can't remove yourself";
 "MemberNumber"="members";
 "Invite"="invite";
 "JoinDiscussion"="joined discussion";
@@ -87,7 +87,7 @@
 "WaitingForAcceptInvitation"="Waiting for accept calling invitation...";
 "VoIP_CallingFailed"="Calling is failed, please try again";
 "VoIP_invite"="Invite you for talking";
-"VoIP_Incoming_Notification"="Invite you for a call";
+"VoIP_Incoming_Notification"="Invite you to join the call";
 "VoIP_Accepted_Notification"="Call accepted";
 "VoIP_SessionIDWrong"="Session ID is wrong";
 "Yesterday"="Yesterday";
@@ -96,13 +96,13 @@
 "NOT_IN_DISCUSSION"="You are not in current discussion";
 "NOT_IN_GROUP"="You are not in current group";
 "FORBIDDEN_IN_GROUP"="You were forbidden to send message in current group.";
-"NOT_IN_CHATROOM"="You are not in current chat room";
+"NOT_IN_CHATROOM"="You are not in current chatroom";
 "Message rejected"="Your message have sent out, but rejected by the receiver";
 "AccessRightTitle"="no access right";
 "ForbiddenInChatRoom"="You were forbidden to send message in current chatroom.";
 "KickedFromChatRoom"="You were kicked from current chatroom.";
 "JoinChatRoomRejected"="You were forbidden to join current chatroom, please contact customer service.";
-"JoinChatRoomFailed"="Join chat room failed";
+"JoinChatRoomFailed"="Join chatroom failed";
 "Connecting..."="Connecting...";
 "FromFriendInvitation"="From %@ friend invitation";
 "AddFriendInvitation"="Add Friend Invitation";
@@ -135,3 +135,6 @@
 "Full_Image"="Full Image";
 "typing"="typing...";
 "Speaking"="Speaking...";
+"Robot_Comment_Title"="Whether the robot solves your problem?";
+"Admin_Comment_Title"="Please comment on our services";
+"NOT_CUSTOM_SERVICE"="No custom service";

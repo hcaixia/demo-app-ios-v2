@@ -109,19 +109,19 @@ RCDConversationSettingTableViewHeaderItemDelegate>
         [cell.ivAva setImage:[RCDUtilities imageNamed:@"delete_members"
                                              ofBundle:@"RongCloud.bundle"]];
         //长按显示减号
-        UILongPressGestureRecognizer *longPressGestureRecognizer =
-        [[UILongPressGestureRecognizer alloc]
-         initWithTarget:self
-         action:@selector(showDeleteTip:)];
-        longPressGestureRecognizer.minimumPressDuration = 0.28;
-        [cell addGestureRecognizer:longPressGestureRecognizer];
+//        UILongPressGestureRecognizer *longPressGestureRecognizer =
+//        [[UILongPressGestureRecognizer alloc]
+//         initWithTarget:self
+//         action:@selector(showDeleteTip:)];
+//        longPressGestureRecognizer.minimumPressDuration = 0.28;
+//        [cell addGestureRecognizer:longPressGestureRecognizer];
         
         //点击去除减号
-        UITapGestureRecognizer *singleTapGestureRecognizer =
-        [[UITapGestureRecognizer alloc]
-         initWithTarget:self
-         action:@selector(notShowDeleteTip:)];
-        [cell addGestureRecognizer:singleTapGestureRecognizer];
+//        UITapGestureRecognizer *singleTapGestureRecognizer =
+//        [[UITapGestureRecognizer alloc]
+//         initWithTarget:self
+//         action:@selector(notShowDeleteTip:)];
+//        [cell addGestureRecognizer:singleTapGestureRecognizer];
     }
     
     
@@ -168,18 +168,17 @@ RCDConversationSettingTableViewHeaderItemDelegate>
 }
 
 //点击去除减号
-
-- (void)notShowDeleteTip:(RCDConversationSettingTableViewHeaderItem *)cell {
-    
-    if (self.showDeleteTip == YES) {
-        
-        self.showDeleteTip = NO;
-        
-        [self reloadData];
-        
-    }
-    
-}
+//- (void)notShowDeleteTip:(RCDConversationSettingTableViewHeaderItem *)cell {
+//    
+//    if (self.showDeleteTip == YES) {
+//        
+//        self.showDeleteTip = NO;
+//        
+//        [self reloadData];
+//
+//    }
+//    
+//}
 
 
 
@@ -194,8 +193,7 @@ RCDConversationSettingTableViewHeaderItemDelegate>
              respondsToSelector:@selector(didTipHeaderClicked:)]) {
                 RCDConversationSettingTableViewHeaderItem *cell=(RCDConversationSettingTableViewHeaderItem *)recognizer.view;
                 [self.settingTableViewHeaderDelegate didTipHeaderClicked:cell.userId];
-            }
-    }
+            }    }
 }
 
 #pragma mark - UICollectionViewDelegateFlowLayout
@@ -221,6 +219,12 @@ RCDConversationSettingTableViewHeaderItemDelegate>
 #pragma mark - UICollectionViewDelegate
 - (void)collectionView:(UICollectionView *)collectionView
 didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    if(indexPath.row == self.users.count+1){
+        if (self.isAllowedDeleteMember) {
+            self.showDeleteTip = !self.showDeleteTip;
+            [self reloadData];
+        }
+    }
     if (indexPath && self.settingTableViewHeaderDelegate &&
         [self.settingTableViewHeaderDelegate
          respondsToSelector:@selector(settingTableViewHeader:

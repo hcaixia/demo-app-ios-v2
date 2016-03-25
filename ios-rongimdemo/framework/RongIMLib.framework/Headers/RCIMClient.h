@@ -24,6 +24,7 @@
 #import "RCConversation.h"
 #import "RCDiscussion.h"
 #import "RCChatRoomInfo.h"
+#import "RCCustomServiceConfig.h"
 
 
 #pragma mark - 消息接收监听器
@@ -700,7 +701,7 @@ FOUNDATION_EXPORT NSString *const RCLibDispatchReadReceiptNotification;
  */
 - (void)getRemoteHistoryMessages:(RCConversationType)conversationType
                         targetId:(NSString *)targetId
-                      recordTime:(long)recordTime
+                      recordTime:(long long)recordTime
                            count:(int)count
                          success:(void (^)(NSArray *messages))successBlock
                            error:(void (^)(RCErrorCode status))errorBlock;
@@ -1310,40 +1311,6 @@ __deprecated_msg("已废弃，请勿使用。");
                 success:(void (^)(RCChatRoomInfo *chatRoomInfo))successBlock
                   error:(void (^)(RCErrorCode status))errorBlock;
 
-#pragma mark 客服
-
-/*!
- 发起客服聊天
- 
- @param customerServiceId       客服ID
- @param successBlock            发起客服会话成功的回调
- @param errorBlock              发起客服会话失败的回调 [status:失败的错误码]
- 
- @discussion 此方法默认会发送一条RCHandShakeMessage消息，通知客服服务器用户即将开始聊天。
- 
- @warning 仅支持客服1.0，客服2.0不需要进行任何操作。
- 如果你使用IMKit，请不要使用此方法。RCConversationViewController在viewDidLoad的时候默认已经做了处理。
- */
-- (void)joinCustomerServiceChat:(NSString *)customerServiceId
-                        success:(void (^)())successBlock
-                          error:(void (^)(RCErrorCode status))errorBlock;
-
-/*!
- 结束客服聊天
- 
- @param customerServiceId       客服ID
- @param successBlock            结束客服会话成功的回调
- @param errorBlock              结束客服会话失败的回调 [status:失败的错误码]
- 
- @discussion 此方法默认会发送一条RCSuspendMessage消息，通知客服服务器用户即将结束聊天。
- 
- @warning 仅支持客服1.0，客服2.0不需要进行任何操作。
- 如果你使用IMKit，请不要使用此方法。RCConversationViewController在退出的时候默认已经做了处理。
- */
-- (void)quitCustomerServiceChat:(NSString *)customerServiceId
-                        success:(void (^)())successBlock
-                          error:(void (^)(RCErrorCode status))errorBlock;
-
 #pragma mark - 公众服务
 
 /*!
@@ -1531,6 +1498,68 @@ __deprecated_msg("已废弃，请勿使用。");
 - (NSData *)encodeWAVEToAMR:(NSData *)data
                    channel:(int)nChannels
             nBitsPerSample:(int)nBitsPerSample;
+
+#pragma mark - 客服方法
+/*!
+ 发起客服聊天
+ 
+ @param kefuId       客服ID
+ @param successBlock            发起客服会话成功的回调
+ @param errorBlock              发起客服会话失败的回调 [errorCode:失败的错误码 errMsg:错误信息]
+ @param modeTypeBlock           客服模式
+ @param quitBlock               客服被动结束。如果主动调用stopCustomeService，则不会调用到该block
+ 
+ @warning 如果你使用IMKit，请不要使用此方法。RCConversationViewController默认已经做了处理。
+ */
+- (void)startCustomService:(NSString *)kefuId
+                 onSuccess:(void(^)(RCCustomServiceConfig *config))successBlock
+                   onError:(void(^)(int errorCode, NSString *errMsg))errorBlock
+                onModeType:(void(^)(RCCSModeType mode))modeTypeBlock
+                    onQuit:(void(^)(NSString *quitMsg))quitBlock;
+
+/*!
+ 结束客服聊天
+ 
+ @param kefuId       客服ID
+
+ @discussion 此方法依赖startCustomService方法，只有调用成功以后才有效。
+ @warning 如果你使用IMKit，请不要使用此方法。RCConversationViewController默认已经做了处理。
+ */
+- (void)stopCustomeService:(NSString *)kefuId;
+
+/*!
+ 切换客服模式
+ 
+ @param kefuId       客服ID
+ 
+ @discussion 此方法依赖startCustomService方法，而且只有当前客服模式为机器人优先才可调用。
+ @warning 如果你使用IMKit，请不要使用此方法。RCConversationViewController默认已经做了处理。
+ */
+- (void)switchToHumanMode:(NSString *)kefuId;
+
+/*!
+ 评价机器人客服
+ 
+ @param kefuId                客服ID
+ @param isRobotResolved       是否解决问题
+ @param sugest                客户建议
+ 
+ @discussion 此方法依赖startCustomService方法。可在客服结束之前或之后调用。
+ @warning 如果你使用IMKit，请不要使用此方法。RCConversationViewController默认已经做了处理。
+ */
+- (void)evaluateCustomService:(NSString *)kefuId robotValue:(BOOL)isRobotResolved suggest:(NSString *)suggest;
+
+/*!
+ 评价人工客服
+ 
+ @param kefuId                客服ID
+ @param value                 分数，取值范围1-5
+ @param sugest                客户建议
+ 
+ @discussion 此方法依赖startCustomService方法。可在客服结束之前或之后调用。
+ @warning 如果你使用IMKit，请不要使用此方法。RCConversationViewController默认已经做了处理。
+ */
+- (void)evaluateCustomService:(NSString *)kefuId humanValue:(int)value suggest:(NSString *)suggest;
 
 @end
 #endif
