@@ -72,6 +72,14 @@
  */
 - (void)didTapmessageFailedStatusViewForResend:(RCMessageModel *)model;
 
+#pragma mark - 客服机器人评价
+/*!
+ 机器人解答问题，点击是否解决问题的回调
+ 
+ @param model 消息Cell的数据模型
+ @param isResolved 是否解决问题
+ */
+- (void)didTapCustomService:(RCMessageModel *)model RobotResoluved:(BOOL)isResolved;
 @end
 
 /*!

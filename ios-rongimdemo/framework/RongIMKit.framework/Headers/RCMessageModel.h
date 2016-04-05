@@ -102,6 +102,13 @@
  @param rcMessage   消息实体
  @return            消息Cell的数据模型对象
  */
-- (instancetype)initWithMessage:(RCMessage *)rcMessage;
++ (instancetype)modelWithMessage:(RCMessage *)rcMessage;
 
+/*!
+ 初始化消息Cell的数据模型
+ 
+ @param rcMessage   消息实体
+ @return            消息Cell的数据模型对象
+ */
+- (instancetype)initWithMessage:(RCMessage *)rcMessage;
 @end

@@ -64,7 +64,7 @@
               success:^(AFHTTPRequestOperation* operation, NSDictionary* responseObj) {
                   if (success) {
                       NSString *cookieString = [[operation.response allHeaderFields] valueForKey:@"Set-Cookie"];
-                      NSData *data = [NSKeyedArchiver archivedDataWithRootObject:cookieString];
+//                      NSData *data = [NSKeyedArchiver archivedDataWithRootObject:cookieString];
                       [[NSUserDefaults standardUserDefaults] setObject:cookieString forKey:@"UserCookies"];
                       success(responseObj);
                   }

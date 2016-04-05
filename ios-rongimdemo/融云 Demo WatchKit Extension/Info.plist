@@ -17,11 +17,11 @@
 	<key>CFBundlePackageType</key>
 	<string>XPC!</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.4.10 Dev</string>
+	<string>2.4.11 Stable</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>201603242035</string>
+	<string>201604052038</string>
 	<key>NSExtension</key>
 	<dict>
 		<key>NSExtensionAttributes</key>

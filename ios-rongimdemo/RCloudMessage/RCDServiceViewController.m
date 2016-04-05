@@ -87,7 +87,8 @@
         [self.view addSubview:self.kefuIdField];
         NSString *kefuId = [[NSUserDefaults standardUserDefaults] objectForKey:@"KefuId"];
         if (kefuId == nil) {
-            kefuId = @"KEFU145760441681012";
+            kefuId = @"KEFU145801184889727";//online kefuId
+//            kefuId = @"KEFU145760441681012";//offline kefuId
         }
         [self.kefuIdField setText:kefuId];
         [self.kefuIdField setDelegate:self];

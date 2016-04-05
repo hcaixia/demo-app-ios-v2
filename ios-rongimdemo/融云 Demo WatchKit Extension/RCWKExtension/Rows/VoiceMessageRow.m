@@ -18,7 +18,7 @@
 @implementation VoiceMessageRow
 - (void)setMessage:(RCMessage *)message {
   [super setMessage:message];
-  RCVoiceMessage *voiceMsg = (RCVoiceMessage *)message.content;
+//  RCVoiceMessage *voiceMsg = (RCVoiceMessage *)message.content;
   if (message.messageDirection == MessageDirection_SEND) {
     [self.voiceIcon setImageNamed:@"to_voice"];
   } else {

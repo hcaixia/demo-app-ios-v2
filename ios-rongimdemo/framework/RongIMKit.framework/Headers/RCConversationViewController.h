@@ -587,18 +587,18 @@ __deprecated_msg("已废弃，请勿使用。");
 
 #pragma mark - 客服
 /*!
- 评价客服服务,然后离开当前VC
+ 评价客服服务,然后离开当前VC的。应用可以重写此方法来自定义客服评价界面。应用不要直接调用此方法。
  
- @param serviceStatus  需要评价的服务状态。0是当前无服务，1是评价人工，2是评价机器人
+ @param serviceStatus  当前的服务类型。0是当前无服务，1是评价人工，2是评价机器人
  
- @discussion 此方法是用于客服服务后评价使用的。默认会弹出评价界面。如果评价界面不符合应用的UI需要，请使用demo的RCDCustomServiceViewController，然后重写此方法。
+ @discussion 当用户点击返回时，sdk会调用此函数弹出评价界面并离开。如需自定义，请使用demo的RCDCustomServiceViewController中的示例。
  */
 - (void)commentCustomerServiceAndQuit:(int)serviceStatus;
 
 /*!
  离开客服界面
  
- @discussion 调用此方法离开客服VC。在此方法里会弹出评价界面，等待用户评价完成后调用leftBarButtonItemPressed弹出VC
+ @discussion 调用此方法离开客服VC。在此方法里会调用commentCustomerServiceAndQuit来弹出评价界面并等待用户评价完成后调用leftBarButtonItemPressed
  */
 - (void)customServiceLeftCurrentViewController;
 @end

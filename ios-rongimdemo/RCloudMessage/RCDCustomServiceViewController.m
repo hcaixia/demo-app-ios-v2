@@ -20,7 +20,9 @@
     // Dispose of any resources that can be recreated.
 }
 
-//客服VC左按键注册的selector是customServiceLeftCurrentViewController，这个函数会弹出评价，
+//客服VC左按键注册的selector是customServiceLeftCurrentViewController，
+//这个函数是基类的函数，他会根据当前服务时间来决定是否弹出评价，根据服务的类型来决定弹出评价类型。
+//弹出评价的函数是commentCustomerServiceAndQuit，应用可以根据这个函数内的注释来自定义评价界面。
 //等待用户评价结束后调用如下函数离开当前VC。
 - (void)leftBarButtonItemPressed:(id)sender {
     //需要调用super的实现
@@ -29,13 +31,55 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+
+//评价客服，并离开当前会话
+//serviceStatus. 0 不需要评价；1，人工评价；2，机器人评价
+//如果您需要自定义客服评价界面，请把本函数注释掉，
+//并打开下面“应用自定义评价界面开始”到“应用自定义评价界面结束”部分的代码，然后根据您的需求进行修改。
 - (void)commentCustomerServiceAndQuit:(int)serviceStatus {
     [super commentCustomerServiceAndQuit:serviceStatus];
-    //如果要自己来弹出评价界面，请把上面的super去掉，在这里弹出评价界面，然后把用户的评价结果调用RongIMLib的接口发送评价到客服后台。最后调用leftBarButtonItemPressed离开当前VC
-    //评价人工服务和机器人服务的方法是：
-    //[[RCIMClient sharedRCIMClient] evaluateCustomService:@"kefuId" humanValue:5 suggest:@"很棒"];
-    //[[RCIMClient sharedRCIMClient] evaluateCustomService:@"kefuId" robotValue:YES suggest:@"萌哒哒"];
 }
+
+//＊＊＊＊＊＊＊＊＊应用去掉评价界面开始＊＊＊＊＊＊＊＊＊＊＊＊＊
+//- (void)commentCustomerServiceAndQuit:(int)serviceStatus {
+//    [self leftBarButtonItemPressed:nil];
+//}
+//＊＊＊＊＊＊＊＊＊应用去掉评价界面结束＊＊＊＊＊＊＊＊＊＊＊＊＊
+
+//＊＊＊＊＊＊＊＊＊应用自定义评价界面开始＊＊＊＊＊＊＊＊＊＊＊＊＊
+//- (void)commentCustomerServiceAndQuit:(int)serviceStatus {
+//    if (serviceStatus == 0) {
+//        [self leftBarButtonItemPressed:nil];
+//    } else if (serviceStatus == 1) {
+//        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"请评价我们的人工服务" message:@"如果您满意就按5，不满意就按1" delegate:self cancelButtonTitle:@"5" otherButtonTitles:@"1", nil];
+//        alert.tag = serviceStatus;
+//        [alert show];
+//    } else if (serviceStatus == 2) {
+//        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"请评价我们的机器人服务" message:@"如果您满意就按是，不满意就按否" delegate:self cancelButtonTitle:@"是" otherButtonTitles:@"否", nil];
+//        alert.tag = serviceStatus;
+//        [alert show];
+//    }
+//}
+//- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+//    //(1)调用evaluateCustomService将评价结果传给融云sdk。
+//    if (alertView.tag == 1) { //人工评价结果
+//        if (buttonIndex == 0) {
+//            [[RCIMClient sharedRCIMClient] evaluateCustomService:self.targetId humanValue:5 suggest:nil];
+//        } else if (buttonIndex == 1) {
+//            [[RCIMClient sharedRCIMClient] evaluateCustomService:self.targetId humanValue:0 suggest:nil];
+//        }
+//    } else if (alertView.tag == 2) {//机器人评价结果
+//        if (buttonIndex == 0) {
+//            [[RCIMClient sharedRCIMClient] evaluateCustomService:self.targetId robotValue:YES suggest:nil];
+//        } else if (buttonIndex == 1) {
+//            [[RCIMClient sharedRCIMClient] evaluateCustomService:self.targetId robotValue:NO suggest:nil];
+//        }
+//    }
+//    //(2)离开当前客服VC
+//    [self leftBarButtonItemPressed:nil];
+//}
+//＊＊＊＊＊＊＊＊＊应用自定义评价界面结束＊＊＊＊＊＊＊＊＊＊＊＊＊
+
 
 - (void)notifyUpdateUnreadMessageCount {
     __weak typeof(&*self) __weakself = self;

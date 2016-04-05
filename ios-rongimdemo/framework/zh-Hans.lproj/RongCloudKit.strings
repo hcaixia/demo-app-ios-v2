@@ -5,20 +5,20 @@
   Created by xugang on 1/15/15.
   Copyright (c) 2015 RongCloud. All rights reserved.
 */
-"RC:ImgMsg" = "[图片]";
-"RC:LBSMsg" = "[位置]";
-"RC:VcMsg" = "[语音]";
-"RC:ImgTextMsg" = "[图文]";
-"RC:VoipCallMsg" = "[语音通话]";
-"RC:VoipFinishMsg" = "[语音结束]";
-"RC:PSMultiImgTxtMsg" = "[图文]";
-"RC:PSImgTxtMsg" = "[图文]";
+"RC:ImgMsg"="[图片]";
+"RC:LBSMsg"="[位置]";
+"RC:VcMsg"="[语音]";
+"RC:ImgTextMsg"="[图文]";
+"RC:VoipCallMsg"="[语音通话]";
+"RC:VoipFinishMsg"="[语音结束]";
+"RC:PSMultiImgTxtMsg"="[图文]";
+"RC:PSImgTxtMsg"="[图文]";
 "Draft"="[草稿]";
-"conversation_private_collection_title" = "聊天助手";
-"conversation_customer_collection_title" = "客服助手";
-"conversation_group_collection_title" = "群助手";
-"conversation_discussion_collection_title" = "讨论组助手";
-"conversation_systemMessage_collection_title" = "系统消息助手";
+"conversation_private_collection_title"="聊天助手";
+"conversation_customer_collection_title"="客服助手";
+"conversation_group_collection_title"="群助手";
+"conversation_discussion_collection_title"="讨论组助手";
+"conversation_systemMessage_collection_title"="系统消息助手";
 "hold_to_talk_title"="按住说话";
 "release_to_send_title"="松开发送";
 "slide_up_to_cancel_title"="手指上滑 取消发送";
@@ -69,11 +69,12 @@
 "ClearRecord"="清除聊天记录";
 "CanNotRemoveSelf"="不能移除自己";
 "MemberNumber"="位成员";
+"You"="你";
 "Invite"="邀请";
 "JoinDiscussion"="加入了讨论组";
 "QuitDiscussion"="退出了讨论组";
-"By"="被";
-"RemoveDiscussion"="移除了讨论组";
+"By"="将";
+"RemoveDiscussion"="移出了讨论组";
 "ModifyDiscussion"="修改讨论组为";
 "InviteStatus"="了成员邀请";
 "Open"="开启";

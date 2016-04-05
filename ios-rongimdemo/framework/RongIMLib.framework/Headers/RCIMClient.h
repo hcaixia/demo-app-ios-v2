@@ -1550,6 +1550,18 @@ __deprecated_msg("已废弃，请勿使用。");
 - (void)evaluateCustomService:(NSString *)kefuId robotValue:(BOOL)isRobotResolved suggest:(NSString *)suggest;
 
 /*!
+ 评价机器人客服
+ 
+ @param kefuId                客服ID
+ @param knownledgeId          知识点ID
+ @param isRobotResolved       是否解决问题
+ 
+ @discussion 此方法依赖startCustomService方法。可在客服结束之前或之后调用。
+ @warning 如果你使用IMKit，请不要使用此方法。RCConversationViewController默认已经做了处理。
+ */
+- (void)evaluateCustomService:(NSString *)kefuId knownledgeId:(NSString *)knownledgeId robotValue:(BOOL)isRobotResolved;
+
+/*!
  评价人工客服
  
  @param kefuId                客服ID

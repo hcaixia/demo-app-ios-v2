@@ -31,7 +31,7 @@ sizeWithFont:font constrainedToSize:maxSize lineBreakMode:mode] : CGSizeZero;
 - (void)setDataModel:(RCMessageModel *)model {
     [super setDataModel:model];
     
-    RCMessageContent *content = model.content;
+//    RCMessageContent *content = model.content;
     
     CGFloat maxMessageLabelWidth = self.baseContentView.bounds.size.width - 30 * 2;
     [self.tipMessageLabel setText:@"位置共享已结束" dataDetectorEnabled:NO];

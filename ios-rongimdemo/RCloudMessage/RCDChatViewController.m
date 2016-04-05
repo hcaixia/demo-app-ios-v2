@@ -250,7 +250,7 @@
   else if (self.conversationType == ConversationType_GROUP) {
       UIStoryboard *secondStroyBoard=[UIStoryboard storyboardWithName:@"Main" bundle:nil];
       RCDGroupDetailViewController *detail=[secondStroyBoard instantiateViewControllerWithIdentifier:@"RCDGroupDetailViewController"];
-      NSMutableArray *groups=RCDHTTPTOOL.allGroups ;
+//      NSMutableArray *groups=RCDHTTPTOOL.allGroups ;
       __weak RCDChatViewController *weakSelf = self;
       detail.clearHistoryCompletion = ^(BOOL isSuccess) {
           if (isSuccess) {
