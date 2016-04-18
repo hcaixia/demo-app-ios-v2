@@ -299,7 +299,7 @@
                     chat.targetId                      = discussion.discussionId;
                     chat.userName                    = discussion.discussionName;
                     chat.conversationType              = ConversationType_DISCUSSION;
-                    chat.title                         = @"讨论组";
+                    chat.title                         = discussion.discussionName;
                     
                     
                     UITabBarController *tabbarVC = weakSelf.navigationController.viewControllers[0];

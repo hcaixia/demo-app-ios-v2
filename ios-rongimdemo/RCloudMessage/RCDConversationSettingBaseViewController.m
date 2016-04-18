@@ -76,18 +76,12 @@
 - (void)addUsers:(NSMutableArray *)users {
     if (!users)
         return;
-    
     _header.users = [NSMutableArray arrayWithArray:users];
-    
     self.users = users;
-    
-    
+    [_header reloadData];
     _headerView.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width,
                                    _header.collectionViewLayout.collectionViewContentSize.height);
     self.tableView.tableHeaderView = _headerView;
-    _header.showDeleteTip = NO;
-    [_header reloadSections:[NSIndexSet indexSetWithIndex:0]];
-    [_header reloadData];
 }
 
 - (void)disableDeleteMemberEvent:(BOOL)disable {
@@ -160,14 +154,15 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    _headerView.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width,
-                                   _header.collectionViewLayout.collectionViewContentSize.height);
+    _headerView.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width,_header.collectionViewLayout.collectionViewContentSize.height);
     self.tableView.tableHeaderView = _headerView;
-    
     if (self.headerHidden) {
         self.tableView.tableHeaderView = nil;
     }
-    _header.showDeleteTip = NO;
+    if (_headerView) {
+       _header.showDeleteTip = NO;
+        [_header reloadData];
+    }
 }
 
 #pragma mark - Table view data source

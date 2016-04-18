@@ -95,7 +95,7 @@
     //设置选中状态
     for (RCUserInfo *userInfo in self.seletedUsers) {
         if ([user.userId isEqualToString:userInfo.userId]) {
-            [tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionBottom];
+            [tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
             [cell setUserInteractionEnabled:NO];
         }
     }

@@ -80,7 +80,10 @@
                                                                        [users addObject:user];
                                                                   }
                                                                   [_members setObject:user forKey:user.userId];
-                                                                  [weakSelf addUsers:users];
+                                                                  if (users.count == discussion.memberIdList.count) {
+                                                              [weakSelf addUsers:users];
+                                                                  }
+                                                                  
                                                               }];
                     
                 }
@@ -386,6 +389,7 @@
         NSLog(@"踢人成功");
         [self.users removeObject:user];
         [self.members removeObjectForKey:user.userId];
+        [self addUsers:self.users];
     } error:^(RCErrorCode status) {
         NSLog(@"踢人失败");
     }];
