@@ -87,12 +87,12 @@
 /*!
  Cell的背景颜色
  */
-@property(nonatomic) UIColor *cellBackgroundColor;
+@property(strong, nonatomic) UIColor *cellBackgroundColor;
 
 /*!
  置顶Cell的背景颜色
  */
-@property(nonatomic) UIColor *topCellBackgroundColor;
+@property(strong, nonatomic) UIColor *topCellBackgroundColor;
 
 /*!
  显示最后一台消息发送状态

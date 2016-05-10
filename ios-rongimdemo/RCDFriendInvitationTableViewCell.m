@@ -83,19 +83,19 @@
         [self.portrait setImage:[UIImage imageNamed:@"icon_person"]];
     }
 
-//    __weak RCDFriendInvitationTableViewCell *weakSelf = self;
-//    RCDUserInfo *_userInfo = [[RCDUserInfo alloc] initWithUserId:_contactNotificationMsg.sourceUserId name:@"" portrait:@""];
-//    [RCDHTTPTOOL isMyFriendWithUserInfo:_userInfo completion:^(BOOL isFriend) {
-////        dispatch_async(dispatch_get_main_queue(), ^{
-//            if (weakSelf.model.messageId != model.messageId) {
-//                return ;
-//            }
-//            if (isFriend) {
-//                [weakSelf.acceptButton setEnabled:NO];
-//            } else {
-//                [weakSelf.acceptButton setEnabled:NO];
-//            }
-////        });
-//    }];
+    __weak RCDFriendInvitationTableViewCell *weakSelf = self;
+    RCDUserInfo *_userInfo = [[RCDUserInfo alloc] initWithUserId:_contactNotificationMsg.sourceUserId name:@"" portrait:@""];
+    [RCDHTTPTOOL isMyFriendWithUserInfo:_userInfo completion:^(BOOL isFriend) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (weakSelf.model.messageId != model.messageId) {
+                return ;
+            }
+            if (isFriend) {
+                [weakSelf.acceptButton setEnabled:NO];
+            } else {
+                [weakSelf.acceptButton setEnabled:YES];
+            }
+        });
+    }];
 }
 @end

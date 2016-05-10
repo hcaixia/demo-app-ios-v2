@@ -1,4 +1,4 @@
-/* 
+/*
   RongCloudKit.strings
   RongIMKit
 
@@ -139,3 +139,5 @@
 "Robot_Comment_Title"="Whether the robot solves your problem?";
 "Admin_Comment_Title"="Please comment on our services";
 "NOT_CUSTOM_SERVICE"="No custom service";
+"Preview"="Preview";
+"Location_Service"="Unable to get your location data,Please enable location service in “Settings”->“Privacy”->“Location Services” and allows the application to use location services.";

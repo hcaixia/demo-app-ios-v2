@@ -111,12 +111,12 @@
 /*!
  Cell的背景颜色
  */
-@property(nonatomic) UIColor *cellBackgroundColor;
+@property(nonatomic, strong) UIColor *cellBackgroundColor;
 
 /*!
  置顶会话的Cell背景颜色
  */
-@property(nonatomic) UIColor *topCellBackgroundColor;
+@property(nonatomic, strong) UIColor *topCellBackgroundColor;
 
 /*!
  设置在会话列表中显示的头像形状，矩形或者圆形（全局有效）

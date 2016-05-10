@@ -573,7 +573,7 @@ FOUNDATION_EXPORT NSString *const RCKitDispatchConnectionStatusChangedNotificati
  
  @discussion 默认值为[UIColor whiteColor]
  */
-@property(nonatomic) UIColor *globalNavigationBarTintColor;
+@property(nonatomic, strong) UIColor *globalNavigationBarTintColor;
 
 /*!
  SDK会话列表界面中显示的头像形状，矩形或者圆形

@@ -1,4 +1,4 @@
-/* 
+/*
   RongCloudKit.strings
   RongIMKit
 
@@ -139,3 +139,5 @@
 "Robot_Comment_Title"="机器人是否解决了您的问题？";
 "Admin_Comment_Title"="请对我们本次的服务作出评价";
 "NOT_CUSTOM_SERVICE"="暂无客服在线";
+"Preview"="预览";
+"Location_Service"="无法获取你的位置信息，请到手机系统的[设置]->[隐私]->[定位服务]中打开定位服务，并允许应用使用定位服务。";
