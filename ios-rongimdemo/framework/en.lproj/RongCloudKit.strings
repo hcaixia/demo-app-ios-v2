@@ -141,3 +141,6 @@
 "NOT_CUSTOM_SERVICE"="No custom service";
 "Preview"="Preview";
 "Location_Service"="Unable to get your location data,Please enable location service in “Settings”->“Privacy”->“Location Services” and allows the application to use location services.";
+"Submit"="Submit";
+"StartCustomerServiceFailure"="Start customer service failure";
+"EvaluateCustomerService"="Evaluate customer service";

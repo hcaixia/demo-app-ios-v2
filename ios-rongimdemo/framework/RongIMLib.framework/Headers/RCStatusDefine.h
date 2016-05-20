@@ -483,19 +483,19 @@ typedef NS_ENUM(NSUInteger, RCNetworkStatus) {
     RC_ReachableViaWiFi = 1,
     
     /*!
-     当前处于LTE网络
+     移动网络
      */
-    RC_ReachableViaLTE = 2,
+    RC_ReachableViaWWAN = 2,
     
-    /*!
-     当前处于3G网络
-     */
-    RC_ReachableVia3G = 3,
-    
-    /*!
-     当前处于2G网络
-     */
-    RC_ReachableVia2G = 4
+//    /*!
+//     当前处于3G网络
+//     */
+//    RC_ReachableVia3G = 3,
+//    
+//    /*!
+//     当前处于2G网络
+//     */
+//    RC_ReachableVia2G = 4
 };
 
 #pragma mark RCSDKRunningMode - SDK当前所处的状态
