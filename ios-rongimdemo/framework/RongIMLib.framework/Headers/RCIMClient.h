@@ -24,7 +24,8 @@
 #import "RCConversation.h"
 #import "RCDiscussion.h"
 #import "RCChatRoomInfo.h"
-#import "RCCustomServiceConfig.h"
+#import "RCCustomerServiceConfig.h"
+#import "RCCustomerServiceInfo.h"
 
 
 #pragma mark - 消息接收监听器
@@ -140,10 +141,10 @@
  @warning 如果您使用IMLib，请使用此方法初始化SDK；
  如果您使用IMKit，请使用RCIM中的initWithAppKey:方法初始化，而不要使用此方法。
  
- **升级说明:**
- **从2.4.1版本开始，为了兼容Swift的风格与便于使用，将此方法升级为initWithAppKey:方法，方法的功能和使用均不变。**
+ @warning **已废弃，请勿使用。**
+ 升级说明:从2.4.1版本开始，为了兼容Swift的风格与便于使用，将此方法升级为initWithAppKey:方法，方法的功能和使用均不变。**
  */
-- (void)init:(NSString *)appKey;
+- (void)init:(NSString *)appKey __deprecated_msg("已废弃，请勿使用。");
 
 /*!
  初始化融云SDK
@@ -182,6 +183,7 @@
  
  */
 - (void)setDeviceToken:(NSString *)deviceToken;
+
 
 #pragma mark - 连接与断开服务器
 
@@ -316,9 +318,10 @@
 /*!
  当前登录用户的用户信息
  
- @discussion 与融云服务器建立连接之后，应该设置当前用户的用户信息。
+ @discussion 用于与融云服务器建立连接之后，设置当前用户的用户信息。
  
- @warning 如果您使用IMLib，请使用此字段设置当前登录用户的用户信息；
+ @warning 如果传入的用户信息中的用户ID与当前登录的用户ID不匹配，则将会忽略。
+ 如果您使用IMLib，请使用此字段设置当前登录用户的用户信息；
  如果您使用IMKit，请使用RCIM中的currentUserInfo设置当前登录用户的用户信息，而不要使用此字段。
  */
 @property(nonatomic, strong) RCUserInfo *currentUserInfo;
@@ -360,39 +363,6 @@ __deprecated_msg("已废弃，请勿使用。");
  @param targetId            发送消息的目标会话ID
  @param content             消息的内容
  @param pushContent         接收方离线时需要显示的远程推送内容
- @param successBlock        消息发送成功的回调 [messageId:消息的ID]
- @param errorBlock          息发送失败的回调 [nErrorCode:发送失败的错误码, messageId:消息的ID]
- @return                    发送的消息实体
- 
- @discussion 当接收方离线并允许远程推送时，会收到远程推送。
- 远程推送中包含两部分内容，一是pushContent，用于显示；二是pushData，用于携带不显示的数据。
- 
- SDK内置的消息类型，如果您将pushContent和pushData置为nil，会使用默认的推送格式进行远程推送。
- 自定义类型的消息，需要您自己设置pushContent和pushData来定义推送内容，否则将不会进行远程推送。
- 
- 使此方法会将pushData设置为nil，如果需要设置pushData可以使用RCIMClient的
- sendMessage:targetId:content:pushContent:pushData:success:error:方法。
- 
- 如果您使用此方法发送图片消息，需要您自己实现图片的上传，然后构建一个RCImageMessage对象，
- 并将RCImageMessage中的imageUrl字段设置为最终上传的地址，使用此方法发送。
- 
- @warning 如果您使用IMLib，可以使用此方法发送消息；
- 如果您使用IMKit，请使用RCIM中的同名方法发送消息，否则不会自动更新UI。
- */
-- (RCMessage *)sendMessage:(RCConversationType)conversationType
-                  targetId:(NSString *)targetId
-                   content:(RCMessageContent *)content
-               pushContent:(NSString *)pushContent
-                   success:(void (^)(long messageId))successBlock
-                     error:(void (^)(RCErrorCode nErrorCode, long messageId))errorBlock;
-
-/*!
- 发送消息
- 
- @param conversationType    发送消息的会话类型
- @param targetId            发送消息的目标会话ID
- @param content             消息的内容
- @param pushContent         接收方离线时需要显示的远程推送内容
  @param pushData            接收方离线时需要在远程推送中携带的非显示数据
  @param successBlock        消息发送成功的回调 [messageId:消息的ID]
  @param errorBlock          消息发送失败的回调 [nErrorCode:发送失败的错误码, messageId:消息的ID]
@@ -417,43 +387,6 @@ __deprecated_msg("已废弃，请勿使用。");
                   pushData:(NSString *)pushData
                    success:(void (^)(long messageId))successBlock
                      error:(void (^)(RCErrorCode nErrorCode, long messageId))errorBlock;
-
-/*!
- 发送图片消息
- 
- @param conversationType    发送消息的会话类型
- @param targetId            发送消息的目标会话ID
- @param content             消息的内容
- @param pushContent         接收方离线时需要显示的远程推送内容
- @param progressBlock       消息发送进度更新的回调 [progress:当前的发送进度, 0 <= progress <= 100, messageId:消息的ID]
- @param successBlock        消息发送成功的回调 [messageId:消息的ID]
- @param errorBlock          消息发送失败的回调 [errorCode:发送失败的错误码, messageId:消息的ID]
- @return                    发送的消息实体
- 
- @discussion 当接收方离线并允许远程推送时，会收到远程推送。
- 远程推送中包含两部分内容，一是pushContent，用于显示；二是pushData，用于携带不显示的数据。
- 
- SDK内置的消息类型，如果您将pushContent和pushData置为nil，会使用默认的推送格式进行远程推送。
- 自定义类型的消息，需要您自己设置pushContent和pushData来定义推送内容，否则将不会进行远程推送。
- 
- 使此方法会将pushData设置为nil，如果需要设置pushData可以使用RCIMClient的
- sendImageMessage:targetId:content:pushContent:pushData:progress:success:error:方法。
- 
- 如果您需要上传图片到自己的服务器并使用IMLib，构建一个RCImageMessage对象，
- 并将RCImageMessage中的imageUrl字段设置为上传成功的URL地址，然后使用RCIMClient的
- sendMessage:targetId:content:pushContent:pushData:success:error:方法
- 或sendMessage:targetId:content:pushContent:success:error:方法进行发送，不要使用此方法。
- 
- @warning 如果您使用IMKit，使用此方法发送图片消息SDK会自动更新UI；
- 如果您使用IMLib，请使用RCIMClient中的同名方法发送图片消息，不会自动更新UI。
- */
-- (RCMessage *)sendImageMessage:(RCConversationType)conversationType
-                       targetId:(NSString *)targetId
-                        content:(RCMessageContent *)content
-                    pushContent:(NSString *)pushContent
-                       progress:(void (^)(int progress, long messageId))progressBlock
-                        success:(void (^)(long messageId))successBlock
-                          error:(void (^)(RCErrorCode errorCode, long messageId))errorBlock;
 
 /*!
  发送图片消息
@@ -522,24 +455,6 @@ __deprecated_msg("已废弃，请勿使用。");
                           error:(void (^)(RCErrorCode errorCode, long messageId))errorBlock;
 
 /*!
- 发送状态消息
- 
- @param conversationType    会话类型
- @param targetId            目标会话ID
- @param content             消息内容
- @param successBlock        发送消息成功的回调 [messageId:消息的ID]
- @param errorBlock          发送消息失败的回调 [nErrorCode:发送失败的错误码, messageId:消息的ID]
- 
- @discussion 通过此方法发送的消息，根据接收方的状态进行投递。
- 如果接收方不在线，则不会收到远程推送，再上线也不会收到此消息。
- */
-- (RCMessage *)sendStatusMessage:(RCConversationType)conversationType
-                        targetId:(NSString *)targetId
-                         content:(RCMessageContent *)content
-                         success:(void (^)(long messageId))successBlock
-                           error:(void (^)(RCErrorCode nErrorCode, long messageId))errorBlock;
-
-/*!
  插入消息
  
  @param conversationType    会话类型
@@ -577,6 +492,106 @@ __deprecated_msg("已废弃，请勿使用。");
                  progress:(void (^)(int progress))progressBlock
                   success:(void (^)(NSString *mediaPath))successBlock
                     error:(void (^)(RCErrorCode errorCode))errorBlock;
+
+/*!
+ 发送状态消息
+ 
+ @param conversationType    会话类型
+ @param targetId            目标会话ID
+ @param content             消息内容
+ @param successBlock        发送消息成功的回调 [messageId:消息的ID]
+ @param errorBlock          发送消息失败的回调 [nErrorCode:发送失败的错误码, messageId:消息的ID]
+ 
+ @discussion 通过此方法发送的消息，根据接收方的状态进行投递。
+ 如果接收方不在线，则不会收到远程推送，再上线也不会收到此消息。
+ 
+ @warning **已废弃，请勿使用。**
+ 升级说明：如果您之前使用了此接口，可以直接替换为sendMessage:targetId:content:pushContent:pushData:success:error:接口（pushContent和pushData传为nil），行为和实现完全一致。
+ */
+- (RCMessage *)sendStatusMessage:(RCConversationType)conversationType
+                        targetId:(NSString *)targetId
+                         content:(RCMessageContent *)content
+                         success:(void (^)(long messageId))successBlock
+                           error:(void (^)(RCErrorCode nErrorCode, long messageId))errorBlock
+__deprecated_msg("已废弃，请勿使用。");
+
+/*!
+ 发送消息
+ 
+ @param conversationType    发送消息的会话类型
+ @param targetId            发送消息的目标会话ID
+ @param content             消息的内容
+ @param pushContent         接收方离线时需要显示的远程推送内容
+ @param successBlock        消息发送成功的回调 [messageId:消息的ID]
+ @param errorBlock          息发送失败的回调 [nErrorCode:发送失败的错误码, messageId:消息的ID]
+ @return                    发送的消息实体
+ 
+ @discussion 当接收方离线并允许远程推送时，会收到远程推送。
+ 远程推送中包含两部分内容，一是pushContent，用于显示；二是pushData，用于携带不显示的数据。
+ 
+ SDK内置的消息类型，如果您将pushContent和pushData置为nil，会使用默认的推送格式进行远程推送。
+ 自定义类型的消息，需要您自己设置pushContent和pushData来定义推送内容，否则将不会进行远程推送。
+ 
+ 使此方法会将pushData设置为nil，如果需要设置pushData可以使用RCIMClient的
+ sendMessage:targetId:content:pushContent:pushData:success:error:方法。
+ 
+ 如果您使用此方法发送图片消息，需要您自己实现图片的上传，然后构建一个RCImageMessage对象，
+ 并将RCImageMessage中的imageUrl字段设置为最终上传的地址，使用此方法发送。
+ 
+ @warning  **已废弃，请勿使用。**
+ 升级说明：如果您之前使用了此接口，可以直接替换为sendMessage:targetId:content:pushContent:pushData:success:error:接口（pushData传为nil），行为和实现完全一致。
+ 
+ 如果您使用IMLib，可以使用此方法发送消息；
+ 如果您使用IMKit，请使用RCIM中的同名方法发送消息，否则不会自动更新UI。
+ */
+- (RCMessage *)sendMessage:(RCConversationType)conversationType
+                  targetId:(NSString *)targetId
+                   content:(RCMessageContent *)content
+               pushContent:(NSString *)pushContent
+                   success:(void (^)(long messageId))successBlock
+                     error:(void (^)(RCErrorCode nErrorCode, long messageId))errorBlock
+__deprecated_msg("已废弃，请勿使用。");
+
+/*!
+ 发送图片消息
+ 
+ @param conversationType    发送消息的会话类型
+ @param targetId            发送消息的目标会话ID
+ @param content             消息的内容
+ @param pushContent         接收方离线时需要显示的远程推送内容
+ @param progressBlock       消息发送进度更新的回调 [progress:当前的发送进度, 0 <= progress <= 100, messageId:消息的ID]
+ @param successBlock        消息发送成功的回调 [messageId:消息的ID]
+ @param errorBlock          消息发送失败的回调 [errorCode:发送失败的错误码, messageId:消息的ID]
+ @return                    发送的消息实体
+ 
+ @discussion 当接收方离线并允许远程推送时，会收到远程推送。
+ 远程推送中包含两部分内容，一是pushContent，用于显示；二是pushData，用于携带不显示的数据。
+ 
+ SDK内置的消息类型，如果您将pushContent和pushData置为nil，会使用默认的推送格式进行远程推送。
+ 自定义类型的消息，需要您自己设置pushContent和pushData来定义推送内容，否则将不会进行远程推送。
+ 
+ 使此方法会将pushData设置为nil，如果需要设置pushData可以使用RCIMClient的
+ sendImageMessage:targetId:content:pushContent:pushData:progress:success:error:方法。
+ 
+ 如果您需要上传图片到自己的服务器并使用IMLib，构建一个RCImageMessage对象，
+ 并将RCImageMessage中的imageUrl字段设置为上传成功的URL地址，然后使用RCIMClient的
+ sendMessage:targetId:content:pushContent:pushData:success:error:方法
+ 或sendMessage:targetId:content:pushContent:success:error:方法进行发送，不要使用此方法。
+ 
+ @warning **已废弃，请勿使用。**
+ 升级说明：如果您之前使用了此接口，可以直接替换为sendImageMessage:targetId:content:pushContent:pushData:progress:success:error:接口（pushData传为nil），行为和实现完全一致。
+ 
+ 如果您使用IMKit，使用此方法发送图片消息SDK会自动更新UI；
+ 如果您使用IMLib，请使用RCIMClient中的同名方法发送图片消息，不会自动更新UI。
+ */
+- (RCMessage *)sendImageMessage:(RCConversationType)conversationType
+                       targetId:(NSString *)targetId
+                        content:(RCMessageContent *)content
+                    pushContent:(NSString *)pushContent
+                       progress:(void (^)(int progress, long messageId))progressBlock
+                        success:(void (^)(long messageId))successBlock
+                          error:(void (^)(RCErrorCode errorCode, long messageId))errorBlock
+__deprecated_msg("已废弃，请勿使用。");
 
 #pragma mark 消息接收监听
 /*!
@@ -692,12 +707,13 @@ FOUNDATION_EXPORT NSString *const RCLibDispatchReadReceiptNotification;
  
  @param conversationType    会话类型
  @param targetId            目标会话ID
- @param recordTime          最早的发送时间，第一次可以传0
- @param count               需要获取的消息数量， 0< count <= 20
+ @param recordTime          截止的消息发送时间戳，毫秒
+ @param count               需要获取的消息数量， 0 < count <= 20
  @param successBlock        获取成功的回调 [messages:获取到的历史消息数组]
  @param errorBlock          获取失败的回调 [status:获取失败的错误码]
  
  @discussion 此方法从服务器端获取之前的历史消息，但是必须先开通历史消息云存储功能。
+ 例如，本地会话中有10条消息，您想拉取更多保存在服务器的消息的话，recordTime应传入最早的消息的发送时间戳，count传入1~20之间的数值。
  */
 - (void)getRemoteHistoryMessages:(RCConversationType)conversationType
                         targetId:(NSString *)targetId
@@ -974,6 +990,7 @@ FOUNDATION_EXPORT NSString *const RCLibDispatchReadReceiptNotification;
 - (void)removeNotificationQuietHours:(void (^)())successBlock
                                error:(void (^)(RCErrorCode status))errorBlock;
 
+
 /*!
  查询已设置的全局时间段消息提醒屏蔽
  
@@ -1160,14 +1177,14 @@ __deprecated_msg("已废弃，请勿使用。");
 /*!
  设置讨论组名称
  
- @param targetId                需要设置的讨论组ID
+ @param discussionId            需要设置的讨论组ID
  @param discussionName          需要设置的讨论组名称，discussionName长度<=40
  @param successBlock            设置成功的回调
  @param errorBlock              设置失败的回调 [status:设置失败的错误码]
  
  @discussion 设置的讨论组名称长度不能超过40个字符，否则将会截断为前40个字符。
  */
-- (void)setDiscussionName:(NSString *)targetId
+- (void)setDiscussionName:(NSString *)discussionId
                      name:(NSString *)discussionName
                   success:(void (^)())successBlock
                     error:(void (^)(RCErrorCode status))errorBlock;
@@ -1175,7 +1192,7 @@ __deprecated_msg("已废弃，请勿使用。");
 /*!
  设置讨论组是否开放加人权限
  
- @param targetId        讨论组ID
+ @param discussionId    讨论组ID
  @param isOpen          是否开放加人权限
  @param successBlock    设置成功的回调
  @param errorBlock      设置失败的回调[status:设置失败的错误码]
@@ -1183,7 +1200,7 @@ __deprecated_msg("已废弃，请勿使用。");
  @discussion 讨论组默认开放加人权限，即所有成员都可以加人。
  如果关闭加人权限之后，只有讨论组的创建者有加人权限。
  */
-- (void)setDiscussionInviteStatus:(NSString *)targetId
+- (void)setDiscussionInviteStatus:(NSString *)discussionId
                            isOpen:(BOOL)isOpen
                           success:(void (^)())successBlock
                             error:(void (^)(RCErrorCode status))errorBlock;
@@ -1504,74 +1521,67 @@ __deprecated_msg("已废弃，请勿使用。");
  发起客服聊天
  
  @param kefuId       客服ID
+ @param csInfo       客服信息
  @param successBlock            发起客服会话成功的回调
  @param errorBlock              发起客服会话失败的回调 [errorCode:失败的错误码 errMsg:错误信息]
- @param modeTypeBlock           客服模式
- @param quitBlock               客服被动结束。如果主动调用stopCustomeService，则不会调用到该block
+ @param modeTypeBlock           客服模式变化
+ @param pullEvaluationBlock     客服请求评价
+ @param quitBlock               客服被动结束。如果主动调用stopCustomerService，则不会调用到该block
  
  @warning 如果你使用IMKit，请不要使用此方法。RCConversationViewController默认已经做了处理。
  */
-- (void)startCustomService:(NSString *)kefuId
-                 onSuccess:(void(^)(RCCustomServiceConfig *config))successBlock
-                   onError:(void(^)(int errorCode, NSString *errMsg))errorBlock
-                onModeType:(void(^)(RCCSModeType mode))modeTypeBlock
-                    onQuit:(void(^)(NSString *quitMsg))quitBlock;
+- (void)startCustomerService:(NSString *)kefuId
+                        info:(RCCustomerServiceInfo *)csInfo
+                   onSuccess:(void(^)(RCCustomerServiceConfig *config))successBlock
+                     onError:(void(^)(int errorCode, NSString *errMsg))errorBlock
+                  onModeType:(void(^)(RCCSModeType mode))modeTypeBlock
+            onPullEvaluation:(void(^)(NSString *dialogId))pullEvaluationBlock
+                      onQuit:(void(^)(NSString *quitMsg))quitBlock;
 
 /*!
  结束客服聊天
  
  @param kefuId       客服ID
 
- @discussion 此方法依赖startCustomService方法，只有调用成功以后才有效。
+ @discussion 此方法依赖startCustomerService方法，只有调用成功以后才有效。
  @warning 如果你使用IMKit，请不要使用此方法。RCConversationViewController默认已经做了处理。
  */
-- (void)stopCustomeService:(NSString *)kefuId;
+- (void)stopCustomerService:(NSString *)kefuId;
 
 /*!
  切换客服模式
  
  @param kefuId       客服ID
  
- @discussion 此方法依赖startCustomService方法，而且只有当前客服模式为机器人优先才可调用。
+ @discussion 此方法依赖startCustomerService方法，而且只有当前客服模式为机器人优先才可调用。
  @warning 如果你使用IMKit，请不要使用此方法。RCConversationViewController默认已经做了处理。
  */
 - (void)switchToHumanMode:(NSString *)kefuId;
 
 /*!
- 评价机器人客服
- 
- @param kefuId                客服ID
- @param isRobotResolved       是否解决问题
- @param suggest                客户建议
- 
- @discussion 此方法依赖startCustomService方法。可在客服结束之前或之后调用。
- @warning 如果你使用IMKit，请不要使用此方法。RCConversationViewController默认已经做了处理。
- */
-- (void)evaluateCustomService:(NSString *)kefuId robotValue:(BOOL)isRobotResolved suggest:(NSString *)suggest;
-
-/*!
- 评价机器人客服
+ 评价机器人客服，用于对单条机器人应答的评价。
  
  @param kefuId                客服ID
  @param knownledgeId          知识点ID
  @param isRobotResolved       是否解决问题
+ @param suggest                客户建议
  
- @discussion 此方法依赖startCustomService方法。可在客服结束之前或之后调用。
+ @discussion 此方法依赖startCustomerService方法。可在客服结束之前或之后调用。
  @warning 如果你使用IMKit，请不要使用此方法。RCConversationViewController默认已经做了处理。
  */
-- (void)evaluateCustomService:(NSString *)kefuId knownledgeId:(NSString *)knownledgeId robotValue:(BOOL)isRobotResolved;
+- (void)evaluateCustomerService:(NSString *)kefuId knownledgeId:(NSString *)knownledgeId robotValue:(BOOL)isRobotResolved suggest:(NSString *)suggest;
 
 /*!
- 评价人工客服
+ 评价人工客服。
  
  @param kefuId                客服ID
+ @param dialogId              对话ID，客服请求评价的对话ID
  @param value                 分数，取值范围1-5
  @param suggest                客户建议
  
- @discussion 此方法依赖startCustomService方法。可在客服结束之前或之后调用。
+ @discussion 此方法依赖startCustomerService方法。可在客服结束之前或之后调用。
  @warning 如果你使用IMKit，请不要使用此方法。RCConversationViewController默认已经做了处理。
  */
-- (void)evaluateCustomService:(NSString *)kefuId humanValue:(int)value suggest:(NSString *)suggest;
-
+- (void)evaluateCustomerService:(NSString *)kefuId dialogId:(NSString *)dialogId humanValue:(int)value suggest:(NSString *)suggest;
 @end
 #endif

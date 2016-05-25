@@ -403,9 +403,9 @@ FOUNDATION_EXPORT NSString *const RCKitDispatchConnectionStatusChangedNotificati
  
  @param targetId    要发起语音通话的对方的用户ID
  
- @discussion 使用此方法，必须要求是带VoIP功能的IMKit SDK
+ @warning 旧版本VoIP接口，不再支持，请升级到最新VoIP版本。
  */
-- (void)startVoIPCallWithTargetId:(NSString *)targetId;
+//- (void)startVoIPCallWithTargetId:(NSString *)targetId;
 
 #pragma mark 消息接收监听
 /*!
@@ -462,14 +462,145 @@ FOUNDATION_EXPORT NSString *const RCKitDispatchConnectionStatusChangedNotificati
  */
 @property(nonatomic, assign) BOOL showUnkownMessageNotificaiton;
 
+/*!
+ 语音消息的最大长度
+ 
+ @discussion 默认值是60s，有效值为不小于5秒，不大于60秒
+ */
+@property(nonatomic, assign) NSUInteger maxVoiceDuration;
+
+#pragma mark - 讨论组相关操作
+
+/*!
+ 创建讨论组
+ 
+ @param name            讨论组名称
+ @param userIdList      用户ID的列表
+ @param successBlock    创建讨论组成功的回调 [discussion:创建成功返回的讨论组对象]
+ @param errorBlock      创建讨论组失败的回调 [status:创建失败的错误码]
+ */
+- (void)createDiscussion:(NSString *)name
+              userIdList:(NSArray *)userIdList
+                 success:(void (^)(RCDiscussion *discussion))successBlock
+                   error:(void (^)(RCErrorCode status))errorBlock;
+
+/*!
+ 讨论组加人，将用户加入讨论组
+ 
+ @param discussionId    讨论组ID
+ @param userIdList      需要加入的用户ID列表
+ @param successBlock    讨论组加人成功的回调 [discussion:讨论组加人成功返回的讨论组对象]
+ @param errorBlock      讨论组加人失败的回调 [status:讨论组加人失败的错误码]
+ 
+ @discussion 设置的讨论组名称长度不能超过40个字符，否则将会截断为前40个字符。
+ */
+- (void)addMemberToDiscussion:(NSString *)discussionId
+                   userIdList:(NSArray *)userIdList
+                      success:(void (^)(RCDiscussion *discussion))successBlock
+                        error:(void (^)(RCErrorCode status))errorBlock;
+
+/*!
+ 讨论组踢人，将用户移出讨论组
+ 
+ @param discussionId    讨论组ID
+ @param userId          需要移出的用户ID
+ @param successBlock    讨论组踢人成功的回调 [discussion:讨论组踢人成功返回的讨论组对象]
+ @param errorBlock      讨论组踢人失败的回调 [status:讨论组踢人失败的错误码]
+ 
+ @discussion 如果当前登陆用户不是此讨论组的创建者并且此讨论组没有开放加人权限，则会返回错误。
+ 
+ @warning 不能使用此接口将自己移除，否则会返回错误。
+ 如果您需要退出该讨论组，可以使用-quitDiscussion:success:error:方法。
+ */
+- (void)removeMemberFromDiscussion:(NSString *)discussionId
+                            userId:(NSString *)userId
+                           success:(void (^)(RCDiscussion *discussion))successBlock
+                             error:(void (^)(RCErrorCode status))errorBlock;
+
+/*!
+ 退出当前讨论组
+ 
+ @param discussionId    讨论组ID
+ @param successBlock    退出成功的回调 [discussion:退出成功返回的讨论组对象]
+ @param errorBlock      退出失败的回调 [status:退出失败的错误码]
+ */
+- (void)quitDiscussion:(NSString *)discussionId
+               success:(void (^)(RCDiscussion *discussion))successBlock
+                 error:(void (^)(RCErrorCode status))errorBlock;
+
+/*!
+ 获取讨论组的信息
+ 
+ @param discussionId    需要获取信息的讨论组ID
+ @param successBlock    获取讨论组信息成功的回调 [discussion:获取的讨论组信息]
+ @param errorBlock      获取讨论组信息失败的回调 [status:获取讨论组信息失败的错误码]
+ */
+- (void)getDiscussion:(NSString *)discussionId
+              success:(void (^)(RCDiscussion *discussion))successBlock
+                error:(void (^)(RCErrorCode status))errorBlock;
+
+/*!
+ 设置讨论组名称
+ 
+ @param discussionId            需要设置的讨论组ID
+ @param discussionName          需要设置的讨论组名称，discussionName长度<=40
+ @param successBlock            设置成功的回调
+ @param errorBlock              设置失败的回调 [status:设置失败的错误码]
+ 
+ @discussion 设置的讨论组名称长度不能超过40个字符，否则将会截断为前40个字符。
+ */
+- (void)setDiscussionName:(NSString *)discussionId
+                     name:(NSString *)discussionName
+                  success:(void (^)())successBlock
+                    error:(void (^)(RCErrorCode status))errorBlock;
+
+/*!
+ 设置讨论组是否开放加人权限
+ 
+ @param discussionId    论组ID
+ @param isOpen          是否开放加人权限
+ @param successBlock    设置成功的回调
+ @param errorBlock      设置失败的回调[status:设置失败的错误码]
+ 
+ @discussion 讨论组默认开放加人权限，即所有成员都可以加人。
+ 如果关闭加人权限之后，只有讨论组的创建者有加人权限。
+ */
+- (void)setDiscussionInviteStatus:(NSString *)discussionId
+                           isOpen:(BOOL)isOpen
+                          success:(void (^)())successBlock
+                            error:(void (^)(RCErrorCode status))errorBlock;
+
 #pragma mark - 用户信息、群组信息相关
 
 /*!
  当前登录的用户的用户信息
  
  @discussion 与融云服务器建立连接之后，应该设置当前用户的用户信息，用于SDK显示和发送。
+ 
+ @warning 如果传入的用户信息中的用户ID与当前登录的用户ID不匹配，则将会忽略。
  */
 @property(nonatomic, strong) RCUserInfo *currentUserInfo;
+
+/*!
+ 是否将用户信息和群组信息在本地持久化存储，默认值为NO
+ 
+ @discussion 如果设置为NO，则SDK在需要显示用户信息时，会调用用户信息提供者获取用户信息并缓存到Cache，此Cache在App生命周期结束时会被移除，下次启动时会再次通过用户信息提供者获取信息。
+ 如果设置为YES，则会将获取到的用户信息持久化存储在本地，App下次启动时Cache会仍然有效。
+ */
+@property(nonatomic, assign) BOOL enablePersistentUserInfoCache;
+
+/*!
+ 是否在发送的所有消息中携带当前登录的用户信息，默认值为NO
+ 
+ @discussion 如果设置为YES，则会在每一条发送的消息中携带当前登录用户的用户信息。
+ 收到一条携带了用户信息的消息，SDK会将其信息加入用户信息的cache中并显示；
+ 若消息中不携带用户信息，则仍然会通过用户信息提供者获取用户信息进行显示。
+ 
+ @warning 需要先设置当前登录用户的用户信息，参考RCIM的currentUserInfo。
+ */
+@property(nonatomic, assign) BOOL enableMessageAttachUserInfo;
+
+#pragma mark 用户信息
 
 /*!
  用户信息提供者
@@ -478,35 +609,6 @@ FOUNDATION_EXPORT NSString *const RCKitDispatchConnectionStatusChangedNotificati
  */
 @property(nonatomic, weak) id<RCIMUserInfoDataSource> userInfoDataSource;
 
-/*!
- 群组信息提供者
- 
- @discussion SDK需要通过您实现的群组信息提供者，获取群组信息并显示。
- */
-@property(nonatomic, weak) id<RCIMGroupInfoDataSource> groupInfoDataSource;
-
-/*!
- 群名片信息提供者
- 
- @discussion 如果您使用了群名片功能，SDK需要通过您实现的群名片信息提供者，获取用户在群组中的名片信息并显示。
- */
-@property(nonatomic, weak) id<RCIMGroupUserInfoDataSource> groupUserInfoDataSource;
-
-/*!
- 是否在发送的所有消息中携带当前登录的用户信息，默认值为NO
- 
- @discussion 如果设置为YES，则会在每一条发送的消息中携带当前登录用户的用户信息。从2.4.1 之后附加用户信息之后cell默认会显示附加的用户信息的头像，即用户信息不会取用户信息提供者里提供的用户信息
- 需要先设置当前登录用户的用户信息，参考RCIM的currentUserInfo。
- */
-@property(nonatomic, assign) BOOL enableMessageAttachUserInfo;
-
-/*!
-  语音消息的最大长度
- 
- @discussion 默认值是60s，有效值为不小于5秒，不大于60秒
- */
-@property(nonatomic, assign) NSUInteger maxVoiceDuration;
-#pragma mark 用户信息、群组信息缓存
 /*!
  更新SDK中的用户信息缓存
  
@@ -521,6 +623,31 @@ FOUNDATION_EXPORT NSString *const RCKitDispatchConnectionStatusChangedNotificati
                   withUserId:(NSString *)userId;
 
 /*!
+ 获取SDK中缓存的用户信息
+ 
+ @param userId  用户ID
+ @return        SDK中缓存的用户信息
+ */
+- (RCUserInfo *)getUserInfoCache:(NSString *)userId;
+
+/*!
+ 清空SDK中所有的用户信息缓存
+ 
+ @discussion 使用此方法，会清空SDK中所有的用户信息缓存。
+ 但是处于性能和使用场景权衡，SDK不会在当前View立即自动刷新（会在切换到其他View的时候再刷新所显示的用户信息）。
+ 如果您想立即刷新，您可以在会话列表或者聊天界面reload强制刷新。
+ */
+- (void)clearUserInfoCache;
+
+#pragma mark 群组信息
+/*!
+ 群组信息提供者
+ 
+ @discussion SDK需要通过您实现的群组信息提供者，获取群组信息并显示。
+ */
+@property(nonatomic, weak) id<RCIMGroupInfoDataSource> groupInfoDataSource;
+
+/*!
  更新SDK中的群组信息缓存
  
  @param groupInfo   需要更新的群组信息
@@ -532,6 +659,42 @@ FOUNDATION_EXPORT NSString *const RCKitDispatchConnectionStatusChangedNotificati
  */
 - (void)refreshGroupInfoCache:(RCGroup *)groupInfo
                   withGroupId:(NSString *)groupId;
+
+/*!
+ 获取SDK中缓存的群组信息
+ 
+ @param groupId     群组ID
+ @return            SDK中缓存的群组信息
+ */
+- (RCGroup *)getGroupInfoCache:(NSString *)groupId;
+
+/*!
+ 清空SDK中所有的群组信息缓存
+ 
+ @discussion 使用此方法，会清空SDK中所有的群组信息缓存。
+ 但是处于性能和使用场景权衡，SDK不会在当前View立即自动刷新（会在切换到其他View的时候再刷新所显示的群组信息）。
+ 如果您想立即刷新，您可以在会话列表或者聊天界面reload强制刷新。
+ */
+- (void)clearGroupInfoCache;
+
+#pragma mark 群名片信息（可选）
+
+/*!
+ 群名片信息提供者
+ 
+ @discussion 如果您使用了群名片功能，SDK需要通过您实现的群名片信息提供者，获取用户在群组中的名片信息并显示。
+ */
+@property(nonatomic, weak) id<RCIMGroupUserInfoDataSource> groupUserInfoDataSource;
+
+/*!
+ 获取SDK中缓存的群名片信息
+ 
+ @param userId      用户ID
+ @param groupId     群组ID
+ @return            群名片信息
+ */
+- (RCUserInfo *)getGroupUserInfoCache:(NSString *)userId
+                          withGroupId:(NSString *)groupId;
 
 /*!
  更新SDK中的群名片信息缓存
@@ -549,22 +712,13 @@ FOUNDATION_EXPORT NSString *const RCKitDispatchConnectionStatusChangedNotificati
                       withGroupId:(NSString *)groupId;
 
 /*!
- 清空SDK中所有的用户信息缓存
+ 清空SDK中所有的群名片信息缓存
  
- @discussion 使用此方法，会清空SDK中所有的用户信息缓存。
- 但是处于性能和使用场景权衡，SDK不会在当前View立即自动刷新（会在切换到其他View的时候再刷新所显示的用户信息）。
+ @discussion 使用此方法，会清空SDK中所有的群名片信息缓存。
+ 但是处于性能和使用场景权衡，SDK不会在当前View立即自动刷新（会在切换到其他View的时候再刷新所显示的群名片信息）。
  如果您想立即刷新，您可以在会话列表或者聊天界面reload强制刷新。
  */
-- (void)clearUserInfoCache;
-
-/*!
- 清空SDK中所有的群组信息缓存
- 
- @discussion 使用此方法，会清空SDK中所有的群组信息缓存。
- 但是处于性能和使用场景权衡，SDK不会在当前View立即自动刷新（会在切换到其他View的时候再刷新所显示的群组信息）。
- 如果您想立即刷新，您可以在会话列表或者聊天界面reload强制刷新。
- */
-- (void)clearGroupInfoCache;
+- (void)clearGroupUserInfoCache;
 
 #pragma mark 头像显示
 
@@ -599,7 +753,7 @@ FOUNDATION_EXPORT NSString *const RCKitDispatchConnectionStatusChangedNotificati
 /*!
  SDK聊天界面中显示的头像大小
  
- @discussion 默认值为46*46
+ @discussion 默认值为40*40
  */
 @property(nonatomic) CGSize globalMessagePortraitSize;
 

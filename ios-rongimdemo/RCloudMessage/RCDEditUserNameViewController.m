@@ -59,7 +59,9 @@
             [hud show:NO];
             RCUserInfo *userInfo = [RCIMClient sharedRCIMClient].currentUserInfo;
             userInfo.name = weakSelf.userName.text;
-            [[RCDataBaseManager shareInstance] insertUserToDB:userInfo];
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                [[RCDataBaseManager shareInstance] insertUserToDB:userInfo];
+            });
             [[RCIM sharedRCIM] refreshUserInfoCache:userInfo withUserId:userInfo.userId];
             
             [weakSelf.navigationController popViewControllerAnimated:YES];

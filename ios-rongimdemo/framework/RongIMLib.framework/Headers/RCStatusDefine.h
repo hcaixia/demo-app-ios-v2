@@ -7,7 +7,7 @@
  *
  */
 
-//  RCCommonDefine.h
+//  RCStatusDefine.h
 //  Created by Heq.Shinoda on 14-4-21.
 
 #import <Foundation/Foundation.h>
@@ -27,12 +27,6 @@
  RC_DISCONN_KICK, RC_CLIENT_NOT_INIT, RC_INVALID_PARAMETER, RC_INVALID_ARGUMENT
  */
 typedef NS_ENUM(NSInteger, RCConnectErrorCode) {
-    /*!
-     导航路由失败
-     
-     @discussion 建立连接的临时错误码，SDK会做好自动重连，开发者无须处理。
-     */
-    RC_NET_NAVI_ERROR = 30000,
     
     /*!
      连接已被释放
@@ -49,39 +43,18 @@ typedef NS_ENUM(NSInteger, RCConnectErrorCode) {
     RC_NET_UNAVAILABLE = 30002,
     
     /*!
-     请求响应超时
-     
-     @discussion 建立连接的临时错误码，SDK会做好自动重连，开发者无须处理。
-     */
-    RC_MSG_RESP_TIMEOUT = 30003,
-    
-    /*!
      导航HTTP发送失败
      
      @discussion 建立连接的临时错误码，SDK会做好自动重连，开发者无须处理。
      */
-    RC_HTTP_SEND_FAIL = 30004,
-    
-    /*!
-     导航HTTP请求超时
-     
-     @discussion 建立连接的临时错误码，SDK会做好自动重连，开发者无须处理。
-     */
-    RC_HTTP_REQ_TIMEOUT = 30005,
-    
-    /*!
-     导航HTTP接收失败
-     
-     @discussion 建立连接的临时错误码，SDK会做好自动重连，开发者无须处理。
-     */
-    RC_HTTP_RECV_FAIL = 30006,
+    RC_NAVI_REQUEST_FAIL = 30004,
     
     /*!
      导航HTTP请求失败
      
      @discussion 建立连接的临时错误码，SDK会做好自动重连，开发者无须处理。
      */
-    RC_NAVI_RESOURCE_ERROR = 30007,
+    RC_NAVI_RESPONSE_ERROR = 30007,
     
     /*!
      导航HTTP返回数据格式错误
@@ -91,18 +64,11 @@ typedef NS_ENUM(NSInteger, RCConnectErrorCode) {
     RC_NODE_NOT_FOUND = 30008,
     
     /*!
-     导航HTTP返回数据不可用
-     
-     @discussion 建立连接的临时错误码，SDK会做好自动重连，开发者无须处理。
-     */
-    RC_DOMAIN_NOT_RESOLVE = 30009,
-    
-    /*!
      创建Socket连接失败
      
      @discussion 建立连接的临时错误码，SDK会做好自动重连，开发者无须处理。
      */
-    RC_SOCKET_NOT_CREATED = 30010,
+    RC_SOCKET_NOT_CONNECTED = 30010,
     
     /*!
      Socket断开
@@ -212,20 +178,6 @@ typedef NS_ENUM(NSInteger, RCConnectErrorCode) {
     RC_DISCONN_KICK = 31010,
     
     /*!
-     信令数据无效
-     
-     @discussion 建立连接的临时状态，SDK会做好自动重连，开发者无须处理。
-     */
-    RC_QUERY_ACK_NO_DATA = 32001,
-    
-    /*!
-     信令数据错误
-     
-     @discussion 建立连接的临时状态，SDK会做好自动重连，开发者无须处理。
-     */
-    RC_MSG_DATA_INCOMPLETE = 32002,
-    
-    /*!
      SDK没有初始化
      
      @discussion 在使用SDK任何功能之前，必须先Init。
@@ -321,6 +273,11 @@ typedef NS_ENUM(NSInteger, RCErrorCode) {
      当前连接不可用
      */
     RC_NETWORK_UNAVAILABLE = 30002,
+    
+    /*!
+     消息响应超时
+     */
+    RC_MSG_RESPONSE_TIMEOUT = 30003,
     
     /*!
      SDK没有初始化

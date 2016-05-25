@@ -135,6 +135,18 @@
     }
 }
 
+- (void)getAllMembersOfGroup:(NSString *)groupId
+                      result:(void (^)(NSArray *userIdList))resultBlock  {
+    [[RCDHttpTool shareInstance] getGroupMembersByGroupID:groupId successCompletion:^(NSArray *members) {
+        NSLog(@"get the memebers here!");
+        NSMutableArray *ret = [[NSMutableArray alloc] init];
+        for (NSDictionary *userDict in members) {
+            [ret addObject:userDict[@"id"]];
+        }
+        resultBlock(ret);
+    }];
+}
+
 - (void)cacheAllUserInfo:(void (^)())completion
 {
     __block NSArray * regDataArray;
@@ -142,7 +154,7 @@
     [AFHttpTool getFriendsSuccess:^(id response) {
         if (response) {
             NSString *code = [NSString stringWithFormat:@"%@",response[@"code"]];
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 if ([code isEqualToString:@"200"]) {
                     regDataArray = response[@"result"];
                     for(int i = 0;i < regDataArray.count;i++){
@@ -168,7 +180,7 @@
 {
     [RCDHTTPTOOL getAllGroupsWithCompletion:^(NSMutableArray *result) {
         [[RCDataBaseManager shareInstance] clearGroupsData];
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             for(int i = 0;i < result.count;i++){
                 RCGroup *userInfo =[result objectAtIndex:i];
                 [[RCDataBaseManager shareInstance] insertGroupToDB:userInfo];
@@ -181,7 +193,7 @@
 - (void)cacheAllFriends:(void (^)())completion
 {
     [RCDHTTPTOOL getFriends:^(NSMutableArray *result) {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             [[RCDataBaseManager shareInstance] clearFriendsData];
             [result enumerateObjectsUsingBlock:^(RCDUserInfo *userInfo, NSUInteger idx, BOOL *stop) {
                 RCUserInfo *friend = [[RCUserInfo alloc] initWithUserId:userInfo.userId name:userInfo.name portrait:userInfo.portraitUri];
@@ -207,12 +219,15 @@
 
 - (NSArray *)getAllUserInfo:(void (^)())completion
 {
-    NSArray *allUserInfo = [[RCDataBaseManager shareInstance] getAllUserInfo];
-    if (!allUserInfo.count) {
-       [self cacheAllUserInfo:^{
-           completion();
-       }];
-    }
+    __block NSArray *allUserInfo = nil;
+    [[RCDataBaseManager shareInstance] getAllUserInfo:^(NSArray *allUserInfoList) {
+        allUserInfo = allUserInfoList;
+        if (!allUserInfo.count) {
+            [self cacheAllUserInfo:^{
+                completion();
+            }];
+        }
+    }];
     return allUserInfo;
 }
 /*
@@ -220,23 +235,29 @@
  */
 - (NSArray *)getAllGroupInfo:(void (^)())completion
 {
-    NSArray *allUserInfo = [[RCDataBaseManager shareInstance] getAllGroup];
-    if (!allUserInfo.count) {
-        [self cacheAllGroup:^{
-            completion();
-        }];
-    }
+    __block NSArray *allUserInfo = nil;
+    [[RCDataBaseManager shareInstance] getAllGroup:^(NSArray *allGroupInfoList) {
+        allUserInfo = allGroupInfoList;
+        if (!allUserInfo.count) {
+            [self cacheAllGroup:^{
+                completion();
+            }];
+        }
+    }];
     return allUserInfo;
 }
 
 - (NSArray *)getAllFriends:(void (^)())completion
 {
-    NSArray *allUserInfo = [[RCDataBaseManager shareInstance] getAllFriends];
-    if (!allUserInfo.count) {
-        [self cacheAllFriends:^{
-            completion();
-        }];
-    }
+    __block NSArray *allUserInfo = nil;
+    [[RCDataBaseManager shareInstance] getAllFriends:^(NSArray *allFriendUserInfoList) {
+        allUserInfo = allFriendUserInfoList;
+        if (!allUserInfo.count) {
+            [self cacheAllFriends:^{
+                completion();
+            }];
+        }
+    }];
     return allUserInfo;
 }
 @end

@@ -10,8 +10,9 @@
 #import "AFHttpTool.h"
 #import "AFNetworking.h"
 
-#define DEV_FAKE_SERVER @"http://119.254.110.241/" //Beijing SUN-QUAN  测试环境（北京）
-#define PRO_FAKE_SERVER @"http://119.254.110.79:8080/" //Beijing Liu-Bei    线上环境（北京）、
+#define DEV_FAKE_SERVER @"http://119.254.110.241/" //Beijing SUN-QUAN 测试环境（北京）
+#define PRO_FAKE_SERVER @"http://119.254.110.79:8080/" //Beijing Liu-Bei 线上环境（北京）
+#define PRIVATE_CLOUD_FAKE_SERVER @"http://139.217.26.223/"//私有云测试
 #define FAKE_SERVER @"http://webim.demo.rong.io/"//@"http://119.254.110.241:80/" //Login 线下测试
 
 //#define ContentType @"text/plain"

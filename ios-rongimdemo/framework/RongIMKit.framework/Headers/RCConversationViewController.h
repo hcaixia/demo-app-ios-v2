@@ -18,13 +18,27 @@
 #import "RCMessageModel.h"
 
 ///输入栏扩展输入的唯一标示
-#define PLUGIN_BOARD_ITEM_ALBUM_TAG    1001
-#define PLUGIN_BOARD_ITEM_CAMERA_TAG   1002
-#define PLUGIN_BOARD_ITEM_LOCATION_TAG 1003
-#if RC_VOIP_ENABLE
-#define PLUGIN_BOARD_ITEM_VOIP_TAG     1004
-#endif
+#define PLUGIN_BOARD_ITEM_ALBUM_TAG      1001
+#define PLUGIN_BOARD_ITEM_CAMERA_TAG     1002
+#define PLUGIN_BOARD_ITEM_LOCATION_TAG   1003
+#define PLUGIN_BOARD_ITEM_VOIP_TAG       1004
+#define PLUGIN_BOARD_ITEM_VIDEO_VOIP_TAG 1005
 
+
+typedef NS_ENUM(NSUInteger, RCCustomerServiceStatus) {
+    /*!
+     无客服服务
+     */
+    RCCustomerService_NoService,
+    /*!
+     人工客服服务
+     */
+    RCCustomerService_HumanService,
+    /*!
+     机器人客服服务
+     */
+    RCCustomerService_RobotService
+};
 /*!
  聊天界面类
  */
@@ -587,19 +601,25 @@ __deprecated_msg("已废弃，请勿使用。");
 
 #pragma mark - 客服
 /*!
- 评价客服服务,然后离开当前VC的。应用可以重写此方法来自定义客服评价界面。应用不要直接调用此方法。
- 
- @param serviceStatus  当前的服务类型。0是当前无服务，1是评价人工，2是评价机器人
- 
- @discussion 当用户点击返回时，sdk会调用此函数弹出评价界面并离开。如需自定义，请使用demo的RCDCustomServiceViewController中的示例。
+ 用户的详细信息，此数据用于上传用户信息到客服后台，数据的nickName和portraitUrl必须填写。
  */
-- (void)commentCustomerServiceAndQuit:(int)serviceStatus;
+@property (nonatomic, strong)RCCustomerServiceInfo *csInfo;
+/*!
+ 评价客服服务,然后离开当前VC的。此方法有可能在离开客服会话界面触发，也可能是客服在后台推送评价触发，也可能用户点击机器人知识库评价触发。应用可以重写此方法来自定义客服评价界面。应用不要直接调用此方法。
+ 
+ @param serviceStatus  当前的服务类型。
+ @param commentId      评论ID。当是用户主动离开客服会话时，这个id是null；当客服在后台推送评价请求时，这个id是对话id；当用户点击机器人应答评价时，这个是机器人知识库id。
+ @param isQuit         评价完成后是否离开
+ 
+ @discussion sdk会在需要评价时调用此函数。如需自定义评价界面，请根据demo的RCDCustomerServiceViewController中的示例来重写此函数。
+ */
+- (void)commentCustomerServiceWithStatus:(RCCustomerServiceStatus)serviceStatus commentId:(NSString *)commentId quitAfterComment:(BOOL)isQuit;
 
 /*!
  离开客服界面
  
- @discussion 调用此方法离开客服VC。在此方法里会调用commentCustomerServiceAndQuit来弹出评价界面并等待用户评价完成后调用leftBarButtonItemPressed
+ @discussion 调用此方法离开客服VC。
  */
-- (void)customServiceLeftCurrentViewController;
+- (void)customerServiceLeftCurrentViewController;
 @end
 #endif

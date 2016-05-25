@@ -25,17 +25,17 @@
 /*!
  更新上传进度需要调用的block [progress:当前上传的进度，0 <= progress < 100]
  */
-@property (nonatomic, strong)void (^updateBlock)(int progress);
+@property (nonatomic, copy)void (^updateBlock)(int progress);
 
 /*!
  上传成功需要调用的block [imageUrl:图片的网络URL]
  */
-@property (nonatomic, strong)void (^successBlock)(NSString *imageUrl);
+@property (nonatomic, copy)void (^successBlock)(NSString *imageUrl);
 
 /*!
  上传成功需要调用的block [errorCode:上传失败的错误码，非0整数]
  */
-@property (nonatomic, strong)void (^errorBlock)(RCErrorCode errorCode);
+@property (nonatomic, copy)void (^errorBlock)(RCErrorCode errorCode);
 
 /*!
  初始化图片上传进度更新的IMKit监听

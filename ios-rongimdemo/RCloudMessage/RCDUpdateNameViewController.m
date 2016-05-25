@@ -8,7 +8,7 @@
 
 #import "RCDUpdateNameViewController.h"
 
-#import <RongIMLib/RongIMLib.h>
+#import <RongIMKit/RongIMKit.h>
 #import "UIColor+RCColor.h"
 
 
@@ -51,7 +51,7 @@
     }
     
     //保存设置
-    [[RCIMClient sharedRCIMClient] setDiscussionName:self.targetId name:self.tfName.text success:^{
+    [[RCIM sharedRCIM] setDiscussionName:self.targetId name:self.tfName.text success:^{
         
     } error:^(RCErrorCode status) {
         

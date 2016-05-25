@@ -15,8 +15,8 @@
 @property (nonatomic, strong)UIImageView *locationView;
 @end
 
-#define RC_REAL_TIME_LOCATION_CELL_LOCATION_ICON_WIDTH 10
-#define RC_REAL_TIME_LOCATION_CELL_LOCATION_ICON_HEIGHT 15
+#define RC_REAL_TIME_LOCATION_CELL_LOCATION_ICON_WIDTH 15
+#define RC_REAL_TIME_LOCATION_CELL_LOCATION_ICON_HEIGHT 20
 
 @implementation RealTimeLocationStartCell
 
@@ -49,10 +49,10 @@
     __textSize = CGSizeMake(ceilf(__textSize.width), ceilf(__textSize.height));
     CGSize __labelSize = CGSizeMake(__textSize.width, __textSize.height + 5);
     
-    CGFloat __bubbleWidth = __labelSize.width + 15 + RC_REAL_TIME_LOCATION_CELL_LOCATION_ICON_WIDTH < 50 ? 50 : (__labelSize.width + 15 + RC_REAL_TIME_LOCATION_CELL_LOCATION_ICON_WIDTH);
-    CGFloat __bubbleHeight = __labelSize.height + 5 + 5 < 35 ? 35 : (__labelSize.height + 5 + 5);
+    CGFloat __bubbleWidth = __labelSize.width + 18 + RC_REAL_TIME_LOCATION_CELL_LOCATION_ICON_WIDTH < 50 ? 50 : (__labelSize.width + 18 + RC_REAL_TIME_LOCATION_CELL_LOCATION_ICON_WIDTH);
+    CGFloat __bubbleHeight = __labelSize.height + 5 + 5 < 40 ? 40 : (__labelSize.height + 5 + 5);
     
-    CGSize __bubbleSize = CGSizeMake(__bubbleWidth + 14, __bubbleHeight);
+    CGSize __bubbleSize = CGSizeMake(__bubbleWidth + 18, __bubbleHeight);
     
     CGRect messageContentViewRect = self.messageContentView.frame;
     
@@ -64,27 +64,26 @@
         self.messageContentView.frame = messageContentViewRect;
         
         self.bubbleBackgroundView.frame = CGRectMake(0, 0, __bubbleSize.width, __bubbleSize.height);
-        
-        self.textLabel.frame = CGRectMake(27, 5, __labelSize.width, __labelSize.height);
         self.bubbleBackgroundView.image = [RCKitUtility imageNamed:@"chat_from_bg_normal" ofBundle:@"RongCloud.bundle"];
-        self.locationView.frame =CGRectMake(15, 10, RC_REAL_TIME_LOCATION_CELL_LOCATION_ICON_WIDTH, RC_REAL_TIME_LOCATION_CELL_LOCATION_ICON_HEIGHT);
+        self.locationView.frame =CGRectMake(18, self.bubbleBackgroundView.frame.size.height/2-RC_REAL_TIME_LOCATION_CELL_LOCATION_ICON_HEIGHT/2, RC_REAL_TIME_LOCATION_CELL_LOCATION_ICON_WIDTH, RC_REAL_TIME_LOCATION_CELL_LOCATION_ICON_HEIGHT);
+        self.textLabel.frame = CGRectMake(CGRectGetMaxX(self.locationView.frame)+4, 20-__labelSize.height/2, __labelSize.width, __labelSize.height);
         UIImage *image = self.bubbleBackgroundView.image;
         self.bubbleBackgroundView.image = [self.bubbleBackgroundView.image
                                            resizableImageWithCapInsets:UIEdgeInsetsMake(image.size.height * 0.8, image.size.width * 0.8,
                                                                                         image.size.height * 0.2, image.size.width * 0.2)];
     } else {
-        messageContentViewRect.size.width = __bubbleSize.width;
+        messageContentViewRect.size.width = __bubbleSize.width +4 ;
         messageContentViewRect.size.height = __bubbleSize.height;
         messageContentViewRect.origin.x =
         self.baseContentView.bounds.size.width -
-        (messageContentViewRect.size.width + 10 + [RCIM sharedRCIM].globalMessagePortraitSize.width + 10)+6;
+        (messageContentViewRect.size.width + 9 + [RCIM sharedRCIM].globalMessagePortraitSize.width + 10);
         self.messageContentView.frame = messageContentViewRect;
         
         self.bubbleBackgroundView.frame = CGRectMake(0, 0, __bubbleSize.width, __bubbleSize.height);
         
-        self.textLabel.frame = CGRectMake(RC_REAL_TIME_LOCATION_CELL_LOCATION_ICON_WIDTH, 5, __labelSize.width, __labelSize.height);
+        self.textLabel.frame = CGRectMake(12, 20-__labelSize.height/2, __labelSize.width, __labelSize.height);
         
-        self.locationView.frame = CGRectMake(10+__labelSize.width + 3, 10, RC_REAL_TIME_LOCATION_CELL_LOCATION_ICON_WIDTH, RC_REAL_TIME_LOCATION_CELL_LOCATION_ICON_HEIGHT);
+        self.locationView.frame = CGRectMake(12+__labelSize.width + 4,self.bubbleBackgroundView.frame.size.height/2-RC_REAL_TIME_LOCATION_CELL_LOCATION_ICON_HEIGHT/2, RC_REAL_TIME_LOCATION_CELL_LOCATION_ICON_WIDTH, RC_REAL_TIME_LOCATION_CELL_LOCATION_ICON_HEIGHT);
 
         
         self.bubbleBackgroundView.image = [RCKitUtility imageNamed:@"chat_to_bg_normal" ofBundle:@"RongCloud.bundle"];

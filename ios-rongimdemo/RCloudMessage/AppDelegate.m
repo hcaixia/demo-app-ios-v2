@@ -7,6 +7,7 @@
 //
 
 #import <RongIMKit/RongIMKit.h>
+#import <RongCallKit/RongCallKit.h>
 #import "AppDelegate.h"
 #import "RCDLoginViewController.h"
 #import "RCDRCIMDataSource.h"
@@ -51,10 +52,10 @@
 
   //重定向log到本地问题
   //在info.plist中打开Application supports iTunes file sharing
-  //    if (![[[UIDevice currentDevice] model] isEqualToString:@"iPhone
-  //    Simulator"]) {
-  //        [self redirectNSlogToDocumentFolder];
-  //    }
+    //    if (![[[UIDevice currentDevice] model] isEqualToString:@"iPhone
+    //    Simulator"]) {
+    //        [self redirectNSlogToDocumentFolder];
+    //    }
     [self umengTrack];
 
 
@@ -72,6 +73,7 @@
 
     //初始化融云SDK
     [[RCIM sharedRCIM] initWithAppKey:RONGCLOUD_IM_APPKEY];
+    
   }
   
   // 注册自定义测试消息
@@ -87,24 +89,30 @@
     [RCIM sharedRCIM].globalConversationPortraitSize = CGSizeMake(46, 46);
   }
 //    [RCIM sharedRCIM].portraitImageViewCornerRadius = 10;
+  //开启用户信息和群组信息的持久化
+  [RCIM sharedRCIM].enablePersistentUserInfoCache = YES;
   //设置用户信息源和群组信息源
   [RCIM sharedRCIM].userInfoDataSource = RCDDataSource;
   [RCIM sharedRCIM].groupInfoDataSource = RCDDataSource;
   //设置群组内用户信息源。如果不使用群名片功能，可以不设置
-  [RCIM sharedRCIM].groupUserInfoDataSource = RCDDataSource;
+//  [RCIM sharedRCIM].groupUserInfoDataSource = RCDDataSource;
 //  [RCIM sharedRCIM].enableMessageAttachUserInfo = YES;
   //设置接收消息代理
   [RCIM sharedRCIM].receiveMessageDelegate=self;
   //    [RCIM sharedRCIM].globalMessagePortraitSize = CGSizeMake(46, 46);
   //开启输入状态监听
   [RCIM sharedRCIM].enableTypingStatus=YES;
-    //开启发送已读回执（只支持单聊）
+  //开启发送已读回执（只支持单聊）
   [RCIM sharedRCIM].enableReadReceipt=YES;
   //设置显示未注册的消息
   //如：新版本增加了某种自定义消息，但是老版本不能识别，开发者可以在旧版本中预先自定义这种未识别的消息的显示
   [RCIM sharedRCIM].showUnkownMessage = YES;
   [RCIM sharedRCIM].showUnkownMessageNotificaiton = YES;
 
+  //通话设置群组成员列表提供者
+  [RCCall sharedRCCall].groupMemberDataSource = RCDDataSource;
+
+    
   //登录
   NSString *token =[[NSUserDefaults standardUserDefaults] objectForKey:@"userToken"];
   NSString *userId=[DEFAULTS objectForKey:@"userId"];
@@ -118,7 +126,7 @@
     [[RCUserInfo alloc] initWithUserId:userId
                                     name:userNickName
                                 portrait:userPortraitUri];
-      [RCIMClient sharedRCIMClient].currentUserInfo = _currentUserInfo;
+      [RCIM sharedRCIM].currentUserInfo = _currentUserInfo;
     [[RCIM sharedRCIM] connectWithToken:token
         success:^(NSString *userId) {
           [AFHttpTool loginWithEmail:userName

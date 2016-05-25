@@ -77,24 +77,23 @@
     self.tabBarController.navigationItem.rightBarButtonItem = nil;
     
     __weak RCDGroupViewController *weakSelf = self;
-    _groups=[NSMutableArray arrayWithArray:[[RCDataBaseManager shareInstance]getAllGroup]];
     
-
-    if (_groups==nil||_groups.count<1) {
-        [RCDHTTPTOOL getAllGroupsWithCompletion:^(NSMutableArray *result) {
-            _groups =[NSMutableArray arrayWithArray: result];
+    [[RCDataBaseManager shareInstance]getAllGroup:^(NSArray *allGroupInfoList) {
+        _groups=[NSMutableArray arrayWithArray:allGroupInfoList];
+        if (_groups==nil||_groups.count<1) {
+            [RCDHTTPTOOL getAllGroupsWithCompletion:^(NSMutableArray *result) {
+                _groups =[NSMutableArray arrayWithArray: result];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [weakSelf.tableView reloadData];
+                });
+            }];
+        }else
+        {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [weakSelf.tableView reloadData];
+                [self.tableView reloadData];
             });
-        }];
-    }else
-    {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.tableView reloadData];
-        });
-    }
-    
-
+        }
+    }];
 }
 
 

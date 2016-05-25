@@ -65,7 +65,7 @@
 /*!
  表情输入的回调
  */
-@property(nonatomic, assign) id<RCEmojiViewDelegate> delegate;
+@property(nonatomic, weak) id<RCEmojiViewDelegate> delegate;
 
 /*!
  加载表情Label

@@ -68,19 +68,21 @@
             [self.tableView reloadData];
         });
     } error:^(RCErrorCode status) {
-        NSArray *blacklist = [[RCDataBaseManager shareInstance] getBlackList];
-        if (blacklist.count < 20) {
-            self.hideSectionHeader = YES;
-        }
-        self.mDictData = [self sortedArrayWithPinYinDic:blacklist];
-        // key 排序
-        NSArray *keyArr = [[self.mDictData allKeys] sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-            return [obj1 compare:obj2 options:NSNumericSearch];
+        [[RCDataBaseManager shareInstance] getBlackList:^(NSArray *allBlackList) {
+            NSArray *blacklist = allBlackList;
+            if (blacklist.count < 20) {
+                self.hideSectionHeader = YES;
+            }
+            self.mDictData = [self sortedArrayWithPinYinDic:blacklist];
+            // key 排序
+            NSArray *keyArr = [[self.mDictData allKeys] sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+                return [obj1 compare:obj2 options:NSNumericSearch];
+            }];
+            self.keys = [NSMutableArray arrayWithArray:keyArr];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.tableView reloadData];
+            });
         }];
-        self.keys = [NSMutableArray arrayWithArray:keyArr];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.tableView reloadData];
-        });
         NSLog(@"getAllData error ");
     }];
 }

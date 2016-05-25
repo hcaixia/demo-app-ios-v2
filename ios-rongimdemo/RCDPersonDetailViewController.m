@@ -10,6 +10,7 @@
 #import "RCDChatViewController.h"
 #import <RongIMKit/RongIMKit.h>
 #import <RongIMLib/RCUserInfo.h>
+#import <RongCallKit/RongCallKit.h>
 #import "RCDHttpTool.h"
 #import "UIImageView+WebCache.h"
 #import "MBProgressHUD.h"
@@ -39,13 +40,14 @@
         weakSelf.inBlackList = (bizStatus == 0);
 
     } error:^(RCErrorCode status) {
-        NSArray *array = [[RCDataBaseManager shareInstance] getBlackList];
-        for (RCUserInfo *blackInfo in array) {
-            if ([blackInfo.userId isEqualToString: weakSelf.userInfo.userId]) {
-                weakSelf.inBlackList = YES;
+        [[RCDataBaseManager shareInstance] getBlackList:^(NSArray *allBlackList) {
+            for (RCUserInfo *blackInfo in allBlackList) {
+                if ([blackInfo.userId isEqualToString: weakSelf.userInfo.userId]) {
+                    weakSelf.inBlackList = YES;
+                }
+                
             }
-
-        }
+        }];
     }];
 
     
@@ -62,7 +64,7 @@
 
 - (IBAction)btnVoIP:(id)sender {
     //语音通话
-    [[RCIM sharedRCIM] startVoIPCallWithTargetId:self.userInfo.userId];
+    [[RCCall sharedRCCall] startSingleCall:self.userInfo.userId mediaType:RCCallMediaAudio];
 }
 
 

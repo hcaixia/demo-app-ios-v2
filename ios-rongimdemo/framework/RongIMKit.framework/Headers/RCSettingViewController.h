@@ -39,13 +39,6 @@ typedef void (^clearHistory)(BOOL isSuccess);
 @property(nonatomic, copy) clearHistory clearHistoryCompletion;
 
 /*!
- 默认的Cell
- 
- @discussion 内置置顶聊天、新消息通、清除消息记录三个cell
- */
-@property(nonatomic, readonly, strong) NSArray *defaultCells;
-
-/*!
  清空会话中所有消息的ActionSheet
  */
 @property(nonatomic, readonly, strong) UIActionSheet *clearMsgHistoryActionSheet;

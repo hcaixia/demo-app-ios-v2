@@ -8,7 +8,6 @@
 
 #import "RCDHttpTool.h"
 #import "AFHttpTool.h"
-#import "RCDGroupInfo.h"
 #import "RCDUserInfo.h"
 #import "RCDRCIMDataSource.h"
 #import "RCDataBaseManager.h"
@@ -45,120 +44,142 @@
 }
 //根据id获取单个群组
 -(void) getGroupByID:(NSString *) groupID
-   successCompletion:(void (^)(RCGroup *group)) completion
+   successCompletion:(void (^)(RCDGroupInfo *group)) completion
 {
-    RCGroup *groupInfo=[[RCDataBaseManager shareInstance] getGroupByGroupId:groupID];
-    if(groupInfo==nil)
-    {
-        [AFHttpTool getGroupByID:groupID success:^(id response) {
-            NSString *code = [NSString stringWithFormat:@"%@",response[@"code"]];
-            NSDictionary *result = response[@"result"];
-            if (result && [code isEqualToString:@"200"]) {
-                RCDGroupInfo *group = [[RCDGroupInfo alloc] init];
-                group.groupId = [result objectForKey:@"id"];
-                group.groupName = [result objectForKey:@"name"];
-                group.portraitUri = [result objectForKey:@"portrait"];
-                if (group.portraitUri) {
-                    group.portraitUri=@"";
+    [[RCDataBaseManager shareInstance] getGroupByGroupId:groupID completion:^(RCDGroupInfo *groupInfo) {
+        if(groupInfo==nil)
+        {
+            [AFHttpTool getGroupByID:groupID success:^(id response) {
+                NSString *code = [NSString stringWithFormat:@"%@",response[@"code"]];
+                NSDictionary *result = response[@"result"];
+                if (result && [code isEqualToString:@"200"]) {
+                    RCDGroupInfo *group = [[RCDGroupInfo alloc] init];
+                    group.groupId = [result objectForKey:@"id"];
+                    group.groupName = [result objectForKey:@"name"];
+                    group.portraitUri = [result objectForKey:@"portrait"];
+                    if (group.portraitUri) {
+                        group.portraitUri=@"";
+                    }
+                    group.creatorId = [result objectForKey:@"create_user_id"];
+                    group.introduce = [result objectForKey:@"introduce"];
+                    if (group.introduce) {
+                        group.introduce=@"";
+                    }
+                    group.number = [result objectForKey:@"number"];
+                    group.maxNumber = [result objectForKey:@"max_number"];
+                    group.creatorTime = [result objectForKey:@"creat_datetime"];
+                    [[RCDataBaseManager shareInstance] insertGroupToDB:group];
+                    if ([group.groupId isEqualToString:groupID] && completion) {
+                        completion(group);
+                    }
                 }
-                group.creatorId = [result objectForKey:@"create_user_id"];
-                group.introduce = [result objectForKey:@"introduce"];
-                if (group.introduce) {
-                    group.introduce=@"";
-                }
-                group.number = [result objectForKey:@"number"];
-                group.maxNumber = [result objectForKey:@"max_number"];
-                group.creatorTime = [result objectForKey:@"creat_datetime"];
-                [[RCDataBaseManager shareInstance] insertGroupToDB:group];
-                if ([group.groupId isEqualToString:groupID] && completion) {
-                    completion(group);
-                }
+                
+            } failure:^(NSError* err){
+                
+            }];
+        }else{
+            if (completion) {
+                completion(groupInfo);
             }
             
-        } failure:^(NSError* err){
-            
-        }];
-    }else{
-        if (completion) {
-            completion(groupInfo);
         }
-
-    }
+    }];
 }
+
+-(void) getGroupMembersByGroupID:(NSString *) groupID
+               successCompletion:(void (^)(NSArray *members)) completion
+{
+    [AFHttpTool getGroupByID:groupID success:^(id response) {
+        NSString *code = [NSString stringWithFormat:@"%@",response[@"code"]];
+        NSDictionary *result = response[@"result"];
+        if (result && [code isEqualToString:@"200"]) {
+            
+            NSArray *members = [result objectForKey:@"users"];
+            
+            completion(members);
+        }
+        
+    } failure:^(NSError* err){
+        completion(nil);
+    }];
+}
+
 -(void) getUserInfoByUserID:(NSString *) userID
                          completion:(void (^)(RCUserInfo *user)) completion
 {
-    
-    RCUserInfo *userInfo=[[RCDataBaseManager shareInstance] getUserByUserId:userID];
-    if (userInfo==nil) {
-        [AFHttpTool getUserById:userID success:^(id response) {
-            if (response) {
-                NSString *code = [NSString stringWithFormat:@"%@",response[@"code"]];
-                
-                if ([code isEqualToString:@"200"]) {
+    [[RCDataBaseManager shareInstance] getUserByUserId:userID completion:^(RCUserInfo *userInfo) {
+        if (userInfo==nil) {
+            [AFHttpTool getUserById:userID success:^(id response) {
+                if (response) {
+                    NSString *code = [NSString stringWithFormat:@"%@",response[@"code"]];
                     
-                    NSDictionary *dic = response[@"result"];
-                    // NSLog(@"isMainThread > %d", [NSThread isMainThread]);
-                    RCUserInfo *user = [RCUserInfo new];
-                    NSNumber *idNum = [dic objectForKey:@"id"];
-                    user.userId = [NSString stringWithFormat:@"%d",idNum.intValue];
-                    user.portraitUri = [dic objectForKey:@"portrait"];
-                    user.name = [dic objectForKey:@"username"];
-                    [[RCDataBaseManager shareInstance] insertUserToDB:user];
-                    
-                    if (completion) {
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            completion(user);
+                    if ([code isEqualToString:@"200"]) {
+                        
+                        NSDictionary *dic = response[@"result"];
+                        // NSLog(@"isMainThread > %d", [NSThread isMainThread]);
+                        RCUserInfo *user = [RCUserInfo new];
+                        NSNumber *idNum = [dic objectForKey:@"id"];
+                        user.userId = [NSString stringWithFormat:@"%d",idNum.intValue];
+                        user.portraitUri = [dic objectForKey:@"portrait"];
+                        user.name = [dic objectForKey:@"username"];
+                        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                            [[RCDataBaseManager shareInstance] insertUserToDB:user];
                         });
+                        if (completion) {
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                completion(user);
+                            });
+                        }
                     }
-                }
-                else
-                {
-                    RCUserInfo *user = [RCUserInfo new];
-
-                    user.userId = userID;
-                    user.portraitUri = @"";
-                    user.name = [NSString stringWithFormat:@"name%@", userID];
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        completion(user);
-                    });
-                }
-                
-            }
-            
-        } failure:^(NSError *err) {
-            NSLog(@"getUserInfoByUserID error");
-            if (completion) {
-                @try {
-                    dispatch_async(dispatch_get_main_queue(), ^{
+                    else
+                    {
                         RCUserInfo *user = [RCUserInfo new];
                         
                         user.userId = userID;
                         user.portraitUri = @"";
                         user.name = [NSString stringWithFormat:@"name%@", userID];
-
-                        completion(user);
-                    });
-                }
-                @catch (NSException *exception) {
-                    
-                }
-                @finally {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            completion(user);
+                        });
+                    }
                     
                 }
                 
+            } failure:^(NSError *err) {
+                NSLog(@"getUserInfoByUserID error");
+                if (completion) {
+                    @try {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            RCUserInfo *user = [RCUserInfo new];
+                            
+                            user.userId = userID;
+                            user.portraitUri = @"";
+                            user.name = [NSString stringWithFormat:@"name%@", userID];
+                            
+                            completion(user);
+                        });
+                    }
+                    @catch (NSException *exception) {
+                        
+                    }
+                    @finally {
+                        
+                    }
+                    
+                }
+            }];
+            
+        }else
+        {
+            if (completion) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    completion(userInfo);
+                });
             }
-        }];
-    
-    }else
-    {
-        if (completion) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                completion(userInfo);
-            });
+            
         }
-
-    }
+    }];
+    
 //    __block NSArray * regDataArray;
 //    [AFHttpTool getFriendsSuccess:^(id response) {
 //        if (response) {
@@ -264,8 +285,9 @@
         }
 
     } failure:^(NSError* err){
-        NSMutableArray *cacheGroups=[[NSMutableArray alloc]initWithArray:[[RCDataBaseManager shareInstance] getAllGroup]];
-        completion(cacheGroups);
+        [[RCDataBaseManager shareInstance] getAllGroup:^(NSArray *allGroupInfoList) {
+            completion([[NSMutableArray alloc]initWithArray:allGroupInfoList]);
+        }];
     }];
 }
 
@@ -327,10 +349,7 @@
                             [[RCDataBaseManager shareInstance] insertGroupToDB:group];
                         }
                     }
-                    
-                    dispatch_async(dispatch_get_main_queue(), ^(void) {
-                        joinResult(YES);
-                    });
+                    joinResult(YES);
 
                 } error:^(RCErrorCode status) {
                     joinResult(NO);
@@ -422,31 +441,32 @@
                 [_allFriends removeAllObjects];
                 NSArray * regDataArray = response[@"result"];
                 [[RCDataBaseManager shareInstance] clearFriendsData];
-                for(int i = 0;i < regDataArray.count;i++){
-                    NSDictionary *dic = [regDataArray objectAtIndex:i];
-                    if([[dic objectForKey:@"status"] intValue] != 1)
-                        continue;
-                    
-                    RCDUserInfo*userInfo = [RCDUserInfo new];
-                    NSNumber *idNum = [dic objectForKey:@"id"];
-                    userInfo.userId = [NSString stringWithFormat:@"%d",idNum.intValue];
-                    userInfo.portraitUri = [dic objectForKey:@"portrait"];
-                    userInfo.name = [dic objectForKey:@"username"];
-                    userInfo.email = [dic objectForKey:@"email"];
-                    userInfo.status = [dic objectForKey:@"status"];
-                    [list addObject:userInfo];
-                    [_allFriends addObject:userInfo];
-                    RCUserInfo *user = [RCUserInfo new];
-                    user.userId = [NSString stringWithFormat:@"%d",idNum.intValue];
-                    user.portraitUri = [dic objectForKey:@"portrait"];
-                    user.name = [dic objectForKey:@"username"];
-                    [[RCDataBaseManager shareInstance] insertUserToDB:user];
-                    [[RCDataBaseManager shareInstance] insertFriendToDB:user];
-                }
-                dispatch_async(dispatch_get_main_queue(), ^(void) {
-                    friendList(list);
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    for(int i = 0;i < regDataArray.count;i++){
+                        NSDictionary *dic = [regDataArray objectAtIndex:i];
+                        if([[dic objectForKey:@"status"] intValue] != 1)
+                            continue;
+                        
+                        RCDUserInfo*userInfo = [RCDUserInfo new];
+                        NSNumber *idNum = [dic objectForKey:@"id"];
+                        userInfo.userId = [NSString stringWithFormat:@"%d",idNum.intValue];
+                        userInfo.portraitUri = [dic objectForKey:@"portrait"];
+                        userInfo.name = [dic objectForKey:@"username"];
+                        userInfo.email = [dic objectForKey:@"email"];
+                        userInfo.status = [dic objectForKey:@"status"];
+                        [list addObject:userInfo];
+                        [_allFriends addObject:userInfo];
+                        RCUserInfo *user = [RCUserInfo new];
+                        user.userId = [NSString stringWithFormat:@"%d",idNum.intValue];
+                        user.portraitUri = [dic objectForKey:@"portrait"];
+                        user.name = [dic objectForKey:@"username"];
+                        [[RCDataBaseManager shareInstance] insertUserToDB:user];
+                        [[RCDataBaseManager shareInstance] insertFriendToDB:user];
+                    }
+                    dispatch_async(dispatch_get_main_queue(), ^(void) {
+                        friendList(list);
+                    });
                 });
-                
             }else{
                 friendList(list);
             }
@@ -454,8 +474,9 @@
         }
     } failure:^(id response) {
         if (friendList) {
-            NSMutableArray *cacheList=[[NSMutableArray alloc]initWithArray:[[RCDataBaseManager shareInstance] getAllFriends]];
-            friendList(cacheList);
+            [[RCDataBaseManager shareInstance] getAllFriends:^(NSArray *allFriendUserInfoList) {
+                friendList([[NSMutableArray alloc]initWithArray:allFriendUserInfoList]);
+            }];
         }
     }];
 }
@@ -640,7 +661,10 @@
                 user.userId = [NSString stringWithFormat:@"%d",idNum.intValue];
                 user.portraitUri = [dic objectForKey:@"portrait"];
                 user.name = [dic objectForKey:@"username"];
-                [[RCDataBaseManager shareInstance] insertUserToDB:user];
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    [[RCDataBaseManager shareInstance] insertUserToDB:user];
+                });
+                
                 if (success) {
                     dispatch_async(dispatch_get_main_queue(), ^{
                         success(user);

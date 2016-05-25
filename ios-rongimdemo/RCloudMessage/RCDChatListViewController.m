@@ -21,6 +21,7 @@
 #import <RongIMKit/RongIMKit.h>
 #import "RCDUserInfo.h"
 #import "RCDFriendInvitationTableViewController.h"
+#import "RCDPublicServiceListViewController.h"
 
 @interface RCDChatListViewController ()
 
@@ -175,6 +176,9 @@
                 _conversationVC.userName = @"系统消息";
                 _conversationVC.title = @"系统消息";
             }
+            if(model.conversationType ==  ConversationType_PRIVATE){
+                _conversationVC.displayUserNameInCell = NO;
+            }
             [self.navigationController pushViewController:_conversationVC animated:YES];
         }
         
@@ -292,7 +296,7 @@
             }
             [discussionTitle deleteCharactersInRange:NSMakeRange(discussionTitle.length - 1, 1)];
 
-            [[RCIMClient sharedRCIMClient] createDiscussion:discussionTitle userIdList:userIdList success:^(RCDiscussion *discussion) {
+            [[RCIM sharedRCIM] createDiscussion:discussionTitle userIdList:userIdList success:^(RCDiscussion *discussion) {
                 NSLog(@"create discussion ssucceed!");
                 dispatch_async(dispatch_get_main_queue(), ^{
                     RCDChatViewController *chat =[[RCDChatViewController alloc]init];
@@ -323,7 +327,7 @@
  */
 - (void) pushPublicService:(id) sender
 {
-        RCPublicServiceListViewController *publicServiceVC = [[RCPublicServiceListViewController alloc] init];
+        RCDPublicServiceListViewController *publicServiceVC = [[RCDPublicServiceListViewController alloc] init];
         [self.navigationController pushViewController:publicServiceVC  animated:YES];
     
 }
@@ -450,7 +454,9 @@
                                           [[NSUserDefaults standardUserDefaults]setObject:userinfoDic forKey:_contactNotificationMsg.sourceUserId];
                                           [[NSUserDefaults standardUserDefaults]synchronize];
                                           
-                                          [weakSelf.conversationListTableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+                                          dispatch_async(dispatch_get_main_queue(), ^{
+                                              [weakSelf.conversationListTableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+                                          });
                                       }];
             }
         }

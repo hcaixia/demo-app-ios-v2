@@ -32,11 +32,16 @@ static FMDatabaseQueue *databaseQueue = nil;
     if ([RCIMClient sharedRCIMClient].currentUserInfo==nil) {
         return nil;
     }
+
     if (!databaseQueue) {
-        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-        NSString *documentDirectory = [paths objectAtIndex:0];
-        NSString *dbPath = [documentDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"RongIMDemoDB%@",[RCIMClient sharedRCIMClient].currentUserInfo.userId]];
-        databaseQueue = [FMDatabaseQueue databaseQueueWithPath:dbPath];
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+            NSString *documentDirectory = [paths objectAtIndex:0];
+            NSString *dbPath = [documentDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"RongIMDemoDB%@",[RCIMClient sharedRCIMClient].currentUserInfo.userId]];
+            databaseQueue = [FMDatabaseQueue databaseQueueWithPath:dbPath];
+            
+        });
     }
     
     return databaseQueue;

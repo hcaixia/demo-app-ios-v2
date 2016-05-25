@@ -1,4 +1,4 @@
-/*
+/* 
   RongCloudKit.strings
   RongIMKit
 
@@ -19,8 +19,8 @@
 "conversation_group_collection_title"="My Groups";
 "conversation_discussion_collection_title"="Discussion Groups";
 "conversation_systemMessage_collection_title"="System Messages";
-"hold_to_talk_title"="Hold to talk";
-"release_to_send_title"="Release to send";
+"hold_to_talk_title"="Hold to  talk";
+"release_to_send_title"="Release to  send";
 "message_too_short"="Message too short";
 "slide_up_to_cancel_title"="Slide up to cancel";
 "release_to_cancel_title"="Release to cancel";
@@ -28,6 +28,7 @@
 "OK"="Ok";
 "Cancel"="Cancel";
 "speakerAccessRight"="You don't have the access right of speaker, please set it in Settings";
+"cameraAccessRight"="You don't have the access right of camera, please set it in Settings";
 "VoIP_Mute"="Mute";
 "VoIP_Speaker"="Speaker";
 "VoIP_End"="End";
@@ -141,6 +142,43 @@
 "NOT_CUSTOM_SERVICE"="No custom service";
 "Preview"="Preview";
 "Location_Service"="Unable to get your location data,Please enable location service in “Settings”->“Privacy”->“Location Services” and allows the application to use location services.";
-"Submit"="Submit";
-"StartCustomerServiceFailure"="Start customer service failure";
-"EvaluateCustomerService"="Evaluate customer service";
+"PhotoOniCloud"="The photo has not been downloaded from the iCloud, please download the system from the album to the local post to try again.";
+"VoIPAudioCall"="Voice Call";
+"VoIPVideoCall"="Video Call";
+"VoIPAudioCallExistedWarning"="Voice call is on. Try again later.";
+"VoIPVideoCallExistedWarning"="Video call is on. Try again later.";
+"VoIPCallSelectMember"="Select Members";
+"VoIPAudioCallMaxNumSelectMember"="Up to %d members";
+"VoIPVideoCallMaxNumSelectMember"="Up to %d members";
+"VoIPCallEnd"="Call cancelled";
+"VoIPAudioCallCamera"="Camera";
+"VoIPVideoCallCloseCamera"="Camera";
+"VoIPVideoCallOpenCamera"="Camera";
+"VoIPVideoCallTurnToAudioCall"="Voice Call";
+"VoIPCallHangup"="Hang Up";
+"VoIPCallAccept"="Accept";
+"VoIPCallMute"="Mute";
+"VoIPCallSpeaker"="Speaker";
+"VoIPCallWaitingForRemoteAccept"="Awaiting response...";
+"VoIPAudioCallIncoming"="Invites you to voice call";
+"VoIPVideoCallIncoming"="Invites you to video call";
+"VoIPAudioCallIncomingWithoutUserName"="Invites you to voice call";
+"VoIPVideoCallIncomingWithoutUserName"="Invites you to video call";
+"VoIPMultiCallUserCollectionTitle"="Members";
+"VoIPCallTotalTime"="Duration";
+"VoIPMultiCallRemoteConnecting"="Waiting";
+"VoIPMultiCallRemoteQuit"="Cancelled";
+"VoIPCallHasEnd"="Cancelled";
+"VoIPCallHasCancel"="Cancelled";
+"VoIPCallHasReject"="Declined";
+"VoIPCallHasHangup"="Cancelled";
+"VoIPCallNoResponse"="No answer";
+"VoIPCallRemoteCancel"="Cancelled";
+"VoIPCallRemoteReject"="Declined";
+"VoIPCallRemoteHangup"="Cancelled";
+"VoIPCallRemoteNoResponse"="No answer";
+"VoIPCallRemoteBusyLine"="Busy line";
+"VoIPCallRemoteBusyLineAndShowAdvice"="Remote user my be busy. Try again later.";
+"VoIPCallRemoteDidInvite"="%@ to join the call";
+"VoIPCallLocalNetworkError"="Network Error";
+"VoIPCallRemoteNetworkError"="Network Error";

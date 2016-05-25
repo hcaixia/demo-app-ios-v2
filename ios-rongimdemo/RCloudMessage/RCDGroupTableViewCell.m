@@ -53,7 +53,9 @@
        {
            if (_delegate) {
                if ([self.delegate respondsToSelector:@selector(joinGroupCallback:withGroupId:)]) {
-                   [self.delegate joinGroupCallback:isOk withGroupId:weakSelf.groupID];
+                   dispatch_async(dispatch_get_main_queue(), ^{
+                       [self.delegate joinGroupCallback:isOk withGroupId:weakSelf.groupID];
+                   });
                }
            }
        }];

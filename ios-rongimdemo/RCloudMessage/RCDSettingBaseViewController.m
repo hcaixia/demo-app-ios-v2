@@ -32,7 +32,6 @@
     [backBtn addSubview:backImg];
     UILabel *backText = [[UILabel alloc] initWithFrame:CGRectMake(12, 0, 85, 22)];
     backText.text = NSLocalizedStringFromTable(@"Back", @"RongCloudKit", nil);
-    backText.font = [UIFont systemFontOfSize:15];
     [backText setBackgroundColor:[UIColor clearColor]];
     [backText setTextColor:[UIColor whiteColor]];
     [backBtn addSubview:backText];

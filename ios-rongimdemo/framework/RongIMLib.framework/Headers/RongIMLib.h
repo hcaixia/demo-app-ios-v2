@@ -54,6 +54,11 @@ FOUNDATION_EXPORT const unsigned char RongIMLibVersionString[];
 #import <RongIMLib/RCAmrDataConverter.h>
 #import <RongIMLib/interf_enc.h>
 #import <RongIMLib/interf_dec.h>
+
+///客服
+#import <RongIMLib/RCEvaluateItem.h>
+#import <RongIMLib/RCCustomerServiceInfo.h>
+
 /// 其他
 #import <RongIMLib/RCUserInfo.h>
 #import <RongIMLib/RCChatRoomMemberInfo.h>
