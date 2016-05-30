@@ -40,14 +40,13 @@
         weakSelf.inBlackList = (bizStatus == 0);
 
     } error:^(RCErrorCode status) {
-        [[RCDataBaseManager shareInstance] getBlackList:^(NSArray *allBlackList) {
-            for (RCUserInfo *blackInfo in allBlackList) {
-                if ([blackInfo.userId isEqualToString: weakSelf.userInfo.userId]) {
-                    weakSelf.inBlackList = YES;
-                }
-                
+        NSArray *array = [[RCDataBaseManager shareInstance] getBlackList];
+        for (RCUserInfo *blackInfo in array) {
+            if ([blackInfo.userId isEqualToString: weakSelf.userInfo.userId]) {
+                weakSelf.inBlackList = YES;
             }
-        }];
+
+        }
     }];
 
     

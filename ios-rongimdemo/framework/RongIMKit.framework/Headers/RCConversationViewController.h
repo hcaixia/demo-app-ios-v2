@@ -621,5 +621,12 @@ __deprecated_msg("已废弃，请勿使用。");
  @discussion 调用此方法离开客服VC。
  */
 - (void)customerServiceLeftCurrentViewController;
+
+/*!
+ 客服服务模式变化
+ 
+ @param newMode  新的客服服务模式。
+ */
+- (void)onCustomerServiceModeChanged:(RCCSModeType)newMode;
 @end
 #endif

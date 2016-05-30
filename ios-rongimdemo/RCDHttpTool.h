@@ -10,7 +10,6 @@
 #import <RongIMLib/RCUserInfo.h>
 #import <RongIMLib/RCGroup.h>
 #import "RCDUserInfo.h"
-#import "RCDGroupInfo.h"
 
 #define RCDHTTPTOOL [RCDHttpTool shareInstance]
 
@@ -39,7 +38,7 @@
 
 //根据id获取单个群组
 -(void) getGroupByID:(NSString *) groupID
-          successCompletion:(void (^)(RCDGroupInfo *group)) completion;
+          successCompletion:(void (^)(RCGroup *group)) completion;
 
 //根据id获取单个群组的用户列表
 -(void) getGroupMembersByGroupID:(NSString *) groupID

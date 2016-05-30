@@ -72,40 +72,39 @@
     _keys = @[@"A",@"B",@"C",@"D",@"E",@"F",@"G",@"H",@"I",@"J",@"K",@"L",@"M",@"N",@"O",@"P",@"Q",@"R",@"S",@"T",@"U",@"V",@"W",@"X",@"Y",@"Z",@"#"];
     _allFriends = [NSMutableDictionary new];
     _allKeys = [NSMutableArray new];
-    
-    [[RCDataBaseManager shareInstance]getAllFriends:^(NSArray *allFriendUserInfoList) {
-        _friends = [NSMutableArray arrayWithArray:allFriendUserInfoList];
-        if (_friends==nil||_friends.count<1) {
-            [RCDDataSource syncFriendList:^(NSMutableArray * result) {
-                _friends=result;
-                if (_friends.count < 20) {
-                    self.hideSectionHeader = YES;
-                }
-                dispatch_async(dispatch_get_global_queue(0, 0), ^{
-                    _allFriends = [self sortedArrayWithPinYinDic:_friends];
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [self.tableView reloadData];
-                        
-                    });
-                });
-                
-            }];
-        }else
-        {
+    _friends = [NSMutableArray arrayWithArray:[[RCDataBaseManager shareInstance]getAllFriends ] ];
+    if (_friends==nil||_friends.count<1) {
+        [RCDDataSource syncFriendList:^(NSMutableArray * result) {
+            _friends=result;
             if (_friends.count < 20) {
                 self.hideSectionHeader = YES;
             }
-            
             dispatch_async(dispatch_get_global_queue(0, 0), ^{
-                
                 _allFriends = [self sortedArrayWithPinYinDic:_friends];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self.tableView reloadData];
                     
                 });
             });
+
+        }];
+    }else
+    {
+        if (_friends.count < 20) {
+            self.hideSectionHeader = YES;
         }
-    }];
+        
+        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+            
+            _allFriends = [self sortedArrayWithPinYinDic:_friends];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.tableView reloadData];
+                
+            });
+        });
+    }
+    
+
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

@@ -43,10 +43,9 @@
 
         [RCDHTTPTOOL getUserInfoByUserID:self.targetId
                               completion:^(RCUserInfo* user) {
-                                  dispatch_async(dispatch_get_main_queue(), ^{
-                                      [self addUsers:@[user]];
-                                      [_members setObject:user forKey:user.userId];
-                                  });
+                                          [self addUsers:@[user]];
+                                          [_members setObject:user forKey:user.userId];
+
                               }];
     }
 
@@ -72,21 +71,20 @@
                 
                 NSMutableArray *users = [NSMutableArray new];
                 for (NSString *targetId in discussion.memberIdList) {
-                    [RCDHTTPTOOL getUserInfoByUserID:targetId
-                                          completion:^(RCUserInfo *user) {
-                                              dispatch_async(dispatch_get_main_queue(), ^{
-                                                  if ([discussion.creatorId isEqualToString: user.userId]) {
-                                                      [users insertObject:user atIndex:0];
-                                                  }else{
-                                                      
-                                                      [users addObject:user];
-                                                  }
-                                                  [_members setObject:user forKey:user.userId];
-                                                  if (users.count == discussion.memberIdList.count) {
-                                                      [weakSelf addUsers:users];
-                                                  }
-                                              });
-                                          }];
+                        [RCDHTTPTOOL getUserInfoByUserID:targetId
+                                                              completion:^(RCUserInfo *user) {
+                                                                  if ([discussion.creatorId isEqualToString: user.userId]) {
+                                                                      [users insertObject:user atIndex:0];
+                                                                  }else{
+                                                                  
+                                                                       [users addObject:user];
+                                                                  }
+                                                                  [_members setObject:user forKey:user.userId];
+                                                                  if (users.count == discussion.memberIdList.count) {
+                                                              [weakSelf addUsers:users];
+                                                                  }
+                                                                  
+                                                              }];
                     
                 }
                 
@@ -409,23 +407,21 @@
                     [[RCIM sharedRCIM]refreshUserInfoCache:user withUserId:user.userId];
                     
                 }
-                [[RCDataBaseManager shareInstance] getAllFriends:^(NSArray *allFriendUserInfoList) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        for (RCUserInfo *USER in allFriendUserInfoList) {
-                            if ([userId isEqualToString:USER.userId] || [userId isEqualToString:[RCIM sharedRCIM].currentUserInfo.userId]) {
-                                UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-                                RCDPersonDetailViewController *temp = [mainStoryboard instantiateViewControllerWithIdentifier:@"RCDPersonDetailViewController"];
-                                temp.userInfo = user;
-                                [self.navigationController pushViewController:temp animated:YES];
-                                return;
-                            }
-                        }
+                NSArray *friendList = [[RCDataBaseManager shareInstance] getAllFriends];
+                for (RCUserInfo *USER in friendList) {
+                    if ([userId isEqualToString:USER.userId] || [userId isEqualToString:[RCIM sharedRCIM].currentUserInfo.userId]) {
                         UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-                        RCDAddFriendViewController *addViewController = [mainStoryboard instantiateViewControllerWithIdentifier:@"RCDAddFriendViewController"];
-                        addViewController.targetUserInfo = userInfo;
-                        [self.navigationController pushViewController:addViewController animated:YES];
-                    });
-                }];
+                        RCDPersonDetailViewController *temp = [mainStoryboard instantiateViewControllerWithIdentifier:@"RCDPersonDetailViewController"];
+                        temp.userInfo = user;
+                        [self.navigationController pushViewController:temp animated:YES];
+                        return;
+                    }
+                }
+                UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+                RCDAddFriendViewController *addViewController = [mainStoryboard instantiateViewControllerWithIdentifier:@"RCDAddFriendViewController"];
+                addViewController.targetUserInfo = userInfo;
+                [self.navigationController pushViewController:addViewController animated:YES];
+                
             } failure:^(NSError *err) {
                 _isClick = NO;
             }];

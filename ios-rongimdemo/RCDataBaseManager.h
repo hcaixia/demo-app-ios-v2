@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <RongIMKit/RongIMKit.h>
-#import "RCDGroupInfo.h"
+
 
 @interface RCDataBaseManager : NSObject
 
@@ -21,30 +21,28 @@
 -(void)insertBlackListToDB:(RCUserInfo*)user;
 
 //获取黑名单列表
--(void)getBlackList:(void (^)(NSArray *allBlackList))completion;
+- (NSArray *)getBlackList;
 
 //移除黑名单
--(void)removeBlackList:(NSString *)userId;
+- (void)removeBlackList:(NSString *)userId;
 
 //清空黑名单缓存信息
 -(void)clearBlackListData;
 
 //从表中获取用户信息
--(void)getUserByUserId:(NSString*)userId
-            completion:(void (^)(RCUserInfo *userInfo))completion;
+-(RCUserInfo*) getUserByUserId:(NSString*)userId;
 
 //从表中获取所有用户信息
--(void)getAllUserInfo:(void (^)(NSArray *allUserInfoList))completion;
+-(NSArray *) getAllUserInfo;
 
 //存储群组信息
 -(void)insertGroupToDB:(RCGroup *)group;
 
 //从表中获取群组信息
--(void)getGroupByGroupId:(NSString*)groupId
-              completion:(void (^)(RCDGroupInfo *groupInfo))completion;
+-(RCGroup*) getGroupByGroupId:(NSString*)groupId;
 
 //从表中获取所有群组信息
--(void)getAllGroup:(void (^)(NSArray *allGroupInfoList))completion;
+-(NSArray *) getAllGroup;
 
 //存储好友信息
 -(void)insertFriendToDB:(RCUserInfo *)friend;
@@ -57,7 +55,7 @@
 -(void)clearFriendsData;
 
 //从表中获取所有好友信息 //RCUserInfo
--(void)getAllFriends:(void (^)(NSArray *allFriendUserInfoList))completion;
+-(NSArray *) getAllFriends;
 
 //删除好友信息
 -(void)deleteFriendFromDB:(NSString *)userId;

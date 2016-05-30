@@ -176,9 +176,6 @@
                 _conversationVC.userName = @"系统消息";
                 _conversationVC.title = @"系统消息";
             }
-            if(model.conversationType ==  ConversationType_PRIVATE){
-                _conversationVC.displayUserNameInCell = NO;
-            }
             [self.navigationController pushViewController:_conversationVC animated:YES];
         }
         
@@ -454,9 +451,7 @@
                                           [[NSUserDefaults standardUserDefaults]setObject:userinfoDic forKey:_contactNotificationMsg.sourceUserId];
                                           [[NSUserDefaults standardUserDefaults]synchronize];
                                           
-                                          dispatch_async(dispatch_get_main_queue(), ^{
-                                              [weakSelf.conversationListTableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-                                          });
+                                          [weakSelf.conversationListTableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
                                       }];
             }
         }

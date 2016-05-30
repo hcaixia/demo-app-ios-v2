@@ -111,7 +111,7 @@
         [self.view addSubview:self.kefuIdField];
         NSString *kefuId = [[NSUserDefaults standardUserDefaults] objectForKey:@"KefuId"];
         if (kefuId == nil) {
-            kefuId = @"KEFUxiaoqiaoLive8001";
+            kefuId = @"KEFU145801184889727";//@"KEFUxiaoqiaoLive8001";
         }
         [self.kefuIdField setText:kefuId];
         [self.kefuIdField setDelegate:self];

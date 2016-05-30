@@ -300,6 +300,16 @@
   [[RCIMClient sharedRCIMClient] setDeviceToken:token];
 }
 
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
+#if TARGET_IPHONE_SIMULATOR
+    // 模拟器不能使用远程推送
+#else
+    // 请检查App的APNs的权限设置，更多内容可以参考文档 http://www.rongcloud.cn/docs/ios_push.html。
+    NSLog(@"获取DeviceToken失败！！！");
+    NSLog(@"ERROR：%@", error);
+#endif
+}
+
 - (void)onlineConfigCallBack:(NSNotification *)note {
 
   NSLog(@"online config has fininshed and note = %@", note.userInfo);

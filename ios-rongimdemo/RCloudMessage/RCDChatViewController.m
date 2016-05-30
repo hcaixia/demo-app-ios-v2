@@ -56,14 +56,11 @@
             }];
         }else
         {
-            UIButton *button  = [[UIButton alloc] initWithFrame:CGRectMake(0,0,25, 25)];
-            UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"data"]];
-            imageView.frame = CGRectMake(7,-1, 25, 25);
-            [button addSubview:imageView];
-            [button addTarget:self action:@selector(rightBarButtonItemClicked:) forControlEvents:UIControlEventTouchUpInside];
-            UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc]
-                                               initWithCustomView:button];
-            self.navigationItem.rightBarButtonItem = rightBarButton;
+            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]
+                                                      initWithImage:[UIImage imageNamed:@"Setting"]
+                                                      style:UIBarButtonItemStylePlain
+                                                      target:self
+                                                      action:@selector(rightBarButtonItemClicked:)];
         }
       
     } else {
@@ -91,7 +88,10 @@
     
     [self notifyUpdateUnreadMessageCount];
     
-    
+    //如果是单聊，不显示发送方昵称
+    if (self.conversationType == ConversationType_PRIVATE) {
+        self.displayUserNameInCell = NO;
+    }
     
 //    self.chatSessionInputBarControl.hidden = YES;
 //    CGRect intputTextRect = self.conversationMessageCollectionView.frame;
@@ -162,13 +162,6 @@
             }];
         }];
         
-    }
-    
-    //进入单聊会话时，刷新一下用户信息
-    if (self.conversationType == ConversationType_PRIVATE) {
-        [RCDDataSource getUserInfoWithUserId:self.targetId completion:^(RCUserInfo *userInfo) {
-            [[RCIM sharedRCIM] refreshUserInfoCache:userInfo withUserId:self.targetId];
-        }];
     }
 }
 
@@ -268,12 +261,10 @@
       };
       
       [RCDHTTPTOOL getGroupByID:self.targetId
-              successCompletion:^(RCDGroupInfo *group)
+              successCompletion:^(RCGroup *group)
        {
-           dispatch_async(dispatch_get_main_queue(), ^{
-               detail.groupInfo=group;
-               [self.navigationController pushViewController:detail animated:YES];
-           });
+           detail.groupInfo=group;
+           [self.navigationController pushViewController:detail animated:YES];
            return;
        }];
 //      if (groups) {
@@ -511,23 +502,20 @@
                     [[RCIM sharedRCIM]refreshUserInfoCache:user withUserId:user.userId];
                     
                 }
-                [[RCDataBaseManager shareInstance] getAllFriends:^(NSArray *allFriendUserInfoList) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        for (RCUserInfo *USER in allFriendUserInfoList) {
-                            if ([userId isEqualToString:USER.userId] || [userId isEqualToString:[RCIM sharedRCIM].currentUserInfo.userId]) {
-                                UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-                                RCDPersonDetailViewController *temp = [mainStoryboard instantiateViewControllerWithIdentifier:@"RCDPersonDetailViewController"];
-                                temp.userInfo = user;
-                                [self.navigationController pushViewController:temp animated:YES];
-                                return;
-                            }
-                        }
+                NSArray *friendList = [[RCDataBaseManager shareInstance] getAllFriends];
+                for (RCUserInfo *USER in friendList) {
+                    if ([userId isEqualToString:USER.userId] || [userId isEqualToString:[RCIM sharedRCIM].currentUserInfo.userId]) {
                         UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-                        RCDAddFriendViewController *addViewController = [mainStoryboard instantiateViewControllerWithIdentifier:@"RCDAddFriendViewController"];
-                        addViewController.targetUserInfo = userInfo;
-                        [self.navigationController pushViewController:addViewController animated:YES];
-                    });
-                }];
+                        RCDPersonDetailViewController *temp = [mainStoryboard instantiateViewControllerWithIdentifier:@"RCDPersonDetailViewController"];
+                        temp.userInfo = user;
+                        [self.navigationController pushViewController:temp animated:YES];
+                        return;
+                    }
+                }
+                UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+                RCDAddFriendViewController *addViewController = [mainStoryboard instantiateViewControllerWithIdentifier:@"RCDAddFriendViewController"];
+                addViewController.targetUserInfo = userInfo;
+                [self.navigationController pushViewController:addViewController animated:YES];
             } failure:^(NSError *err) {
                 
             }];
