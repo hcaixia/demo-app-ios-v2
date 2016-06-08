@@ -98,12 +98,12 @@ enum INTERFACE_ID_TYPE
 
 enum WARN_CODE_TYPE
 {
-    WARN_NO_AVAILABLE_CHANNEL = 103,
+	WARN_PENDING = 20,
+	WARN_NO_AVAILABLE_CHANNEL = 103,
     WARN_LOOKUP_CHANNEL_TIMEOUT = 104,
     WARN_LOOKUP_CHANNEL_REJECTED = 105,
     WARN_OPEN_CHANNEL_TIMEOUT = 106,
     WARN_OPEN_CHANNEL_REJECTED = 107,
-    WARN_REQUEST_DEFERRED = 108,
     WARN_ADM_RUNTIME_PLAYOUT_WARNING = 1014,
     WARN_ADM_RUNTIME_RECORDING_WARNING = 1016,
     WARN_ADM_RECORD_AUDIO_SILENCE = 1019,
@@ -134,6 +134,7 @@ enum ERROR_CODE_TYPE
     ERR_INIT_VIDEO = 16,
     ERR_JOIN_CHANNEL_REJECTED = 17,
     ERR_LEAVE_CHANNEL_REJECTED = 18,
+	ERR_ALREADY_IN_USE = 19,
     ERR_INVALID_VENDOR_KEY = 101,
     ERR_INVALID_CHANNEL_NAME = 102,
     ERR_DYNAMIC_KEY_TIMEOUT = 109,
@@ -157,19 +158,22 @@ enum ERROR_CODE_TYPE
     ERR_ADM_RECORD_AUDIO_FAILED = 1018,
     ERR_ADM_INIT_LOOPBACK  = 1022,
     ERR_ADM_START_LOOPBACK  = 1023,
-    ERR_VDM_CAMERA_NOT_AUTHORIZED  = 1024,
     // 1025, as warning for interruption of adm on ios
     // 1026, as warning for route change of adm on ios
+  
+    // VDM error code starts from 1500
+    ERR_VDM_CAMERA_NOT_AUTHORIZED  = 1501,
 };
 
 enum LOG_FILTER_TYPE
 {
+	LOG_FILTER_CONSOLE = 0x8000,
     LOG_FILTER_DEBUG = 0x0800,
     LOG_FILTER_INFO = 0x0001,
     LOG_FILTER_WARN = 0x0002,
     LOG_FILTER_ERROR = 0x0004,
     LOG_FILTER_CRITICAL = 0x0008,
-	LOG_FILTER_MASK = 0x80f,
+	LOG_FILTER_MASK = 0x880f,
 };
 
 enum MAX_DEVICE_ID_LENGTH_TYPE
@@ -249,7 +253,8 @@ enum VIDEO_PROFILE_TYPE
     VIDEO_PROFILE_480P_4 = 43,        // 640x480   30   1000
     VIDEO_PROFILE_480P_5 = 44,        // 480x640   30   1000
     VIDEO_PROFILE_480P_6 = 45,        // 480x480   30   800
-    VIDEO_PROFILE_720P = 50,        // 1280x720  15   1000
+	VIDEO_PROFILE_480P_7 = 46,		// 640x480 15 1000
+	VIDEO_PROFILE_720P = 50,        // 1280x720  15   1000
     VIDEO_PROFILE_720P_2 = 51,        // 720x1280  15   1000
     VIDEO_PROFILE_720P_3 = 52,        // 1280x720  30   2000
     VIDEO_PROFILE_720P_4 = 53,        // 720x1280  30   2000
@@ -298,38 +303,41 @@ struct RtcStats
     double cpuTotalUsage;
 };
 
-struct LocalVideoStat
+struct LocalVideoStats
 {
-    // local stat
-    int sentBytes;
-    int sentFrames;
+    int sentBitrate;
+    int sentFrameRate;
 };
 
-struct RemoteVideoStat
+struct RemoteVideoStats
 {
-    // remote stat
     uid_t uid;
     int delay;
-    int renderedFrames;
-    int receivedBytes;
+	int width;
+	int height;
+	int receivedBitrate;
+	int receivedFrameRate;
 };
 
-#if defined(_WIN32)
+#if !defined(__ANDROID__)
 struct VideoCanvas
 {
     view_t view;
     int renderMode;
     uid_t uid;
+    void *priv; // private data (underlying video engine denotes it)
 
     VideoCanvas()
         : view(NULL)
         , renderMode(RENDER_MODE_HIDDEN)
         , uid(0)
+        , priv(NULL)
     {}
     VideoCanvas(view_t v, int m, uid_t u)
         : view(v)
         , renderMode(m)
         , uid(u)
+        , priv(NULL)
     {}
 };
 #else
@@ -339,6 +347,7 @@ struct VideoCanvas;
 class IPacketObserver
 {
 public:
+
 	struct Packet
 	{
 		const unsigned char* buffer;
@@ -483,8 +492,8 @@ public:
     * @param [in] totalVolume
     *        the total volume of all users
     */
-    virtual void onLeaveChannel(const RtcStats& stat) {
-        (void)stat;
+    virtual void onLeaveChannel(const RtcStats& stats) {
+        (void)stats;
     }
 
     /**
@@ -492,17 +501,8 @@ public:
     * @param [in] stat
     *        the RTC engine stats
     */
-    virtual void onRtcStats(const RtcStats& stat) {
-        (void)stat;
-    }
-
-    /**
-    * when the media engine event come, the function will be called
-    * @param [in] evt
-    *        the event code
-    */
-    virtual void onMediaEngineEvent(int evt) {
-        (void)evt;
+    virtual void onRtcStats(const RtcStats& stats) {
+        (void)stats;
     }
 
     /**
@@ -645,7 +645,19 @@ public:
         (void)muted;
     }
 
-    /**
+	/**
+	* when remote user enable video function, the function will be called
+	* @param [in] uid
+	*        the UID of the remote user
+	* @param [in] enabled
+	*        true: the remote user has enabled video function, false: the remote user has disabled video function
+	*/
+	virtual void onUserEnableVideo(uid_t uid, bool enabled) {
+		(void)uid;
+		(void)enabled;
+	}
+	
+	/**
     * when api call executed completely, the function will be called
     * @param [in] api
     *        the api name
@@ -658,33 +670,21 @@ public:
     }
 
     /**
-    * when api call executed completely, the function will be called
-    * @param [in] api
-    *        the api name
-    * @param [in] error
-    *        error code while 0 means OK
+	* reported local video stats
+	* @param [in] stats
+    *        the latest local video stats
     */
-    virtual void onLocalVideoStat(int sentBitrate, int sentFrameRate) {
-        (void)sentBitrate;
-        (void)sentFrameRate;
+	virtual void onLocalVideoStats(const LocalVideoStats& stats) {
+		(void)stats;
     }
 
     /**
-    * reported the remote video stat
-    * @param [in] uid
-    *        UID of the remote user
-    * @param [in] delay
-    *        remote video frame delayed
-    * @param [in] receivedBitrate
-    *        bit rate
-    * @param [in] receiveFrameRate
-    *        frame rate
-    */
-    virtual void onRemoteVideoStat(uid_t uid, int delay, int receivedBitrate, int receiveFrameRate) {
-        (void)uid;
-        (void)delay;
-        (void)receivedBitrate;
-        (void)receiveFrameRate;
+    * reported remote video stats
+    * @param [in] stats
+	*        the latest remote video stats
+	*/
+	virtual void onRemoteVideoStats(const RemoteVideoStats& stats) {
+		(void)stats;
     }
 
     /**
@@ -706,6 +706,10 @@ public:
     * when local user disconnected by accident, the function will be called(then SDK will try to reconnect itself)
     */
     virtual void onConnectionInterrupted() {}
+    
+    virtual void onRefreshRecordingServiceStatus(int status) {
+        (void)status;
+    }
 };
 
 /**
@@ -1095,7 +1099,6 @@ public:
 
     virtual int rate(const char* callId, int rating, const char* description) = 0; // 0~10
     virtual int complain(const char* callId, const char* description) = 0;
-    virtual int makeQualityReportUrl(const char* channel, uid_t listenerUid, uid_t speakerUid, QUALITY_REPORT_FORMAT_TYPE format, agora::util::AString& url) = 0;
 
     /**
     * register a packet observer while the packet arrived or ready to be sent, the observer can touch the packet data
@@ -1104,6 +1107,8 @@ public:
     * @return return 0 if success or an error code
     */
     virtual int registerPacketObserver(IPacketObserver* observer) = 0;
+
+	virtual int setVideoRenderFactory(void* factory) = 0;
 };
 
 
@@ -1296,7 +1301,7 @@ public:
             reset(p);
     }
     AParameter(IRtcEngineParameter* p)
-        :AutoPtr<IRtcEngineParameter>(p)
+        :agora::util::AutoPtr<IRtcEngineParameter>(p)
     {}
 };
 
@@ -1420,6 +1425,22 @@ public:
         return m_parameter->setBool("che.audio.stop_recording", true);
     }
 
+	/**
+	* start screen capture
+	* @return return 0 if success or an error code
+	*/
+	int startScreenCapture() {
+		return m_parameter->setBool("che.video.screen_capture", true);
+	}
+
+	/**
+	* stop screen capture
+	* @return return 0 if success or an error code
+	*/
+	int stopScreenCapture() {
+		return m_parameter->setBool("che.video.screen_capture", false);
+	}
+
     /**
     * set path to save the log file
     * @param [in] filePath
@@ -1457,8 +1478,21 @@ public:
     * @return return 0 if success or an error code
     */
     int setRemoteRenderMode(uid_t uid, RENDER_MODE_TYPE renderMode) {
-        return setObject("che.video.peer.render_mode", "{\"uid\":%u,\"mode\":%d}", uid, renderMode);
+        return setObject("che.video.render_mode", "{\"uid\":%u,\"mode\":%d}", uid, renderMode);
     }
+    
+	int startRecordingService(const char* key) {
+		return m_parameter->setString("rtc.api.start_recording_service", key);
+    }
+    
+    int stopRecordingService(const char* key) {
+        return m_parameter->setString("rtc.api.stop_recording_service", key);
+    }
+    
+    int refreshRecordingServiceStatus() {
+        return m_parameter->setBool("rtc.api.query_recording_service_status", true);
+    }
+
 protected:
     AParameter& parameter() {
         return m_parameter;

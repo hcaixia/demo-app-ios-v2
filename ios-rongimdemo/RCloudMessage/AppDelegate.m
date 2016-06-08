@@ -54,7 +54,7 @@
   //在info.plist中打开Application supports iTunes file sharing
     //    if (![[[UIDevice currentDevice] model] isEqualToString:@"iPhone
     //    Simulator"]) {
-    //        [self redirectNSlogToDocumentFolder];
+            [self redirectNSlogToDocumentFolder];
     //    }
     [self umengTrack];
 
@@ -393,6 +393,7 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
 }
 
 - (void)redirectNSlogToDocumentFolder {
+  NSLog(@"Log重定向到本地，如果您需要控制台Log，注释掉重定向逻辑即可。");
   NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
                                                        NSUserDomainMask, YES);
   NSString *documentDirectory = [paths objectAtIndex:0];

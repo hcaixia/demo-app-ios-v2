@@ -12,7 +12,7 @@
 #import <RongIMLib/RongIMLib.h>
 #import "RCTextView.h"
 
-#define Height_ChatSessionInputBar 46.0f
+#define Height_ChatSessionInputBar 50.0f
 
 /*!
  输入工具栏的显示布局

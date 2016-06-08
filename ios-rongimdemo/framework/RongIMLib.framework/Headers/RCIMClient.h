@@ -1528,6 +1528,8 @@ __deprecated_msg("已废弃，请勿使用。");
  @param pullEvaluationBlock     客服请求评价
  @param quitBlock               客服被动结束。如果主动调用stopCustomerService，则不会调用到该block
  
+ @discussion 有些客服提供商可能会主动邀请评价，有些不会，所以用lib开发客服需要注意对pullEvaluationBlock的处理。在pullEvaluationBlock里应该弹出评价。如果pullEvaluationBlock没有被调用到，需要在结束客服时（之前之后都可以）弹出评价框并评价。
+ 
  @warning 如果你使用IMKit，请不要使用此方法。RCConversationViewController默认已经做了处理。
  */
 - (void)startCustomerService:(NSString *)kefuId
@@ -1567,6 +1569,8 @@ __deprecated_msg("已废弃，请勿使用。");
  @param suggest                客户建议
  
  @discussion 此方法依赖startCustomerService方法。可在客服结束之前或之后调用。
+ @discussion 有些客服服务商需要对机器人回答的词条进行评价，机器人回答的文本消息的extra带有{“robotEva”:”1”, “sid”:”xxx”}字段，当用户对这一条消息评价后调用本函数同步到服务器，knownledgedID为extra中的sid。若是离开会话评价，knownledgedID填nil
+ 
  @warning 如果你使用IMKit，请不要使用此方法。RCConversationViewController默认已经做了处理。
  */
 - (void)evaluateCustomerService:(NSString *)kefuId knownledgeId:(NSString *)knownledgeId robotValue:(BOOL)isRobotResolved suggest:(NSString *)suggest;
@@ -1580,6 +1584,8 @@ __deprecated_msg("已废弃，请勿使用。");
  @param suggest                客户建议
  
  @discussion 此方法依赖startCustomerService方法。可在客服结束之前或之后调用。
+ @discussion 有些客服服务商会主动邀请评价，pullEvaluationBlock会被调用到，当评价完成后调用本函数同步到服务器，dialogId填pullEvaluationBlock返回的dialogId。若是离开会话触发的评价，dialogID为nil
+ 
  @warning 如果你使用IMKit，请不要使用此方法。RCConversationViewController默认已经做了处理。
  */
 - (void)evaluateCustomerService:(NSString *)kefuId dialogId:(NSString *)dialogId humanValue:(int)value suggest:(NSString *)suggest;

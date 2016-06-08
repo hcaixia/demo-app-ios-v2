@@ -216,6 +216,7 @@
 		F821B7F51BE75BFD00F0D14C /* libMobClickLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F821B7F41BE75BFD00F0D14C /* libMobClickLibrary.a */; };
 		F836AB0E1C2262C400A1A5D2 /* RCDTestMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = F836AB0D1C2262C400A1A5D2 /* RCDTestMessage.m */; };
 		F836AB151C226A7F00A1A5D2 /* RCDTestMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F836AB141C226A7F00A1A5D2 /* RCDTestMessageCell.m */; };
+		F880EA761D08081100FD5CC4 /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F880EA751D08081100FD5CC4 /* VideoToolbox.framework */; };
 		F8AD4A551CAE56A4006C1CBB /* PushKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F8AD4A541CAE56A4006C1CBB /* PushKit.framework */; };
 		F8AD4A571CAE5702006C1CBB /* libicucore.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = F8AD4A561CAE5702006C1CBB /* libicucore.tbd */; };
 		F8AD4A5B1CAE5782006C1CBB /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F8AD4A5A1CAE5782006C1CBB /* CoreMotion.framework */; };
@@ -646,6 +647,7 @@
 		F836AB0D1C2262C400A1A5D2 /* RCDTestMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RCDTestMessage.m; path = RCloudMessage/RCDTestMessage.m; sourceTree = SOURCE_ROOT; };
 		F836AB131C226A7F00A1A5D2 /* RCDTestMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RCDTestMessageCell.h; path = RCloudMessage/RCDTestMessageCell.h; sourceTree = SOURCE_ROOT; };
 		F836AB141C226A7F00A1A5D2 /* RCDTestMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RCDTestMessageCell.m; path = RCloudMessage/RCDTestMessageCell.m; sourceTree = SOURCE_ROOT; };
+		F880EA751D08081100FD5CC4 /* VideoToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VideoToolbox.framework; path = System/Library/Frameworks/VideoToolbox.framework; sourceTree = SDKROOT; };
 		F8AD4A541CAE56A4006C1CBB /* PushKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PushKit.framework; path = System/Library/Frameworks/PushKit.framework; sourceTree = SDKROOT; };
 		F8AD4A561CAE5702006C1CBB /* libicucore.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libicucore.tbd; path = usr/lib/libicucore.tbd; sourceTree = SDKROOT; };
 		F8AD4A581CAE5766006C1CBB /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
@@ -671,6 +673,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F880EA761D08081100FD5CC4 /* VideoToolbox.framework in Frameworks */,
 				A68AFAF41CCF0B3700F16B3D /* RongCallKit.framework in Frameworks */,
 				F8AD4A5B1CAE5782006C1CBB /* CoreMotion.framework in Frameworks */,
 				E4C330FA1A0C724400E31B9A /* CoreMedia.framework in Frameworks */,
@@ -1137,6 +1140,7 @@
 		E4C4E7E71A0A309100140067 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F880EA751D08081100FD5CC4 /* VideoToolbox.framework */,
 				A68AFAFC1CCF1ECE00F16B3D /* AgoraRtcEngineKit.framework */,
 				A68AFAF31CCF0B3700F16B3D /* RongCallKit.framework */,
 				A68AFAF11CCF0B1600F16B3D /* RongCallLib.framework */,
